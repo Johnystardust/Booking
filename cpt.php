@@ -29,8 +29,8 @@ function tvds_booking_create_post_type(){
 
             'public'        => true,
             'menu_position' => 15,
-            'supports'      => array( 'title', 'editor', 'comments', 'thumbnail', 'custom-fields' ),
-            'taxonomies'    => array( 'home_place' ),
+            'supports'      => array('title', 'editor', 'comments', 'thumbnail', 'custom-fields'),
+            'taxonomies'    => array('home_place'),
             'menu_icon'     => plugins_url( 'images/image.png', __FILE__ ),
             'has_archive'   => true
         )
@@ -41,7 +41,8 @@ add_action('init', 'tvds_booking_create_post_type');
 // Add meta boxes
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_add_homes_meta_boxes(){
-    add_meta_box('homes_meta_box', __('Huis details', 'tvds'), 'tvds_display_homes_meta_box', 'homes', 'normal', 'high');
+    add_meta_box('homes_detail_meta_box', __('Huis details', 'tvds'), 'tvds_display_homes_detail_meta_box', 'homes', 'normal', 'high');
+    add_meta_box('homes_booking_meta_box', __('Booking', 'tvds'), 'tvds_display_homes_booking_meta_box', 'homes', 'normal', 'high');
 }
 add_action('admin_init', 'tvds_add_homes_meta_boxes');
 
@@ -60,7 +61,7 @@ add_action('admin_init', 'tvds_add_homes_meta_boxes');
 
 // Display meta boxes
 //----------------------------------------------------------------------------------------------------------------------
-function tvds_display_homes_meta_box( $home ) {
+function tvds_display_homes_detail_meta_box( $home ) {
     // Retrieve current name of the Director and Movie Rating based on review ID
     $wifi           = esc_html(get_post_meta($home->ID, 'wifi', true));
     $pool           = esc_html(get_post_meta($home->ID, 'pool', true));
@@ -127,9 +128,25 @@ function tvds_display_homes_meta_box( $home ) {
                 </select>
             </td>
         </tr>
+    </table>
+    <?php
+}
+
+// Display meta boxes
+//----------------------------------------------------------------------------------------------------------------------
+function tvds_display_homes_booking_meta_box( $home ) {
+    // Retrieve current name of the Director and Movie Rating based on review ID
+    $arrival_date    = esc_html(get_post_meta($home->ID, 'arrival_date', true));
+    $leave_date     = esc_html(get_post_meta($home->ID, 'leave_date', true));
+    ?>
+    <table>
         <tr>
-            <td style="width: 100%"><?php echo __('Plaats', 'tvds'); ?></td>
-            <td><input type="text" size="80" name="place" value="<?php echo $place; ?>" /></td>
+            <td style="width: 100%"><?php echo __('Aankomstdatum', 'tvds'); ?></td>
+            <td><input type="text" size="80" name="arrival_date" value="<?php echo $arrival_date; ?>" /></td>
+        </tr>
+        <tr>
+            <td style="width: 100%"><?php echo __('Vertrekdatum', 'tvds'); ?></td>
+            <td><input type="text" size="80" name="leave_date" value="<?php echo $leave_date; ?>" /></td>
         </tr>
     </table>
     <?php
@@ -137,36 +154,41 @@ function tvds_display_homes_meta_box( $home ) {
 
 // Save Post
 //----------------------------------------------------------------------------------------------------------------------
-function tvds_save_homes_post( $home_review_id, $home ) {
+function tvds_save_homes_post( $home_id, $home ) {
     // Check post type for movie reviews
     if ( $home->post_type == 'homes' ) {
         // Store data in post meta table if present in post data
         if ( isset( $_POST['wifi'] ) && $_POST['wifi'] != '' ) {
-            update_post_meta( $home_review_id, 'wifi', $_POST['wifi'] );
+            update_post_meta( $home_id, 'wifi', $_POST['wifi'] );
         }
         if ( isset( $_POST['pool'] ) && $_POST['pool'] != '' ) {
-            update_post_meta( $home_review_id, 'pool', $_POST['pool'] );
+            update_post_meta( $home_id, 'pool', $_POST['pool'] );
         }
         if ( isset( $_POST['animals'] ) && $_POST['animals'] != '' ) {
-            update_post_meta( $home_review_id, 'animals', $_POST['animals'] );
+            update_post_meta( $home_id, 'animals', $_POST['animals'] );
         }
         if ( isset( $_POST['alpine'] ) && $_POST['alpine'] != '' ) {
-            update_post_meta( $home_review_id, 'alpine', $_POST['alpine'] );
+            update_post_meta( $home_id, 'alpine', $_POST['alpine'] );
         }
         if ( isset( $_POST['for_sale'] ) && $_POST['for_sale'] != '' ) {
-            update_post_meta( $home_review_id, 'for_sale', $_POST['for_sale'] );
+            update_post_meta( $home_id, 'for_sale', $_POST['for_sale'] );
         }
         if ( isset( $_POST['sale_price'] ) && $_POST['sale_price'] != '' ) {
-            update_post_meta( $home_review_id, 'sale_price', $_POST['sale_price'] );
+            update_post_meta( $home_id, 'sale_price', $_POST['sale_price'] );
         }
         if ( isset( $_POST['max_persons'] ) && $_POST['max_persons'] != '' ) {
-            update_post_meta( $home_review_id, 'max_persons', $_POST['max_persons'] );
+            update_post_meta( $home_id, 'max_persons', $_POST['max_persons'] );
         }
         if ( isset( $_POST['type'] ) && $_POST['type'] != '' ) {
-            update_post_meta( $home_review_id, 'type', $_POST['type'] );
+            update_post_meta( $home_id, 'type', $_POST['type'] );
         }
-        if ( isset( $_POST['place'] ) && $_POST['place'] != '' ) {
-            update_post_meta( $home_review_id, 'place', $_POST['place'] );
+
+
+        if ( isset( $_POST['arrival_date'] ) && $_POST['arrival_date'] != '' ) {
+            update_post_meta( $home_id, 'arrival_date', $_POST['arrival_date'] );
+        }
+        if ( isset( $_POST['leave_date'] ) && $_POST['leave_date'] != '' ) {
+            update_post_meta( $home_id, 'leave_date', $_POST['leave_date'] );
         }
     }
 }
