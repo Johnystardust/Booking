@@ -42,7 +42,7 @@ add_action('init', 'tvds_booking_create_post_type');
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_add_homes_meta_boxes(){
     add_meta_box('homes_detail_meta_box', __('Huis details', 'tvds'), 'tvds_display_homes_detail_meta_box', 'homes', 'normal', 'high');
-    add_meta_box('homes_booking_meta_box', __('Booking', 'tvds'), 'tvds_display_homes_booking_meta_box', 'homes', 'normal', 'high');
+    add_meta_box('homes_booking_meta_box', __('Reserveringen', 'tvds'), 'tvds_display_homes_booking_meta_box', 'homes', 'normal', 'high');
 }
 add_action('admin_init', 'tvds_add_homes_meta_boxes');
 
@@ -62,7 +62,6 @@ add_action('admin_init', 'tvds_add_homes_meta_boxes');
 // Display meta boxes
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_display_homes_detail_meta_box( $home ) {
-    // Retrieve current name of the Director and Movie Rating based on review ID
     $wifi           = esc_html(get_post_meta($home->ID, 'wifi', true));
     $pool           = esc_html(get_post_meta($home->ID, 'pool', true));
     $animals        = esc_html(get_post_meta($home->ID, 'animals', true));
@@ -135,20 +134,48 @@ function tvds_display_homes_detail_meta_box( $home ) {
 // Display meta boxes
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_display_homes_booking_meta_box( $home ) {
-    // Retrieve current name of the Director and Movie Rating based on review ID
-    $arrival_date    = esc_html(get_post_meta($home->ID, 'arrival_date', true));
-    $leave_date     = esc_html(get_post_meta($home->ID, 'leave_date', true));
+
+    // Dummy bookings
+    $bookings_10 = array(
+        array(
+            'name' 		=> 'Jan Kamp',
+            'persons' 	=> 5,
+            'arrival'	=> '2016-10-01',
+            'leave'		=> '2016-10-07'
+        ),
+        array(
+            'name' 		=> 'Piet van Dam',
+            'persons' 	=> 3,
+            'arrival'	=> '2016-10-15',
+            'leave'		=> '2016-10-21'
+        ),
+    );
     ?>
+
     <table>
         <tr>
-            <td style="width: 100%"><?php echo __('Aankomstdatum', 'tvds'); ?></td>
-            <td><input type="text" size="80" name="arrival_date" value="<?php echo $arrival_date; ?>" /></td>
+            <th><?php echo __('Naam', 'tvds'); ?></th>
+            <th><?php echo __('Personen', 'tvds'); ?></th>
+            <th><?php echo __('Aankomstdatum', 'tvds'); ?></th>
+            <th><?php echo __('Vertrekdatum', 'tvds'); ?></th>
         </tr>
-        <tr>
-            <td style="width: 100%"><?php echo __('Vertrekdatum', 'tvds'); ?></td>
-            <td><input type="text" size="80" name="leave_date" value="<?php echo $leave_date; ?>" /></td>
-        </tr>
+
+        <?php
+        foreach($bookings_10 as $booking){
+            ?>
+            <tr>
+                <td><?php echo $booking['name']; ?></td>
+                <td><?php echo $booking['persons']; ?></td>
+                <td><?php echo $booking['arrival']; ?></td>
+                <td><?php echo $booking['arrival']; ?></td>
+            </tr>
+            <?
+        }
+
+        ?>
+
     </table>
+
     <?php
 }
 
