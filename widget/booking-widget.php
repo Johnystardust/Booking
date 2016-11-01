@@ -25,7 +25,7 @@ class tvds_booking_filter_widget extends WP_Widget
 	//---------------------------------------------------------------
     public function widget($args, $instance){
         $title      = apply_filters('widget_title', $instance['title']);
-        $text       = $instance['text'];
+        $text       = isset($instance['text']) ? $instance['text'] : '';
 
 
         echo $args['before_widget'];
@@ -44,7 +44,7 @@ class tvds_booking_filter_widget extends WP_Widget
  		        
  		        <?php
 	 		        // If Filter Is Active
-			        if($_GET['type']){
+			        if(isset($_GET['type'])){
 				        $type = $_GET['type'];
 			        }	        
 
@@ -53,7 +53,7 @@ class tvds_booking_filter_widget extends WP_Widget
 	 				
 			        foreach($terms as $term){
 				        ?>
-				        <option <?php if($type == $term->slug){echo 'selected';} ?> value="<?php echo $term->slug; ?>"><?php echo $term->name; ?></option>
+				        <option <?php if(isset($type) == $term->slug){echo 'selected';} ?> value="<?php echo $term->slug; ?>"><?php echo $term->name; ?></option>
 				        <?
 			        }
  		        ?> 
@@ -64,7 +64,7 @@ class tvds_booking_filter_widget extends WP_Widget
  		        
  		        <?php
 	 		        // If Filter Is Active
-	 		        if($_GET['place']){
+	 		        if(isset($_GET['place'])){
 				        $place = $_GET['place'];
 			        }
 			        
@@ -73,7 +73,7 @@ class tvds_booking_filter_widget extends WP_Widget
 	 		      	
 	 		      	foreach($terms as $term){
 				        ?>
-				        <option <?php if($place == $term->slug){echo 'selected';} ?> value="<?php echo $term->slug; ?>"><?php echo $term->name; ?></option>
+				        <option <?php if(isset($place) == $term->slug){echo 'selected';} ?> value="<?php echo $term->slug; ?>"><?php echo $term->name; ?></option>
 				        <?
 			        }
 	 		    ?>
@@ -82,21 +82,21 @@ class tvds_booking_filter_widget extends WP_Widget
 	        
 			<?php
 				// If Filter Is Active
-		        if($_GET['wifi']){
-			        $wifi = $_GET['wifi'];
-		        }
+				if(isset($_GET['wifi'])){
+					$wifi = $_GET['wifi'];
+				}
 		    ?>
 	        <label>Wifi</label></br>
-	        <input type="checkbox" <?php if($wifi == 1){echo 'checked';} ?> value="1" name="wifi"/></br></br>
+	        <input type="checkbox" <?php if(isset($wifi) == 1){echo 'checked';} ?> value="1" name="wifi"/></br></br>
 	        
 	        <?php
 				// If Filter Is Active
-		        if($_GET['pool']){
-			        $pool = $_GET['pool'];
-		        }
+				if(isset($_GET['pool'])){
+					$pool = $_GET['pool'];
+				}
 		    ?>
 	        <label>Pool</label></br>
-	        <input type="checkbox" <?php if($pool == 1){echo 'checked';} ?> value="1" name="pool"/></br></br>
+	        <input type="checkbox" <?php if(isset($pool) == 1){echo 'checked';} ?> value="1" name="pool"/></br></br>
 	        
 			<!-- Clear all Filters -->
 	        <?php $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2); ?>

@@ -23,46 +23,9 @@ get_header(); ?>
 				            <?php the_content(); ?>
 				            
 					        <div class="book">
-					
-					            <?php
-						            // Update the post meta
-					                if($_POST['arrival_date']){
-					                    update_post_meta(get_the_ID(), 'arrival_date', $_POST['arrival_date']);
-					                }
-					            ?>
 					            
 					            
-					            <!-- The booking form -->
-					            <form id="new_booking" name="new_booking" method="post" action="http://dev.timvanderslik.nl/themeawesome/homes/test/">
-					                <input id="arival_date" name="arrival_date" type="text" class="datepicker"/>
-					                <input type="text" class="datepicker"/>
-					
-					                <input type="submit" value="submit">
-					            </form>
-					            
-					            <?php 
-// 						            do_action('tvds_after_booking_entry');
-						            
-						            /* sample usages */
-
-									echo '<h2>Oktober 2016</h2>';
-									echo tvds_booking_draw_calendar(10,2016);
-
-									echo '<h2>November 2016</h2>';
-									echo tvds_booking_draw_calendar(11,2016);
-
-									echo '<h2>December 2016</h2>';
-									echo tvds_booking_draw_calendar(12,2016);
-
-									
-//									echo '<h2>Beschikbaarheid</h2>';
-//									echo tvds_booking_calendar('2016-10-01', '2017-10-31');
-								?>
-
-
-								<div class="week-calendar">
-
-								</div>
+					            <?php do_action('tvds_after_single_home_content'); ?>
 					            
 					            
 					        </div>
@@ -93,5 +56,8 @@ get_header(); ?>
 	</div><!-- container end -->
 </div><!-- primary end -->
 
-<?php wp_reset_query(); ?>
-<?php get_footer(); ?>
+<?php wp_reset_query();
+
+do_action('tvds_before_single_home_footer');
+
+get_footer();

@@ -30,48 +30,53 @@ get_header(); ?>
 				
 				
 				// Wifi Search Meta
-				$wifi = $_GET['wifi'];
-				if(!empty($wifi)){
-					if($wifi == 1){
-						$wifi_array = array(
-					        'key'     => 'wifi',
-					        'value'   => 1,
-					        'compare' => '='
-					    );
-						
-						array_push($search_meta, $wifi_array);
-					}
-					else if($wifi == 0){
-						$wifi_array = array(
-					        'key'     => 'wifi',
-					        'value'   => 0,
-					        'compare' => '='
-					    );
-					    
-					    array_push($search_meta, $wifi_array);
+				if(isset($_GET['wifi'])){
+					$wifi = $_GET['wifi'];
+
+					if(!empty($wifi)){
+						if($wifi == 1){
+							$wifi_array = array(
+						        'key'     => 'wifi',
+						        'value'   => 1,
+						        'compare' => '='
+						    );
+							
+							array_push($search_meta, $wifi_array);
+						}
+						else if($wifi == 0){
+							$wifi_array = array(
+						        'key'     => 'wifi',
+						        'value'   => 0,
+						        'compare' => '='
+						    );
+						    
+						    array_push($search_meta, $wifi_array);
+						}
 					}
 				}
 				
 				// Pool Search Meta
-				$pool = $_GET['pool'];
-				if(!empty($pool)){
-					if($pool == 1){
-						$pool_array = array(
-					        'key'     => 'pool',
-					        'value'   => 1,
-					        'compare' => '='
-					    );
-						
-						array_push($search_meta, $pool_array);
-					}
-					else if($pool == 0){
-						$pool_array = array(
-					        'key'     => 'pool',
-					        'value'   => 0,
-					        'compare' => '='
-					    );
-					    
-					    array_push($search_meta, $pool_array);
+				if(isset($_GET['pool'])){
+					$pool = $_GET['pool'];
+					if(!empty($pool)){
+						if($pool == 1){
+							$pool_array = array(
+						        'key'     => 'pool',
+						        'value'   => 1,
+						        'compare' => '='
+						    );
+							
+							array_push($search_meta, $pool_array);
+						}
+						else if($pool == 0){
+							$pool_array = array(
+						        'key'     => 'pool',
+						        'value'   => 0,
+						        'compare' => '='
+						    );
+						    
+						    array_push($search_meta, $pool_array);
+						}
 					}
 				}
 				
@@ -79,25 +84,29 @@ get_header(); ?>
 				$tax_query = array('relation' => 'AND');
 				
 				// Place Taxonomy Search
-				$place = $_GET['place'];
+				if(isset($_GET['place'])){
+					$place = $_GET['place'];
 				
-				if(!empty($place)){
-					$tax_query[] = array(
-						'taxonomy' => 'homes_place',
-						'field'    => 'slug',
-						'terms'    => array($place),
-					);
+					if(!empty($place)){
+						$tax_query[] = array(
+							'taxonomy' => 'homes_place',
+							'field'    => 'slug',
+							'terms'    => array($place),
+						);
+					}
 				}
 				
 				// Type Taxonomy Search
-				$type = $_GET['type'];
+				if(isset($_GET['type'])){
+					$type = $_GET['type'];
 				
-				if(!empty($type)){
-				    $tax_query[] = array(
-						'taxonomy' => 'homes_type',
-						'field'    => 'slug',
-						'terms'    => array($type),
-					);
+					if(!empty($type)){
+					    $tax_query[] = array(
+							'taxonomy' => 'homes_type',
+							'field'    => 'slug',
+							'terms'    => array($type),
+						);
+					}
 				}
 				
 				// The Query Arguments

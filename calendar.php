@@ -1,43 +1,27 @@
 <?php
 
-// Draw Calendar
+// Return All The Booked Days In A Month
 //----------------------------------------------------------------------------------------------------------------------
-function tvds_booking_draw_calendar($month,$year){
+function tvds_booking_get_booked_month($booked_days, $year, $month){
+	// Get Leading 0 If Is One Character
+	$month = sprintf('%02d', $month);
 
-	// Test Bookings
-	$bookings_10 = array(
-		array(
-			'name' 		=> 'Jan Kamp',
-			'persons' 	=> 5,
-			'arrival'	=> '2016-10-01',
-			'leave'		=> '2016-10-07'
-		),
-		array(
-			'name' 		=> 'Piet van Dam',
-			'persons' 	=> 3,
-			'arrival'	=> '2016-10-15',
-			'leave'		=> '2016-10-21'
-		),
-	);
+	// Make Array For The Booked Day
+	$booked_month = array();
 
-	// Create An Array For The Booked Days
-	$bookings_full = array();
-
-
-
-	// Determine The Booked days
-	foreach($bookings_10 as $booking) {
-
-		$start = new DateTime($booking['arrival']);
-		$end = (new DateTime($booking['leave']))->modify('+1 day');
-		$interval = new DateInterval('P1D');
-		$period = new DatePeriod($start, $interval, $end);
-
-		foreach ($period as $dt) {
-			$bookings_full[] = $dt->format("d");
+	// Get All The Booked Days From A Month & Year
+	foreach($booked_days as $key => $booked_day){
+		if(strpos($booked_day, $year.'-'.$month) !== false){
+			$booked_day = str_replace($year.'-'.$month.'-', "", $booked_day);
+			array_push($booked_month, $booked_day);
 		}
 	}
+	return $booked_month;
+}
 
+// Draw Calendar
+//----------------------------------------------------------------------------------------------------------------------
+function tvds_booking_draw_calendar($month,$year, $booked_month){
 	// Draw Table
 	//---------------------------------------------------------------
 	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar">';
@@ -70,7 +54,7 @@ function tvds_booking_draw_calendar($month,$year){
 	//---------------------------------------------------------------
 	for($list_day = 1; $list_day <= $days_in_month; $list_day++):
 		// Add The Day, If The Day Is In Booked Array Color It
-		if(in_array($list_day, $bookings_full)){
+		if(in_array($list_day, $booked_month)){
 			$calendar.= '<td style="background-color: #333333;" class="calendar-day">';
 		}
 		else {
@@ -115,28 +99,3 @@ function tvds_booking_draw_calendar($month,$year){
 	//---------------------------------------------------------------
 	return $calendar;
 }
-
-
-function tvds_booking_calendar($begin_time, $end_time){
-	$begin  = new DateTime($begin_time);
-	$end    = new DateTime($end_time);
-
-	$calendar = '';
-
-	while ($begin <= $end)
-	{
-	    if($begin->format("D") == "Sat")
-	    {
-	        $calendar .= $begin->format("Y-m-d") . "<br>";
-	    }
-
-	    $begin->modify('+1 day');
-	}
-
-	return $calendar;
-}
-
-
-
-	
-?>

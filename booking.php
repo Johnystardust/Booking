@@ -10,27 +10,35 @@
 
 // Include CPT
 //----------------------------------------------------------------------------------------------------------------------
-include_once('cpt.php');
+include_once('cpt/cpt.php');
 
 // Include The Widgets
 //----------------------------------------------------------------------------------------------------------------------
 include_once('widget/widgets.php');
+
+// Include The Calendar
+//----------------------------------------------------------------------------------------------------------------------
+include_once('calendar.php');
+
+// Include The Shortcodes
+//----------------------------------------------------------------------------------------------------------------------
+include_once('shortcodes.php');
 
 // Enqueue Scripts
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_homes_enqueue_script(){
     // Scripts
     wp_enqueue_script('booking_js', plugin_dir_url(__FILE__).'assets/js/booking.js');
+
+	wp_register_script('validation', 'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js');
+	wp_enqueue_script('validation');
        
     // Styles
     wp_enqueue_style('booking.css', plugin_dir_url(__FILE__).'assets/css/booking.css');
-    
 }
 add_action('wp_enqueue_scripts', 'tvds_homes_enqueue_script');
 
-// Include The Calendar
-//----------------------------------------------------------------------------------------------------------------------
-include_once('calendar.php');
+
 
 // Include The Templates
 //----------------------------------------------------------------------------------------------------------------------
