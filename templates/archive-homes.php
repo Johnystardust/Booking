@@ -108,7 +108,18 @@ get_header(); ?>
 						);
 					}
 				}
-				
+
+				if(is_tax()){
+					echo 'TAX';
+				}
+
+				if(is_archive()){
+					echo 'ARCHIVE';
+				}
+
+
+
+
 				// The Query Arguments
 				$args = array(
 				    'post_type' 	=> 'homes',
@@ -127,7 +138,7 @@ get_header(); ?>
 					    <!-- the loop -->
 					    <?php while ( $query->have_posts() ) : $query->the_post(); ?>
 					    
-					    	<div class="col-md-12" style="margin-bottom: 20px;">
+					    	<div class="col-md-4" style="margin-bottom: 20px;">
 						    	<div class="thumbnail">
 							    	<?php
 								    	if(has_post_thumbnail()){
