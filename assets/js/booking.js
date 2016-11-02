@@ -5,7 +5,7 @@ jQuery(document).ready(function($){
     
     // Validate the booking form
 	//----------------------------------------------------------------------------------------------------------------------
-	jQuery("#single-book-form").validate();
+// 	$("#single-book-form").validate();
     
 	
     // Disable days in date picker

@@ -14,17 +14,34 @@ function tvds_booking_show_book_form(){
 	    }
 	    
 	    $post_information = array(
-	        'post_title' 	=> wp_strip_all_tags( $_POST['name'] ),
-	        'post_content' 	=> $_POST['notes'],
+	        'post_title' 	=> wp_strip_all_tags($_POST['name'].' '. $_POST['last_name']),
 	        'post_type' 	=> 'booking',
 	        'post_status' 	=> 'publish',
 	        'meta_input' 	=> array(
 		        'home_id'		=> get_the_ID(),
+		        
+		        'name'			=> $_POST['name'],
+		        'last_name'		=> $_POST['last_name'],
+		        'street'		=> $_POST['street'],
+		        'city'			=> $_POST['city'],
+		        'postal'		=> $_POST['postal'],
+		        'phone'			=> $_POST['phone'],
+		        'email'			=> $_POST['email'],
+		        'notes'			=> $_POST['notes'],
+		        
 		        'arrival_date' 	=> $_POST['arrival_date'],
 		        'weeks'			=> $_POST['weeks'],
 	        ),
 	    );
-		wp_insert_post($post_information);
+		$post = wp_insert_post($post_information);
+		
+		if($post){
+			?>
+			<script>
+				window.location.href = '<?php echo home_url(); ?>';
+			</script>
+			<?php
+		}
 	}
 	
 	?>
@@ -33,34 +50,78 @@ function tvds_booking_show_book_form(){
         
         <table>
             <tbody>
-				<!-- Name -->
+	            
+	            <!-- Personal Info Section -->
 	            <tr>
-		            <td><label>Naam</label></td>
-		            <td><input type="text" name="name" value="<?php if(isset($_POST['name'])) echo $_POST['name']; ?>"/>
-					<?php 
-						if($postTitleError != ''){
-							echo '<span class="error">'.$postTitleError.'</span>';
-						}
-					?>
+		            <th><?php echo __('Persoonsgegevens', 'tvds'); ?></th>
+	            </tr>
+	            <tr>
+		            <td colspan="2"><hr/></td>
+	            </tr>
+	            
+				<!-- First Name -->
+	            <tr>
+		            <td><label><?php echo __('Naam', 'tvds'); ?></label></td>
+		            <td><input required minlength="2" type="text" name="name" value="<?php if(isset($_POST['name'])) echo $_POST['name']; ?>"/>
+	            </tr>
+
+				<!-- Last Name -->	            
+	            <tr>
+		            <td><label><?php echo __('Achternaam', 'tvds'); ?></label></td>
+		            <td><input required minlength="2" type="text" name="last_name" value="<?php if(isset($_POST['last_name'])) echo $_POST['last_name']; ?>"/>
 	            </tr>
 				
-				<!-- Address -->
+				<!-- Street -->
 	            <tr>
-		            <td><label><?php echo __('Adres', 'tvds') ?></label></td>
-		            <td><input type="text" name="address"/>
+		            <td><label><?php echo __('Straat', 'tvds') ?></label></td>
+		            <td><input required type="text" name="street" value="<?php if(isset($_POST['street'])) echo $_POST['street']; ?>"/>
 	            </tr>
+	            
+	            <!-- Woonplaats -->
+	            <tr>
+		            <td><label><?php echo __('Woonplaats', 'tvds') ?></label></td>
+		            <td><input required type="text" name="city" value="<?php if(isset($_POST['city'])) echo $_POST['city']; ?>"/>
+	            </tr>
+	            
+				<!-- Postal -->
+	            <tr>
+		            <td><label><?php echo __('Postcode', 'tvds') ?></label></td>
+		            <td><input required type="text" name="postal" value="<?php if(isset($_POST['postal'])) echo $_POST['postal']; ?>"/>
+	            </tr>
+	            
+	            <!-- Phone -->
+	            <tr>
+		            <td><label><?php echo __('Phone', 'tvds') ?></label></td>
+		            <td><input required type="tel" name="phone" value="<?php if(isset($_POST['phone'])) echo $_POST['phone']; ?>"/>
+	            </tr>
+	            
+	            <!-- E-mail -->
+	            <tr>
+		            <td><label><?php echo __('Email', 'tvds') ?></label></td>
+		            <td><input required type="text" name="email" value="<?php if(isset($_POST['email'])) echo $_POST['email']; ?>"/>
+	            </tr>
+	            
+	            
+				<!-- Home Section -->
+	            <tr>
+		            <th><?php echo __('Huis', 'tvds'); ?></th>
+	            </tr>
+	            <tr>
+		            <td colspan="2"><hr/></td>
+	            </tr>
+	            
 				
 				<!-- Arrival Date -->
 	            <tr>
 		            <td><label><?php echo __('Aankomst datum', 'tvds') ?></label></td>
-		            <td><input type="text" class="datepicker" name="arrival_date"/>
+		            <td><input required type="text" class="datepicker" name="arrival_date" value="<?php if(isset($_POST['arrival_date'])) echo $_POST['arrival_date']; ?>"/>
 	            </tr>
 	            
 				<!-- Weeks -->
 	            <tr>
 		            <td><label><?php echo __('Aantal weken', 'tvds') ?></label></td>
 		            <td>
-			            <select name="weeks">
+			            <select required name="weeks">
 				            <?php 
 					            for ($x = 0; $x <= 20; $x++) {
 						            echo '<option value="'.$x.'">'.$x.'</option>';
@@ -100,6 +161,9 @@ function tvds_booking_show_book_form(){
             </tbody>
         </table>	 
 	</form>
+	<script>
+		$("#single-book-form").validate();
+	</script>
 	<?php
 }
 add_action('tvds_after_single_home_content', 'tvds_booking_show_book_form');
@@ -117,6 +181,7 @@ function tvds_booking_show_calendars(){
 	$args = array(
 	    'post_type' 	=> 'booking',
 	    'orderby'       => 'meta_value',
+	    'post_status'	=> 'publish',
 	    "meta_query" => array( 
 	        array(
 	            "key" 		=> "home_id",
@@ -172,3 +237,4 @@ function tvds_booking_show_calendars(){
 	}
 }
 add_action('tvds_after_single_home_content', 'tvds_booking_show_calendars');
+add_shortcode('tvds_booking_calendar', 'tvds_booking_show_calendars');

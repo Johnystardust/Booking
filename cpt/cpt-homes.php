@@ -24,9 +24,10 @@ function tvds_booking_create_homes_post_type(){
             'public'        => true,
             'menu_position' => 15,
             'supports'      => array('title', 'editor', 'comments', 'thumbnail', 'custom-fields'),
-            'taxonomies'    => array('home_place'),
+            'taxonomies'    => array('homes_place', 'homes_type'),
             'menu_icon'     => 'dashicons-palmtree',
-            'has_archive'   => true
+            'has_archive'   => true,
+            'hierarchical'  => true
         )
     );
 }
@@ -60,66 +61,147 @@ function tvds_display_homes_detail_meta_box( $home ) {
     $pool           = esc_html(get_post_meta($home->ID, 'pool', true));
     $animals        = esc_html(get_post_meta($home->ID, 'animals', true));
     $alpine         = esc_html(get_post_meta($home->ID, 'alpine', true));
+    
+    $week_price     = esc_html(get_post_meta($home->ID, 'week_price', true));
     $for_sale       = esc_html(get_post_meta($home->ID, 'for_sale', true));
     $sale_price     = esc_html(get_post_meta($home->ID, 'sale_price', true));
+    
     $max_persons    = esc_html(get_post_meta($home->ID, 'max_persons', true));
     $type           = esc_html(get_post_meta($home->ID, 'type', true));
-    $place          = esc_html(get_post_meta($home->ID, 'place', true));
+    $bedrooms		= esc_html(get_post_meta($home->ID, 'bedrooms', true));
+    $new_contender  = esc_html(get_post_meta($home->ID, 'new_contender', true));
     ?>
-    <table>
+    <table cellpadding="5px" cellpadding="homes-detail">
+	    
+	    <!-- Details Section -->
+		<tr>
+            <th style="width: 100%;"><?php echo __('Details', 'tvds'); ?></th>
+            <th><?php echo __('Waarde', 'tvds'); ?></th>
+        </tr>
+        
+		<!-- Max Persons -->
         <tr>
-            <td style="width: 100%"><?php echo __('Wifi', 'tvds'); ?></td>
+            <td style="width: 100%;"><?php echo __('Maximum aantal personen', 'tvds'); ?></td>
             <td>
-                <input type="radio" name="wifi" value="0" <?php if($wifi == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
-                <input type="radio" name="wifi" value="1" <?php if($wifi == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
-            </td>
+	            <select name="max_persons">
+		            <?php
+			            for($x = 1; $x <= 20; $x++){
+				            ?>
+				            <option <?php if($x == $max_persons){echo 'selected';} ?> value="<?php echo $x; ?>"><?php echo $x; ?></option>
+				            <?
+			            }
+			        ?>
+	            </select>
+	        </td>
         </tr>
+        <!-- Home Type -->
         <tr>
-            <td style="width: 100%"><?php echo __('Zwembad', 'tvds'); ?></td>
+            <td style="width: 100%;"><?php echo __('Huis type', 'tvds'); ?></td>
             <td>
-                <input type="radio" name="pool" value="0" <?php if($pool == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
-                <input type="radio" name="pool" value="1" <?php if($pool == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 100%"><?php echo __('Huisdieren', 'tvds'); ?></td>
-            <td>
-                <input type="radio" name="animals" value="0" <?php if($animals == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
-                <input type="radio" name="animals" value="1" <?php if($animals == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 100%"><?php echo __('Wintersport', 'tvds'); ?></td>
-            <td>
-                <input type="radio" name="alpine" value="0" <?php if($alpine == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
-                <input type="radio" name="alpine" value="1" <?php if($alpine == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 100%"><?php echo __('Te koop', 'tvds'); ?></td>
-            <td>
-                <input type="radio" name="for_sale" value="0" <?php if($for_sale == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
-                <input type="radio" name="for_sale" value="1" <?php if($for_sale == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 100%"><?php echo __('Verkoopprijs', 'tvds'); ?></td>
-            <td><input type="number" size="80" name="sale_price" value="<?php echo $sale_price; ?>" /></td>
-        </tr>
-        <tr>
-            <td style="width: 100%"><?php echo __('Maximum aantal personen', 'tvds'); ?></td>
-            <td><input type="number" size="80" name="max_persons" value="<?php echo $max_persons; ?>" /></td>
-        </tr>
-        <tr>
-            <td style="width: 100%"><?php echo __('Huis type', 'tvds'); ?></td>
-            <td>
-                <select size="80" name="type">
+                <select name="type">
                     <option value="0" <?php if($type == 0){echo 'selected';} ?>><?php echo __('Vrijstaand', 'tvds'); ?></option>
                     <option value="1" <?php if($type == 1){echo 'selected';} ?>><?php echo __('Half vrijstaand', 'tvds'); ?></option>
                     <option value="2" <?php if($type == 2){echo 'selected';} ?>><?php echo __('Appartament', 'tvds'); ?></option>
                     <option value="3" <?php if($type == 3){echo 'selected';} ?>><?php echo __('Hotel & Residence', 'tvds'); ?></option>
                 </select>
             </td>
+        </tr>
+        <!-- Slaapkamers -->
+        <tr>
+            <td style="width: 100%;"><?php echo __('Slaapkamers', 'tvds'); ?></td>
+            <td>
+	            <select name="bedrooms">
+		            <?php
+			            for($x = 1; $x <= 10; $x++){
+				            ?>
+				            <option <?php if($x == $bedrooms){echo 'selected';} ?> value="<?php echo $x; ?>"><?php echo $x; ?></option>
+				            <?
+			            }
+			        ?>
+	            </select>
+	        </td>
+        </tr>
+        <!-- New Contender -->
+        <tr>
+            <td style="width: 100%;"><?php echo __('Nieuwe aanwinst', 'tvds'); ?></td>
+            <td>
+                <input type="radio" name="new_contender" value="0" <?php if($new_contender == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
+                <input type="radio" name="new_contender" value="1" <?php if($new_contender == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
+            </td>
+        </tr>
+
+		<!-- Divider -->
+        <tr>
+	        <td colspan="2"><hr/></td>
+        </tr>
+
+	    <!-- Voorzieningen Section -->
+		<tr>
+            <th style="width: 100%;"><?php echo __('Voorzieningen', 'tvds'); ?></th>
+            <th><?php echo __('Aanwezig', 'tvds'); ?></th>
+        </tr>
+
+        <!-- Wifi -->
+        <tr>
+            <td style="width: 100%;"><?php echo __('Wifi', 'tvds'); ?></td>
+            <td>
+                <input type="radio" name="wifi" value="0" <?php if($wifi == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
+                <input type="radio" name="wifi" value="1" <?php if($wifi == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
+            </td>
+        </tr>
+        <!-- Pool -->
+        <tr>
+            <td style="width: 100%;"><?php echo __('Zwembad', 'tvds'); ?></td>
+            <td>
+                <input type="radio" name="pool" value="0" <?php if($pool == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
+                <input type="radio" name="pool" value="1" <?php if($pool == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
+            </td>
+        </tr>
+        <!-- Animals -->        
+        <tr>
+            <td style="width: 100%;"><?php echo __('Huisdieren', 'tvds'); ?></td>
+            <td>
+                <input type="radio" name="animals" value="0" <?php if($animals == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
+                <input type="radio" name="animals" value="1" <?php if($animals == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
+            </td>
+        </tr>
+        <!-- Alpine -->        
+        <tr>
+            <td style="width: 100%;"><?php echo __('Wintersport', 'tvds'); ?></td>
+            <td>
+                <input type="radio" name="alpine" value="0" <?php if($alpine == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
+                <input type="radio" name="alpine" value="1" <?php if($alpine == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
+            </td>
+        </tr>
+
+        <!-- Divider -->
+        <tr>
+	        <td colspan="2"><hr/></td>
+        </tr>
+        
+		<!-- Prijs Section -->
+        <tr>
+            <th style="width: 100%;"><?php echo __('Prijs', 'tvds'); ?></th>
+            <th><?php echo __('Waarde', 'tvds'); ?></th>
+        </tr>
+        
+        <!-- Week Price -->
+        <tr>
+	        <td style="width: 100%;"><?php echo __('Week prijs', 'tvds'); ?></td>
+            <td><input type="number" size="80" name="week_price" value="<?php echo $week_price; ?>" /></td>
+        </tr>
+        <!-- For Sale -->
+        <tr>
+            <td style="width: 100%;"><?php echo __('Te koop', 'tvds'); ?></td>
+            <td>
+                <input type="radio" name="for_sale" value="0" <?php if($for_sale == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
+                <input type="radio" name="for_sale" value="1" <?php if($for_sale == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
+            </td>
+        </tr>
+        <!-- Sale Price -->
+        <tr>
+            <td style="width: 100%;"><?php echo __('Verkoopprijs', 'tvds'); ?></td>
+            <td><input type="number" size="80" name="sale_price" value="<?php echo $sale_price; ?>" /></td>
         </tr>
     </table>
     <?php
@@ -128,49 +210,9 @@ function tvds_display_homes_detail_meta_box( $home ) {
 // Display meta boxes
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_display_homes_booking_meta_box( $home ) {
-
-    // Dummy bookings
-    $bookings_10 = array(
-        array(
-            'name' 		=> 'Jan Kamp',
-            'persons' 	=> 5,
-            'arrival'	=> '2016-10-01',
-            'leave'		=> '2016-10-07'
-        ),
-        array(
-            'name' 		=> 'Piet van Dam',
-            'persons' 	=> 3,
-            'arrival'	=> '2016-10-15',
-            'leave'		=> '2016-10-21'
-        ),
-    );
-    ?>
-
-    <table>
-        <tr>
-            <th><?php echo __('Naam', 'tvds'); ?></th>
-            <th><?php echo __('Personen', 'tvds'); ?></th>
-            <th><?php echo __('Aankomstdatum', 'tvds'); ?></th>
-            <th><?php echo __('Vertrekdatum', 'tvds'); ?></th>
-        </tr>
-
-        <?php
-        foreach($bookings_10 as $booking){
-            ?>
-            <tr>
-                <td><?php echo $booking['name']; ?></td>
-                <td><?php echo $booking['persons']; ?></td>
-                <td><?php echo $booking['arrival']; ?></td>
-                <td><?php echo $booking['arrival']; ?></td>
-            </tr>
-            <?
-        }
-
-        ?>
-
-    </table>
-
-    <?php
+	
+	// Display the bookings	
+	do_shortcode('[tvds_booking_calendar]');
 }
 
 // Save Post
@@ -191,6 +233,10 @@ function tvds_save_homes_post( $home_id, $home ) {
         if ( isset( $_POST['alpine'] ) && $_POST['alpine'] != '' ) {
             update_post_meta( $home_id, 'alpine', $_POST['alpine'] );
         }
+        
+        if ( isset( $_POST['week_price'] ) && $_POST['week_price'] != '' ) {
+            update_post_meta( $home_id, 'week_price', $_POST['week_price'] );
+        }
         if ( isset( $_POST['for_sale'] ) && $_POST['for_sale'] != '' ) {
             update_post_meta( $home_id, 'for_sale', $_POST['for_sale'] );
         }
@@ -204,12 +250,17 @@ function tvds_save_homes_post( $home_id, $home ) {
             update_post_meta( $home_id, 'type', $_POST['type'] );
         }
 
-
         if ( isset( $_POST['arrival_date'] ) && $_POST['arrival_date'] != '' ) {
             update_post_meta( $home_id, 'arrival_date', $_POST['arrival_date'] );
         }
         if ( isset( $_POST['leave_date'] ) && $_POST['leave_date'] != '' ) {
             update_post_meta( $home_id, 'leave_date', $_POST['leave_date'] );
+        }
+        if ( isset( $_POST['bedrooms'] ) && $_POST['bedrooms'] != '' ) {
+            update_post_meta( $home_id, 'bedrooms', $_POST['bedrooms'] );
+        }
+        if ( isset( $_POST['new_contender'] ) && $_POST['new_contender'] != '' ) {
+            update_post_meta( $home_id, 'new_contender', $_POST['new_contender'] );
         }
     }
 }
