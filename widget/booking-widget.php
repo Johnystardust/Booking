@@ -30,12 +30,20 @@ class tvds_booking_filter_widget extends WP_Widget
 
         echo $args['before_widget'];
 
-        if(!empty($title))
-            echo $args['before_title'] . $title . $args['after_title'];
+        if(!empty($title)){
+	        echo $args['before_title'] . $title . $args['after_title'];
+        }
+
+		// If is taxonomy query by taxonomy
+		if(is_tax()){
+			// Get The Taxonomy and its slug
+			$tax_url = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
+
+			$taxonomy = $tax_url->taxonomy;
+			$tax_slug = $tax_url->slug;
+		}
+
         ?>
-        
-       
-        
         <form method="get">
 			
 			<!-- Type Filter -->
@@ -44,17 +52,24 @@ class tvds_booking_filter_widget extends WP_Widget
  		        
  		        <?php
 	 		        // If Filter Is Active
-			        if(isset($_GET['type'])){
-				        $type = $_GET['type'];
-			        }	        
+			        if(isset($_GET['type'])) {
+						$type = $_GET['type'];
+					}
+					elseif($taxonomy == 'homes_type'){
+						$type = $tax_slug;
+						echo $type;
+					}
 
 	 		        // Get All Type Taxonomies
 	 				$terms = get_terms('homes_type', array('hide_empty' => false));
 	 				
 			        foreach($terms as $term){
-				        ?>
-				        <option <?php if(isset($type) == $term->slug){echo 'selected';} ?> value="<?php echo $term->slug; ?>"><?php echo $term->name; ?></option>
-				        <?
+				        if(isset($type) == $term->slug){
+					        echo '<option selected value="'.$term->slug.'">'.$term->name.'</option>';
+				        }
+				        else {
+					        echo '<option value="'.$term->slug.'">'.$term->name.'</option>';
+				        }
 			        }
  		        ?> 
 	        </select></br></br>
@@ -67,14 +82,18 @@ class tvds_booking_filter_widget extends WP_Widget
 	 		        if(isset($_GET['place'])){
 				        $place = $_GET['place'];
 			        }
+
 			        
 	 		      	// Get All Place Taxonomies
 	 		      	$terms = get_terms('homes_place', array('hide_empty' => false));
 	 		      	
 	 		      	foreach($terms as $term){
-				        ?>
-				        <option <?php if(isset($place) == $term->slug){echo 'selected';} ?> value="<?php echo $term->slug; ?>"><?php echo $term->name; ?></option>
-				        <?
+		 		      	if(isset($place) == $term->slug){
+			 		      	echo '<option selected value="'.$term->slug.'">'.$term->name.'</option>';
+		 		      	}
+		 		      	else {
+			 		      	echo '<option value="'.$term->slug.'">'.$term->name.'</option>';
+		 		      	}
 			        }
 	 		    ?>
 	        </select></br></br>
@@ -117,7 +136,8 @@ class tvds_booking_filter_widget extends WP_Widget
 	// Creating widget backend, this is where the edit happens
 	//---------------------------------------------------------------
     public function form($instance){
-        if (isset($instance['title'])) {
+	    
+        if (isset($instance['title'])){
             $title = $instance['title'];
         } else {
             $title = __('New title', 'tvds');

@@ -5,7 +5,7 @@
       <paths name="timvanderslik.nl">
         <serverdata>
           <mappings>
-            <mapping deploy="/domains/timvanderslik.nl/public_html/dev/themeawesome/wp-content/plugins/Booking" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/domains/timvanderslik.nl/public_html/dev/themeawesome/wp-content/plugins/TVDS Booking" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

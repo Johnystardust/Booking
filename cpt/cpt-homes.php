@@ -1,5 +1,4 @@
 <?php
-
 // Create custom post type
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_booking_create_homes_post_type(){
@@ -56,13 +55,14 @@ add_action('admin_init', 'tvds_add_homes_meta_boxes');
 
 // Display meta boxes
 //----------------------------------------------------------------------------------------------------------------------
-function tvds_display_homes_detail_meta_box( $home ) {
+function tvds_display_homes_detail_meta_box($home){
     $wifi           = esc_html(get_post_meta($home->ID, 'wifi', true));
     $pool           = esc_html(get_post_meta($home->ID, 'pool', true));
     $animals        = esc_html(get_post_meta($home->ID, 'animals', true));
     $alpine         = esc_html(get_post_meta($home->ID, 'alpine', true));
     
-    $week_price     = esc_html(get_post_meta($home->ID, 'week_price', true));
+    $min_week_price = esc_html(get_post_meta($home->ID, 'min_week_price', true));
+    $max_week_price = esc_html(get_post_meta($home->ID, 'max_week_price', true));
     $for_sale       = esc_html(get_post_meta($home->ID, 'for_sale', true));
     $sale_price     = esc_html(get_post_meta($home->ID, 'sale_price', true));
     
@@ -86,9 +86,12 @@ function tvds_display_homes_detail_meta_box( $home ) {
 	            <select name="max_persons">
 		            <?php
 			            for($x = 1; $x <= 20; $x++){
-				            ?>
-				            <option <?php if($x == $max_persons){echo 'selected';} ?> value="<?php echo $x; ?>"><?php echo $x; ?></option>
-				            <?
+				            if($x == $max_persons){
+					            echo '<option selected value="'.$x.'">'.$x.'</option>';
+				            }
+				            else {
+					            echo '<option value="'.$x.'">'.$x.'</option>';
+				            }
 			            }
 			        ?>
 	            </select>
@@ -113,9 +116,12 @@ function tvds_display_homes_detail_meta_box( $home ) {
 	            <select name="bedrooms">
 		            <?php
 			            for($x = 1; $x <= 10; $x++){
-				            ?>
-				            <option <?php if($x == $bedrooms){echo 'selected';} ?> value="<?php echo $x; ?>"><?php echo $x; ?></option>
-				            <?
+				            if($x == $bedrooms){
+					            echo '<option selected value="'.$x.'">'.$x.'</option>';
+				            }
+				            else {
+					            echo '<option value="'.$x.'">'.$x.'</option>';
+				            }
 			            }
 			        ?>
 	            </select>
@@ -185,10 +191,15 @@ function tvds_display_homes_detail_meta_box( $home ) {
             <th><?php echo __('Waarde', 'tvds'); ?></th>
         </tr>
         
-        <!-- Week Price -->
+        <!-- Min Week Price -->
         <tr>
-	        <td style="width: 100%;"><?php echo __('Week prijs', 'tvds'); ?></td>
-            <td><input type="number" size="80" name="week_price" value="<?php echo $week_price; ?>" /></td>
+	        <td style="width: 100%;"><?php echo __('Minimale week prijs', 'tvds'); ?></td>
+            <td><input type="number" size="80" name="min_week_price" value="<?php echo $min_week_price; ?>" /></td>
+        </tr>
+        <!-- Max Week Price -->
+        <tr>
+	        <td style="width: 100%;"><?php echo __('Maximale week prijs', 'tvds'); ?></td>
+            <td><input type="number" size="80" name="max_week_price" value="<?php echo $max_week_price; ?>" /></td>
         </tr>
         <!-- For Sale -->
         <tr>
@@ -203,6 +214,18 @@ function tvds_display_homes_detail_meta_box( $home ) {
             <td style="width: 100%;"><?php echo __('Verkoopprijs', 'tvds'); ?></td>
             <td><input type="number" size="80" name="sale_price" value="<?php echo $sale_price; ?>" /></td>
         </tr>
+
+        <!-- Divider -->
+        <tr>
+            <td colspan="2"><hr/></td>
+        </tr>
+
+        <!-- Prijs Section -->
+        <tr>
+            <th style="width: 100%;"><?php echo __('Extra informatie', 'tvds'); ?></th>
+            <th><?php echo __('Waarde', 'tvds'); ?></th>
+        </tr>
+
     </table>
     <?php
 }
@@ -234,8 +257,11 @@ function tvds_save_homes_post( $home_id, $home ) {
             update_post_meta( $home_id, 'alpine', $_POST['alpine'] );
         }
         
-        if ( isset( $_POST['week_price'] ) && $_POST['week_price'] != '' ) {
-            update_post_meta( $home_id, 'week_price', $_POST['week_price'] );
+        if ( isset( $_POST['min_week_price'] ) && $_POST['min_week_price'] != '' ) {
+            update_post_meta( $home_id, 'min_week_price', $_POST['min_week_price'] );
+        }
+        if ( isset( $_POST['max_week_price'] ) && $_POST['max_week_price'] != '' ) {
+            update_post_meta( $home_id, 'max_week_price', $_POST['max_week_price'] );
         }
         if ( isset( $_POST['for_sale'] ) && $_POST['for_sale'] != '' ) {
             update_post_meta( $home_id, 'for_sale', $_POST['for_sale'] );
@@ -302,7 +328,6 @@ add_filter('manage_edit-homes_sortable_columns', 'tvds_sort_homes_columns');
 
 //add_filter( 'request', 'column_ordering' );
 add_filter( 'request', 'tvds_homes_column_orderby' );
-
 function tvds_homes_column_orderby ( $vars ) {
     if ( !is_admin() )
         return $vars;
@@ -313,4 +338,4 @@ function tvds_homes_column_orderby ( $vars ) {
         $vars = array_merge( $vars, array( 'meta_key' => 'place', 'orderby' => 'meta_value' ) );
     }
     return $vars;
-}
+}?>

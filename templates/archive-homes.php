@@ -24,11 +24,11 @@ get_header(); ?>
 				if($_GET){
 				    echo 'post';
 				}
-				
+
 				// Create The Search Meta
 				$search_meta = array();
-				
-				
+
+
 				// Wifi Search Meta
 				if(isset($_GET['wifi'])){
 					$wifi = $_GET['wifi'];
@@ -40,7 +40,7 @@ get_header(); ?>
 						        'value'   => 1,
 						        'compare' => '='
 						    );
-							
+
 							array_push($search_meta, $wifi_array);
 						}
 						else if($wifi == 0){
@@ -49,12 +49,12 @@ get_header(); ?>
 						        'value'   => 0,
 						        'compare' => '='
 						    );
-						    
+
 						    array_push($search_meta, $wifi_array);
 						}
 					}
 				}
-				
+
 				// Pool Search Meta
 				if(isset($_GET['pool'])){
 					$pool = $_GET['pool'];
@@ -65,7 +65,7 @@ get_header(); ?>
 						        'value'   => 1,
 						        'compare' => '='
 						    );
-							
+
 							array_push($search_meta, $pool_array);
 						}
 						else if($pool == 0){
@@ -74,19 +74,19 @@ get_header(); ?>
 						        'value'   => 0,
 						        'compare' => '='
 						    );
-						    
+
 						    array_push($search_meta, $pool_array);
 						}
 					}
 				}
-				
+
 				// Create The Tax Query
 				$tax_query = array('relation' => 'AND');
-				
+
 				// Place Taxonomy Search
 				if(isset($_GET['place'])){
 					$place = $_GET['place'];
-				
+
 					if(!empty($place)){
 						$tax_query[] = array(
 							'taxonomy' => 'homes_place',
@@ -95,11 +95,11 @@ get_header(); ?>
 						);
 					}
 				}
-				
+
 				// Type Taxonomy Search
 				if(isset($_GET['type'])){
 					$type = $_GET['type'];
-				
+
 					if(!empty($type)){
 					    $tax_query[] = array(
 							'taxonomy' => 'homes_type',
@@ -109,9 +109,24 @@ get_header(); ?>
 					}
 				}
 
+				// If is taxonomy query by taxonomy
 				if(is_tax()){
 					echo 'TAX';
+					$term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
+
+					$taxonomy = $term->taxonomy;
+					$tax_slug = $term->slug;
+
+					$tax_query = array(
+						array(
+							'taxonomy' => $taxonomy,
+							'field'    => 'slug',
+							'terms'    => $tax_slug,
+						),
+					);
 				}
+
+
 
 				if(is_archive()){
 					echo 'ARCHIVE';

@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name: Booking
- * Plugin URI: http://danielpataki.com
+ * Plugin Name: TVDS Booking
+ * Plugin URI: 
  * Description: Booking plugin
  * Version: 1.0.0
  * Author: Tim van der Slik
@@ -27,6 +27,7 @@ include_once('shortcodes.php');
 // Include VC Elements
 //----------------------------------------------------------------------------------------------------------------------
 include_once('vc_elements/vc_elements.php');
+
 
 // Enqueue Scripts
 //----------------------------------------------------------------------------------------------------------------------
@@ -121,4 +122,3 @@ function tvds_create_homes_taxonomies(){
     );
 }
 add_action('init', 'tvds_create_homes_taxonomies', 0);
-
