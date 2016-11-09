@@ -6,13 +6,7 @@ function tvds_booking_show_book_form(){
 	
 	// Validate And Send Booking to Cpt Booking
 	if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')){
-		
-		
-	    if(trim($_POST['postTitle']) === ''){
-	        $postTitleError = 'Please enter a title.';
-	        $hasError = true;
-	    }
-	    
+
 	    $post_information = array(
 	        'post_title' 	=> wp_strip_all_tags($_POST['name'].' '. $_POST['last_name']),
 	        'post_type' 	=> 'booking',
@@ -36,6 +30,23 @@ function tvds_booking_show_book_form(){
 		$post = wp_insert_post($post_information);
 		
 		if($post){
+
+			// If The Post Is Accepted Send The Client A Confirmation E-mail
+			$subject = 'Dit is de titel van het test bericht';
+			$email = 'Dit is de inhoud van het test bericht';
+			$to = $_POST['email'] ;
+			$from = 'timvdslik@gmail.com';
+
+			$headers   = array();
+			$headers[] = "MIME-Version: 1.0";
+			$headers[] = "Content-type: text/plain; charset=iso-8859-1";
+			$headers[] = "From: Realhosting Servicedesk <{$from}>";
+			$headers[] = "Reply-To: Realhosting Servicedesk <{$from}>";
+			//$headers[] = "Subject: {$subject}";
+			$headers[] = "X-Mailer: PHP/".phpversion();
+
+			mail($to, $subject, $email, implode("\r\n", $headers), "-f".$from );
+
 			?>
 			<script>
 				window.location.href = '<?php echo home_url(); ?>';
