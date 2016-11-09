@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="timvanderslik.nl">
+  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="ftp.timvanderslik.nl">
     <serverData>
-      <paths name="timvanderslik.nl">
+      <paths name="ftp.timvanderslik.nl">
         <serverdata>
           <mappings>
-            <mapping deploy="/domains/timvanderslik.nl/public_html/dev/themeawesome/wp-content/plugins/TVDS Booking" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/timvanderslik.nl/public_html/dev/themeawesome/wp-content/plugins/TVDS Booking" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
