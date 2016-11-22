@@ -45,8 +45,18 @@ class tvds_booking_filter_widget extends WP_Widget
 
         ?>
         <form method="get">
+	        
+			<!-- Keyword -->
+			<?php 
+				if(isset($_GET['s'])){
+					$keyword = $_GET['s'];
+				}
+			?>
+			<label>Zoekwoord</label>
+			<input type="text" name="s" value="<?php if(isset($keyword)){ echo $keyword;} ?>" /></br></br>
 			
 			<!-- Type Filter -->
+			<label>Type</label>
 	        <select name="type" >
  		        <option value="">Alle Types</option>
  		        
@@ -64,7 +74,7 @@ class tvds_booking_filter_widget extends WP_Widget
 	 				$terms = get_terms('homes_type', array('hide_empty' => false));
 	 				
 			        foreach($terms as $term){
-				        if(isset($type) == $term->slug){
+				        if(isset($type) && $type == $term->slug){
 					        echo '<option selected value="'.$term->slug.'">'.$term->name.'</option>';
 				        }
 				        else {
@@ -74,6 +84,34 @@ class tvds_booking_filter_widget extends WP_Widget
  		        ?> 
 	        </select></br></br>
 	        
+			<!-- Region Filter -->
+			<label>Regio</label>
+	        <select name="region">
+ 		        <option value="">Alle Regio's</option>
+ 		        
+ 		        <?php
+	 		        // If Filter Is Active
+	 		        if(isset($_GET['region'])){
+				        $region = $_GET['region'];
+			        }
+
+	 		      	// Get All Place Taxonomies
+	 		      	$terms = get_terms('homes_region', array('hide_empty' => false));
+	 		      	
+	 		      	foreach($terms as $term){
+		 		      	if(isset($region) && $region == $term->slug){
+			 		      	echo '<option selected value="'.$term->slug.'">'.$term->name.'</option>';
+		 		      	}
+		 		      	else {
+			 		      	echo '<option value="'.$term->slug.'">'.$term->name.'</option>';
+		 		      	}
+			        }
+	 		    ?>
+	        </select></br></br>
+
+	        
+			<!-- Place Filter -->
+			<label>Plaats</label>
 	        <select name="place">
  		        <option value="">Alle Plaatsen</option>
  		        
@@ -82,13 +120,13 @@ class tvds_booking_filter_widget extends WP_Widget
 	 		        if(isset($_GET['place'])){
 				        $place = $_GET['place'];
 			        }
-
 			        
 	 		      	// Get All Place Taxonomies
 	 		      	$terms = get_terms('homes_place', array('hide_empty' => false));
 	 		      	
+	 		      	// For each Taxonomy check if it is t
 	 		      	foreach($terms as $term){
-		 		      	if(isset($place) == $term->slug){
+		 		      	if(isset($place) && $place == $term->slug){
 			 		      	echo '<option selected value="'.$term->slug.'">'.$term->name.'</option>';
 		 		      	}
 		 		      	else {
@@ -98,7 +136,79 @@ class tvds_booking_filter_widget extends WP_Widget
 	 		    ?>
 	        </select></br></br>
 	        
+	        <!-- Arrival Date -->
+	        <label>Aankomst Datum</label></br>
+	        <input type="text" class="datepicker" name="arrival_date" value="<?php if(isset($_GET['arrival_date'])) echo $_GET['arrival_date']; ?>"/></br></br>
 	        
+	        <!-- Weeks Filter -->
+	        <label>Aantal Weken</label></br>
+	        <?php
+		        // If Filter Is Active
+		        if(isset($_GET['weeks'])){
+			        $weeks = $_GET['weeks'];
+		        }
+		    ?>
+            <select name="weeks">
+		        <option value="">Maak keuze</option>
+		        <?php 
+		            for($x = 0; $x <= 20; $x++){
+			            if($x == $weeks){
+				        	echo '<option selected value="'.$x.'">'.$x.'</option>';    
+			            }
+			            else {
+				            echo '<option value="'.$x.'">'.$x.'</option>';
+			            }
+					}
+		        ?>
+			</select></br></br>
+            	        
+	        <!-- Persons Filter -->
+			<label>Aantal personen</label>
+			<?php
+				// If Filter Is Active
+				if(isset($_GET['max_persons'])){
+			        $max_persons = $_GET['max_persons'];
+		        }
+		    ?>
+	        <select name="max_persons">
+		        <option value="">Maak keuze</option>
+		        
+	            <?php
+		            for($x = 1; $x <= 20; $x++){
+			            if($x == $max_persons){
+				            echo '<option selected value="'.$x.'">'.$x.'</option>';
+			            }
+			            else {
+				            echo '<option value="'.$x.'">'.$x.'</option>';
+			            }
+		            }
+		        ?>
+            </select></br></br>
+            
+            <!-- Bedrooms Filter -->
+			<label>Aantal Slaapkamers</label>
+			<?php
+				// If Filter Is Active
+				if(isset($_GET['bedrooms'])){
+			        $bedrooms = $_GET['bedrooms'];
+		        }
+		    ?>
+	        <select name="bedrooms">
+		        <option value="">Maak keuze</option>
+		        
+	            <?php
+		            for($x = 1; $x <= 10; $x++){
+			            if($x == $bedrooms){
+				            echo '<option selected value="'.$x.'">'.$x.'</option>';
+			            }
+			            else {
+				            echo '<option value="'.$x.'">'.$x.'</option>';
+			            }
+		            }
+		        ?>
+            </select></br></br>
+	        
+			<!-- Wifi -->
 			<?php
 				// If Filter Is Active
 				if(isset($_GET['wifi'])){
@@ -107,7 +217,8 @@ class tvds_booking_filter_widget extends WP_Widget
 		    ?>
 	        <label>Wifi</label></br>
 	        <input type="checkbox" <?php if(isset($wifi) == 1){echo 'checked';} ?> value="1" name="wifi"/></br></br>
-	        
+
+			<!-- Pool -->	        
 	        <?php
 				// If Filter Is Active
 				if(isset($_GET['pool'])){
@@ -116,6 +227,26 @@ class tvds_booking_filter_widget extends WP_Widget
 		    ?>
 	        <label>Pool</label></br>
 	        <input type="checkbox" <?php if(isset($pool) == 1){echo 'checked';} ?> value="1" name="pool"/></br></br>
+	        
+   			<!-- Animals -->
+	        <?php
+				// If Filter Is Active
+				if(isset($_GET['animals'])){
+					$animals = $_GET['animals'];
+				}
+		    ?>
+	        <label>Dieren</label></br>
+	        <input type="checkbox" <?php if(isset($animals) == 1){echo 'checked';} ?> value="1" name="animals"/></br></br>
+	        
+			<!-- Alpine -->
+	        <?php
+				// If Filter Is Active
+				if(isset($_GET['alpine'])){
+					$alpine = $_GET['alpine'];
+				}
+		    ?>
+	        <label>Wintersport</label></br>
+	        <input type="checkbox" <?php if(isset($alpine) == 1){echo 'checked';} ?> value="1" name="alpine"/></br></br>
 	        
 			<!-- Clear all Filters -->
 	        <?php $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2); ?>

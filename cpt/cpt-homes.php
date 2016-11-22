@@ -7,8 +7,8 @@ function tvds_booking_create_homes_post_type(){
             'labels' => array(
                 'name'                  => __('Huizen', 'tvds'),
                 'singular_name'         => __('Huis', 'tvds'),
-                'add_new'               => __('Add new', 'tvds'),
-                'add_new_item'          => __('Add new huis', 'tvds'),
+                'add_new'               => __('Nieuw huis', 'tvds'),
+                'add_new_item'          => __('Nieuw huis toevoegen', 'tvds'),
                 'edit'                  => __('Edit', 'tvds'),
                 'edit_item'             => __('Edit Huis', 'tvds'),
                 'new_item'              => __('Nieuw huis', 'tvds'),
@@ -22,7 +22,7 @@ function tvds_booking_create_homes_post_type(){
 
             'public'        => true,
             'menu_position' => 15,
-            'supports'      => array('title', 'editor', 'comments', 'thumbnail', 'custom-fields'),
+            'supports'      => array('title', 'editor', 'comments', 'excerpt', 'thumbnail', 'custom-fields'),
             'taxonomies'    => array('homes_place', 'homes_type'),
             'menu_icon'     => 'dashicons-palmtree',
             'has_archive'   => true,
@@ -56,20 +56,23 @@ add_action('admin_init', 'tvds_add_homes_meta_boxes');
 // Display meta boxes
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_display_homes_detail_meta_box($home){
-    $wifi           = esc_html(get_post_meta($home->ID, 'wifi', true));
-    $pool           = esc_html(get_post_meta($home->ID, 'pool', true));
-    $animals        = esc_html(get_post_meta($home->ID, 'animals', true));
-    $alpine         = esc_html(get_post_meta($home->ID, 'alpine', true));
+    $wifi               = esc_html(get_post_meta($home->ID, 'wifi', true));
+    $pool               = esc_html(get_post_meta($home->ID, 'pool', true));
+    $animals            = esc_html(get_post_meta($home->ID, 'animals', true));
+    $alpine             = esc_html(get_post_meta($home->ID, 'alpine', true));
     
-    $min_week_price = esc_html(get_post_meta($home->ID, 'min_week_price', true));
-    $max_week_price = esc_html(get_post_meta($home->ID, 'max_week_price', true));
-    $for_sale       = esc_html(get_post_meta($home->ID, 'for_sale', true));
-    $sale_price     = esc_html(get_post_meta($home->ID, 'sale_price', true));
+    $min_week_price     = esc_html(get_post_meta($home->ID, 'min_week_price', true));
+    $max_week_price     = esc_html(get_post_meta($home->ID, 'max_week_price', true));
+    $for_sale           = esc_html(get_post_meta($home->ID, 'for_sale', true));
+    $sale_price         = esc_html(get_post_meta($home->ID, 'sale_price', true));
     
-    $max_persons    = esc_html(get_post_meta($home->ID, 'max_persons', true));
-    $type           = esc_html(get_post_meta($home->ID, 'type', true));
-    $bedrooms		= esc_html(get_post_meta($home->ID, 'bedrooms', true));
-    $new_contender  = esc_html(get_post_meta($home->ID, 'new_contender', true));
+    $max_persons        = esc_html(get_post_meta($home->ID, 'max_persons', true));
+    $type               = esc_html(get_post_meta($home->ID, 'type', true));
+    $bedrooms		    = esc_html(get_post_meta($home->ID, 'bedrooms', true));
+    $new_contender      = esc_html(get_post_meta($home->ID, 'new_contender', true));
+
+    $rating             = esc_html(get_post_meta($home->ID, 'rating', true));
+    $additional_info    = get_post_meta($home->ID, 'additional_info', true);
     ?>
     <table cellpadding="5px" cellpadding="homes-detail">
 	    
@@ -220,10 +223,34 @@ function tvds_display_homes_detail_meta_box($home){
             <td colspan="2"><hr/></td>
         </tr>
 
-        <!-- Prijs Section -->
+        <!-- Extra Info Section -->
         <tr>
             <th style="width: 100%;"><?php echo __('Extra informatie', 'tvds'); ?></th>
             <th><?php echo __('Waarde', 'tvds'); ?></th>
+        </tr>
+
+        <!-- Rating -->
+        <tr>
+            <td style="width: 100%;"><?php echo __('Waardering', 'tvds'); ?></td>
+            <td>
+                <select name="rating">
+                    <?php
+                    for($x = 1; $x <= 5; $x++){
+                        if($x == $rating){
+                            echo '<option selected value="'.$x.'">'.$x.' '.__('Sterren', 'tvds').'</option>';
+                        }
+                        else {
+                            echo '<option value="'.$x.'">'.$x.' '.__('Sterren', 'tvds').'</option>';
+                        }
+                    }
+                    ?>
+                </select>
+            </td>
+        </tr>
+        <!-- Additional Info -->
+        <tr>
+            <td style="width: 100%;"><?php echo __('Extra informatie', 'tvds'); ?></td>
+            <td><textarea cols="80" rows name="additional_info"><?php echo $additional_info; ?></textarea></td>
         </tr>
 
     </table>
@@ -287,6 +314,10 @@ function tvds_save_homes_post( $home_id, $home ) {
         }
         if ( isset( $_POST['new_contender'] ) && $_POST['new_contender'] != '' ) {
             update_post_meta( $home_id, 'new_contender', $_POST['new_contender'] );
+        }
+
+        if ( isset( $_POST['rating'] ) && $_POST['rating'] != '' ) {
+            update_post_meta( $home_id, 'rating', $_POST['rating'] );
         }
     }
 }
@@ -368,6 +399,21 @@ add_filter( 'template_include', 'tvds_homes_include_template_function', 1 );
 // Create Taxonomies
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_create_homes_taxonomies(){
+	register_taxonomy(
+		'homes_region',
+		'homes',
+		array(
+			'labels' => array(
+				'name' => __('Regio'),
+				'add_new_item' => __('Nieuwe regio', 'tvds'),
+				'new_item_name' => __('Nieuw regio type', 'tvds'),
+			),
+			'show_ui' => true,
+			'show_tagcloud' => false,
+			'hierarchical' => true,
+			'rewrite' => array('slug' => 'regio'),
+		)
+	);
     register_taxonomy(
         'homes_place',
         'homes',

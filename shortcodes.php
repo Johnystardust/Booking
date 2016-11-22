@@ -1,18 +1,62 @@
 <?php
 
+// Check if a Date is inside a range
+//----------------------------------------------------------------------------------------------------------------------
+function tvds_homes_check_in_date_range($i, $x, $y){
+	if((($y >= $i) && ($y <= $x))){
+		return true;
+	}
+}
+
+// Exclude Booked Homes Function
+//----------------------------------------------------------------------------------------------------------------------
+function tvds_homes_exclude_booked_homes($search_start_date, $search_end_date){
+	$exclude_array = array();
+	
+	// The Query Arguments
+	$booking_args = array(
+		'post_type' => 'booking',
+	);
+	
+	// The Query
+	$booking_query = new WP_Query($booking_args);
+	
+	if($booking_query->have_posts()){
+		while($booking_query->have_posts()) : $booking_query->the_post();
+			
+			// Get The Booked Arrival Date & Weeks
+				$arrival_date 	= get_post_meta(get_the_ID(), 'arrival_date', true);
+			$weeks 			= get_post_meta(get_the_ID(), 'weeks', true);
+
+			// Make DateTime from the strings
+			$start_date = new DateTime($arrival_date);
+			$end_date 	= new DateTime($arrival_date);
+			
+			// Add The Number Of Weeks To The End Date
+			$end_date->modify('+'.$weeks.' week');
+			
+			// Find Out If The Search Is Available
+			if(tvds_homes_check_in_date_range($start_date, $end_date, $search_start_date) || tvds_homes_check_in_date_range($start_date, $end_date, $search_end_date)){
+				// Make Int Of The String An Add It To The Array
+				$home_id = intval(get_post_meta(get_the_ID(), 'home_id', true));
+				$exclude_array[] = $home_id;
+			}
+			
+		endwhile;
+		wp_reset_postdata();
+	}
+	
+	// Return The Homes To Be Excluded In The Search
+	return $exclude_array;
+}
+
 // Booking Form
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_booking_show_book_form(){
 	
 	// Validate And Send Booking to Cpt Booking
 	if(isset($_POST['submitted']) && isset($_POST['post_nonce_field']) && wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')){
-		
-		
-	    if(trim($_POST['postTitle']) === ''){
-	        $postTitleError = 'Please enter a title.';
-	        $hasError = true;
-	    }
-	    
+
 	    $post_information = array(
 	        'post_title' 	=> wp_strip_all_tags($_POST['name'].' '. $_POST['last_name']),
 	        'post_type' 	=> 'booking',
@@ -36,9 +80,26 @@ function tvds_booking_show_book_form(){
 		$post = wp_insert_post($post_information);
 		
 		if($post){
+
+			// If The Post Is Accepted Send The Client A Confirmation E-mail
+			$subject 	= 'Dit is de titel van het test bericht';
+			$email 		= 'Dit is de inhoud van het test bericht';
+			$to 		= $_POST['email'];
+			$from 		= 'timvdslik@gmail.com';
+
+			$headers   	= array();
+			$headers[] 	= "MIME-Version: 1.0";
+			$headers[] 	= "Content-type: text/plain; charset=iso-8859-1";
+			$headers[] 	= "From: Realhosting Servicedesk <{$from}>";
+			$headers[] 	= "Reply-To: Realhosting Servicedesk <{$from}>";
+			//$headers[] = "Subject: {$subject}";
+			$headers[] 	= "X-Mailer: PHP/".phpversion();
+
+			mail($to, $subject, $email, implode("\r\n", $headers), "-f".$from );
+
 			?>
 			<script>
-				window.location.href = '<?php echo home_url(); ?>';
+				window.location.href = '<?php echo esc_attr(get_option('option_name')); ?>';
 			</script>
 			<?php
 		}
@@ -166,75 +227,6 @@ function tvds_booking_show_book_form(){
 	</script>
 	<?php
 }
-add_action('tvds_after_single_home_content', 'tvds_booking_show_book_form');
+add_action('tvds_after_single_home_content', 'tvds_booking_show_book_form', 10);
 
-// Calendars
-//----------------------------------------------------------------------------------------------------------------------
-function tvds_booking_show_calendars(){
-	
-	// Make Array for the booked days
-	$booked_days = array();
-	
-	// The Query Arguments
-	//
-	// Get the bookings with the page ID
-	$args = array(
-	    'post_type' 	=> 'booking',
-	    'orderby'       => 'meta_value',
-	    'post_status'	=> 'publish',
-	    "meta_query" => array( 
-	        array(
-	            "key" 		=> "home_id",
-	            "value" 	=> get_the_ID(),
-	        ),
-	    ),
-	);
-	
-	$query = new WP_Query( $args );
-	if($query->have_posts()){
-	    while($query->have_posts()) : $query->the_post();
-			$arrival_date 	= get_post_meta(get_the_ID(), 'arrival_date', true);
-			$weeks 			= get_post_meta(get_the_ID(), 'weeks', true);
 
-			$start_date = new DateTime($arrival_date);
-			$end_date 	= new DateTime($arrival_date);
-
-			$end_date->modify('+'.$weeks.' week');
-
-			$interval = DateInterval::createFromDateString('+1 day');
-			$period	= new DatePeriod($start_date, $interval, $end_date);
-
-			foreach($period as $datetime){
-				$booked_days[] = $datetime->format('Y-m-d');
-			}
-	    endwhile;
-
-		wp_reset_postdata();
-	}
-
-	// Get The Current Date And Extract Year & Month
-	$date = new DateTime();
-	$current_year  = $date->format('Y');
-	$current_month = $date->format('m');
-    
-    // For Each Month Display a Calendar
-    for ($x = 0; $x <= 12; $x++){
-        $date = strtotime($current_month.'/1/'.$current_year);
-        $newformat = date('Y-M',$date);
-        
-        echo '<h2>'.$newformat.'</h2>';
-		$booked_month = tvds_booking_get_booked_month($booked_days, $current_year, $current_month);
-        echo tvds_booking_draw_calendar($current_month, $current_year, $booked_month);
-
-        // If The Month Is December Start a New Year
-        if($current_month > 11){
-            $current_month = 1;
-            $current_year++;
-        }
-        else {
-            $current_month++;								            
-        }
-	}
-}
-add_action('tvds_after_single_home_content', 'tvds_booking_show_calendars');
-add_shortcode('tvds_booking_calendar', 'tvds_booking_show_calendars');
