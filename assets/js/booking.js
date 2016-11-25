@@ -83,6 +83,7 @@ jQuery(document).ready(function($){
 	            var text = target.html();
 	            $(this).find(".btn-select-input").val(value);
 	            $(this).find(".btn-select-value").html(text);
+				$(this).find(".btn-select-value").addClass('selected');
 	        }
 	        ul.hide();
 	        $(this).removeClass("active");

@@ -25,7 +25,7 @@ class tvds_booking_filter_widget extends WP_Widget
 	//---------------------------------------------------------------
     public function widget($args, $instance){
         $title      = apply_filters('widget_title', $instance['title']);
-//         $show_labels = (isset($instance['t']))
+        $show_labels = (isset($instance['show_labels'])) ? $instance['show_labels'] : '';
 
 
         echo $args['before_widget'];
@@ -45,78 +45,105 @@ class tvds_booking_filter_widget extends WP_Widget
 
         ?>
         <form method="get" action="/themeawesome/homes/">
-	        
-			<!-- Keyword -->
-			<?php 
+
+
+			<div class="tvds_homes_search_form_group">
+				<!-- Keyword -->
+				<?php
 				if(isset($_GET['s'])){
 					$keyword = $_GET['s'];
 				}
-			?>
-			
-			<label>Zoekwoord</label>
-			<input type="text" name="s" value="<?php if(isset($keyword)){ echo $keyword;} ?>" /></br></br>
-			
+
+				if($show_labels){
+					echo '<label>Zoekwoord</label>';
+				}
+				?>
+				<input type="text" name="s" value="<?php if(isset($keyword)){ echo $keyword;} ?>" />
+			</div>
+
+
+
 			<!-- Type Filter -->
-			<label>Type</label>
+			<?php
+			var_dump(getallheaders());
 
+			// If Filter Is Active
+			if(isset($_GET['type'])) {
+				$type = $_GET['type'];
+			}
+			elseif($taxonomy == 'homes_type'){
+				$type = $tax_slug;
+				echo $type;
+			}
 
-			<!-- Weeks -->
-			<div class="tvds_homes_search_form_field_wrap">
+			// Get The Set Term
+			$terms = get_terms('homes_type', array('hide_empty' => false));
 
-				<!-- Bootstrap Select Button -->
+			if(isset($type)){
+				foreach($terms as $term){
+					if($type == $term->slug){
+						$term_slug = $term->slug;
+						$term_name = $term->name;
+					}
+				}
+			}
+
+			// If Show Labels Is Set
+			if($show_labels){
+				echo '<label>Type</label>';
+			}
+			?>
+			<div class="tvds_homes_search_form_group">
 				<a class="btn btn-default btn-select">
-
-					<!-- The Hidden Value Field -->
-					<input type="hidden" class="btn-select-input" id="" name="type" value="" />
-
-					<!-- Initial Title -->
-					<span class="btn-select-value">test</span>
-
-					<!-- Arrow -->
-					<span class="btn-select-arrow glyphicon glyphicon-chevron-down"></span>
+					<input type="hidden" class="btn-select-input" id="" name="type" value="<?php if(isset($term_slug)){echo $term_slug;} ?>" />
+					<span class="btn-select-value"><?php if(isset($term_slug)){echo $term_slug;}else {echo __('Type', 'tvds');} ?></span>
+					<span class="btn-select-arrow glyphicon glyphicon glyphicon-menu-down pull-right"></span>
 
 					<!-- The Values -->
 					<ul>
-						<?php for($x = 0; $x <= 20; $x++){
-							echo '<li data-value="'.$x.'">'.$x.' Week</li>';
+						<li><?php __('Alle Types', 'tvds'); ?></li>
+						<?php
+						// Get All Type Taxonomies
+						foreach($terms as $term){
+							echo '<li data-value="'.$term->slug.'">'.$term->name.'</li>';
 						}
 						?>
 					</ul>
 				</a>
 			</div>
-			
-			
-			
-			
-			
-			
-			
-	        <select name="type" >
- 		        <option value="">Alle Types</option>
- 		        
- 		        <?php
-	 		        // If Filter Is Active
-			        if(isset($_GET['type'])) {
-						$type = $_GET['type'];
-					}
-					elseif($taxonomy == 'homes_type'){
-						$type = $tax_slug;
-						echo $type;
-					}
 
-	 		        // Get All Type Taxonomies
-	 				$terms = get_terms('homes_type', array('hide_empty' => false));
-	 				
-			        foreach($terms as $term){
-				        if(isset($type) && $type == $term->slug){
-					        echo '<option selected value="'.$term->slug.'">'.$term->name.'</option>';
-				        }
-				        else {
-					        echo '<option value="'.$term->slug.'">'.$term->name.'</option>';
-				        }
-			        }
- 		        ?> 
-	        </select></br></br>
+			</br></br>
+			</br></br>
+			</br></br>
+			</br></br>
+
+<!--			<label>Type</label>-->
+<!--	        <select name="type" >-->
+<!-- 		        <option value="">Alle Types</option>-->
+<!---->
+<!-- 		        --><?php
+//	 		        // If Filter Is Active
+//			        if(isset($_GET['type'])) {
+//						$type = $_GET['type'];
+//					}
+//					elseif($taxonomy == 'homes_type'){
+//						$type = $tax_slug;
+//						echo $type;
+//					}
+//
+//	 		        // Get All Type Taxonomies
+//	 				$terms = get_terms('homes_type', array('hide_empty' => false));
+//
+//			        foreach($terms as $term){
+//				        if(isset($type) && $type == $term->slug){
+//					        echo '<option selected value="'.$term->slug.'">'.$term->name.'</option>';
+//				        }
+//				        else {
+//					        echo '<option value="'.$term->slug.'">'.$term->name.'</option>';
+//				        }
+//			        }
+// 		        ?>
+<!--	        </select></br></br>-->
 	        
 			<!-- Region Filter -->
 			<label>Regio</label>
@@ -131,7 +158,7 @@ class tvds_booking_filter_widget extends WP_Widget
 
 	 		      	// Get All Place Taxonomies
 	 		      	$terms = get_terms('homes_region', array('hide_empty' => false));
-	 		      	
+
 	 		      	foreach($terms as $term){
 		 		      	if(isset($region) && $region == $term->slug){
 			 		      	echo '<option selected value="'.$term->slug.'">'.$term->name.'</option>';

@@ -22,6 +22,10 @@ include_once('calendar.php');
 
 // Include The Shortcodes
 //----------------------------------------------------------------------------------------------------------------------
+include_once('booking-functions.php');
+
+// Include The Shortcodes
+//----------------------------------------------------------------------------------------------------------------------
 include_once('shortcodes.php');
 
 // Include VC Elements

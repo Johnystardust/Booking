@@ -235,6 +235,72 @@
 
 /* Archive Sidebar */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+.tvds_homes_archive_sidebar {
+  background: #ffffff;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+
 .booking-widget.widget_tvds_booking_filter_widget {
-  
+
+  .tvds_homes_search_form_group {
+    margin-bottom: 10px;
+  }
+
+  .btn-select, input {
+    display: block;
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    border-radius: 0px;
+    border: none;
+    text-align: left;
+    line-height: 24px;
+    border-color: #f8f8f8;
+    background: #f8f8f8;
+  }
+
+  .btn-select ul {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #eeeeee;
+    border-top: 0px;
+    color: #000;
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    left: -1px;
+    right: -1px;
+    top: 51px;
+    z-index: 999;
+  }
+
+  .btn-select ul li {
+    padding: 5px 10px;
+    text-align: left;
+  }
+
+  .btn-select ul li:hover, .btn-select ul li.selected {
+    background-color: #F9F8F7;
+  }
+
+  .btn-select:hover, .btn-select.active {
+    background-color: #F9F8F7;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  .btn-select-value {
+    color: #999999;
+  }
+
+  .btn-select-value.selected {
+    color: #000;
+  }
+
+  .btn-select-arrow {
+    top: 5px;
+  }
 }

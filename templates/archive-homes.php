@@ -18,9 +18,11 @@ get_header(); ?>
 
 			<!-- The Sidebar -->
 			<div class="col-md-3">
-				<?php dynamic_sidebar('booking_sidebar'); ?>
+				<div class="tvds_homes_archive_sidebar">
+					<?php dynamic_sidebar('booking_sidebar'); ?>
+				</div>
 			</div>
-			
+
 			<!-- The Homes -->
 			<div class="col-md-9">
 				
