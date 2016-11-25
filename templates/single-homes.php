@@ -46,11 +46,7 @@ get_header(); ?>
 			</div>
 			
 			<div class="col-md-3">
-				<div class="booking-info">
-
-				</div>
-
-				<?php dynamic_sidebar('booking_sidebar'); ?>
+				<?php do_action('tvds_single_home_sidebar_content'); ?>
 			</div>
 		</div>
 	</div><!-- container end -->

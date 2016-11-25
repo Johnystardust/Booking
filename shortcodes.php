@@ -227,6 +227,6 @@ function tvds_booking_show_book_form(){
 	</script>
 	<?php
 }
-add_action('tvds_after_single_home_content', 'tvds_booking_show_book_form', 10);
+add_action('tvds_single_home_sidebar_content', 'tvds_booking_show_book_form', 10);
 
 

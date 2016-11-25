@@ -23,7 +23,7 @@ function tvds_booking_create_homes_post_type(){
             'public'        => true,
             'menu_position' => 15,
             'supports'      => array('title', 'editor', 'comments', 'excerpt', 'thumbnail', 'custom-fields'),
-            'taxonomies'    => array('homes_place', 'homes_type'),
+            'taxonomies'    => array('category', 'homes_place', 'homes_type'),
             'menu_icon'     => 'dashicons-palmtree',
             'has_archive'   => true,
             'hierarchical'  => true
@@ -46,9 +46,6 @@ add_action('admin_init', 'tvds_add_homes_meta_boxes');
  *
  * Nieuwe Aanwinst
  *
- * Code
- *
- * Extra kosten informatie
  *
  *
  */
@@ -197,12 +194,12 @@ function tvds_display_homes_detail_meta_box($home){
         <!-- Min Week Price -->
         <tr>
 	        <td style="width: 100%;"><?php echo __('Minimale week prijs', 'tvds'); ?></td>
-            <td><input type="number" size="80" name="min_week_price" value="<?php echo $min_week_price; ?>" /></td>
+            <td><input type="text" name="min_week_price" value="<?php echo $min_week_price; ?>" /></td>
         </tr>
         <!-- Max Week Price -->
         <tr>
 	        <td style="width: 100%;"><?php echo __('Maximale week prijs', 'tvds'); ?></td>
-            <td><input type="number" size="80" name="max_week_price" value="<?php echo $max_week_price; ?>" /></td>
+            <td><input type="text" name="max_week_price" value="<?php echo $max_week_price; ?>" /></td>
         </tr>
         <!-- For Sale -->
         <tr>
@@ -215,7 +212,7 @@ function tvds_display_homes_detail_meta_box($home){
         <!-- Sale Price -->
         <tr>
             <td style="width: 100%;"><?php echo __('Verkoopprijs', 'tvds'); ?></td>
-            <td><input type="number" size="80" name="sale_price" value="<?php echo $sale_price; ?>" /></td>
+            <td><input type="text" name="sale_price" value="<?php echo $sale_price; ?>" /></td>
         </tr>
 
         <!-- Divider -->
@@ -234,6 +231,7 @@ function tvds_display_homes_detail_meta_box($home){
             <td style="width: 100%;"><?php echo __('Waardering', 'tvds'); ?></td>
             <td>
                 <select name="rating">
+	                <option value=""><?php echo __('Geen waardering', 'tvds'); ?></option>
                     <?php
                     for($x = 1; $x <= 5; $x++){
                         if($x == $rating){
@@ -250,7 +248,7 @@ function tvds_display_homes_detail_meta_box($home){
         <!-- Additional Info -->
         <tr>
             <td style="width: 100%;"><?php echo __('Extra informatie', 'tvds'); ?></td>
-            <td><textarea cols="80" rows name="additional_info"><?php echo $additional_info; ?></textarea></td>
+            <td><textarea cols="40" rows name="additional_info"><?php echo $additional_info; ?></textarea></td>
         </tr>
 
     </table>

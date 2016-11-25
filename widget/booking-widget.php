@@ -25,7 +25,7 @@ class tvds_booking_filter_widget extends WP_Widget
 	//---------------------------------------------------------------
     public function widget($args, $instance){
         $title      = apply_filters('widget_title', $instance['title']);
-        $text       = isset($instance['text']) ? $instance['text'] : '';
+//         $show_labels = (isset($instance['t']))
 
 
         echo $args['before_widget'];
@@ -44,7 +44,7 @@ class tvds_booking_filter_widget extends WP_Widget
 		}
 
         ?>
-        <form method="get">
+        <form method="get" action="/themeawesome/homes/">
 	        
 			<!-- Keyword -->
 			<?php 
@@ -52,11 +52,45 @@ class tvds_booking_filter_widget extends WP_Widget
 					$keyword = $_GET['s'];
 				}
 			?>
+			
 			<label>Zoekwoord</label>
 			<input type="text" name="s" value="<?php if(isset($keyword)){ echo $keyword;} ?>" /></br></br>
 			
 			<!-- Type Filter -->
 			<label>Type</label>
+
+
+			<!-- Weeks -->
+			<div class="tvds_homes_search_form_field_wrap">
+
+				<!-- Bootstrap Select Button -->
+				<a class="btn btn-default btn-select">
+
+					<!-- The Hidden Value Field -->
+					<input type="hidden" class="btn-select-input" id="" name="type" value="" />
+
+					<!-- Initial Title -->
+					<span class="btn-select-value">test</span>
+
+					<!-- Arrow -->
+					<span class="btn-select-arrow glyphicon glyphicon-chevron-down"></span>
+
+					<!-- The Values -->
+					<ul>
+						<?php for($x = 0; $x <= 20; $x++){
+							echo '<li data-value="'.$x.'">'.$x.' Week</li>';
+						}
+						?>
+					</ul>
+				</a>
+			</div>
+			
+			
+			
+			
+			
+			
+			
 	        <select name="type" >
  		        <option value="">Alle Types</option>
  		        
@@ -273,12 +307,23 @@ class tvds_booking_filter_widget extends WP_Widget
         } else {
             $title = __('New title', 'tvds');
         }
+        
+        
+        if(isset($instance['show_labels'])){
+	    	$show_labels = $instance['show_labels'];    
+        }
+        
+        
 
         // Widget admin form
         ?>
         <p>
             <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label>
             <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>"/>
+        </p>
+        <p>
+	        <label for="<?php echo $this->get_field_id('show_labels'); ?>"><?php _e('Show labels') ?></label>
+	        <input id="<?php echo $this->get_field_id('show_labels'); ?>" name="<?php echo $this->get_field_name('show_labels'); ?>" type="checkbox" <?php if($show_labels){echo 'checked';} ?> value="1"/>
         </p>
 
         <?php
@@ -290,7 +335,8 @@ class tvds_booking_filter_widget extends WP_Widget
 	//---------------------------------------------------------------
     public function update($new_instance, $old_instance){
         $instance = array();
-        $instance['title']      = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
+        $instance['title']      	= (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
+        $instance['show_labels'] 	= (!empty($new_instance['show_labels'])) ? strip_tags($new_instance['show_labels']) : '';
 
         return $instance;
     }

@@ -51,30 +51,41 @@ function tvds_booking_show_calendars(){
 
 	// Calendars Container
 	echo '<div id="tvds_booking_calendars_wrapper">';
-	echo '<div class="tvds_booking_calendars_container">';
 
-	// For Each Month Display a Calendar
-	for ($x = 0; $x <= 12; $x++){
-		$date = strtotime($current_month.'/1/'.$current_year);
-		$newformat = date('Y-M',$date);
+		// Calendars Menu
+		echo '<a class="tvds_booking_calendars_prev"><i class="icon icon-left-dir"></i> '.__('Vorige', 'tvds').'</a>';
+		echo '<a class="tvds_booking_calendars_next">'.__('Volgende', 'tvds').' <i class="icon icon-right-dir"></i></a>';
+		
+		
+		
+		echo '<ul class="tvds_booking_calendars_container">';
+			
+			// Get The Number Of Calendars In The Future
+			$max_calendar_future = (!empty(get_option('max_future_calendars')) ? get_option('max_future_calendars') : 12); 
+			
+			// For Each Month Display a Calendar
+			for ($x = 0; $x <= ($max_calendar_future - 1); $x++){
+				echo '<li class="tvds_calendar_item">';
+					$date = strtotime($current_month.'/1/'.$current_year);
+					$newformat = date('Y-M',$date);
+			
+					echo '<h2>'.$newformat.'</h2>';
+					$booked_month = tvds_booking_get_booked_month($booked_days, $current_year, $current_month);
+					echo tvds_booking_draw_calendar($current_month, $current_year, $booked_month);
+			
+					// If The Month Is December Start a New Year
+					if($current_month > 11){
+						$current_month = 1;
+						$current_year++;
+					}
+					else {
+						$current_month++;
+					}
 
-		echo '<div class="calendar">';
-		echo '<h2>'.$newformat.'</h2>';
-		$booked_month = tvds_booking_get_booked_month($booked_days, $current_year, $current_month);
-		echo tvds_booking_draw_calendar($current_month, $current_year, $booked_month);
-
-		// If The Month Is December Start a New Year
-		if($current_month > 11){
-			$current_month = 1;
-			$current_year++;
-		}
-		else {
-			$current_month++;
-		}
-		echo '</div>';
-	}
-	echo '<div class="clearfix"></div>';
-	echo '</div>';
+				echo '</li>';
+			}
+			
+		echo '</ul>';
 	echo '</div>';
 }
 add_action('tvds_after_single_home_content', 'tvds_booking_show_calendars', 20);

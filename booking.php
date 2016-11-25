@@ -35,7 +35,7 @@ include_once('homes-options.php');
 // Add Image Size
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_homes_add_image_sizes() {
-    add_image_size( 'homes_archive_thumb', 300, 300, true );
+    add_image_size( 'homes_archive_thumb', 405, 330, true );
 }
 add_action( 'after_setup_theme', 'tvds_homes_add_image_sizes' );
 
