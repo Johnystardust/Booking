@@ -55,7 +55,7 @@ function tvds_homes_enqueue_script(){
 
 	wp_register_script('validation', 'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js');
 	wp_enqueue_script('validation');
-       
+
     // Styles
     wp_enqueue_style('booking_css', plugin_dir_url(__FILE__).'assets/css/booking.css');
 }

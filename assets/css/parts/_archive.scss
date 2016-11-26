@@ -4,7 +4,7 @@
 /* Archive Options */
 .tvds_homes_archive_options .tvds_homes_archive_options_views {
   float: right;
-  padding: 15px 0px;
+  padding: 15px 0;
 }
 
 .tvds_homes_archive_options .tvds_homes_archive_options_views .tvds_homes_archive_view_btn {
@@ -26,7 +26,7 @@
 }
 
 .tvds_homes_archive_options .tvds_homes_archive_options_views .tvds_homes_archive_view_btn i {
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 .tvds_homes_archive_options .tvds_homes_archive_options_views .tvds_homes_archive_view_btn.active,
@@ -43,7 +43,7 @@
 
 .tvds_homes_archive_item .tvds_homes_archive_item_inner {
   background-color: #ffffff;
-  box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.03);
+  box-shadow: 4px 3px 5px 0 rgba(0, 0, 0, 0.03);
   overflow: hidden;
 }
 
@@ -105,7 +105,7 @@
 }
 
 .tvds_homes_archive_item .tvds_homes_archive_item_info .tvds_homes_archive_item_info_rating li i {
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 .tvds_homes_archive_item .tvds_homes_archive_item_info .tvds_homes_archive_item_info_services ul {
@@ -116,12 +116,12 @@
 }
 
 .tvds_homes_archive_item .tvds_homes_archive_item_info .tvds_homes_archive_item_info_services ul li i {
-  margin-left: 0px;
+  margin-left: 0;
   line-height: 20px;
 }
 
 .tvds_homes_archive_item .tvds_homes_archive_item_info .tvds_homes_archive_item_info_services .tvds_homes_archive_room_information {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .tvds_homes_archive_item .tvds_homes_archive_item_info .tvds_homes_archive_item_info_services .tvds_homes_archive_room_information i {
@@ -152,7 +152,7 @@
 }
 
 .tvds_homes_archive_item .tvds_homes_archive_item_details .tvds_homes_archive_price {
-  margin: 10px 0px;
+  margin: 10px 0;
 }
 
 .tvds_homes_archive_item .tvds_homes_book_btn {
@@ -202,7 +202,7 @@
 /* Details */
 .tvds_homes_archive_items_wrapper.grid .tvds_homes_archive_item .tvds_homes_archive_item_details {
   width: 100%;
-  padding-top: 0px;
+  padding-top: 0;
   text-align: left;
 }
 
@@ -244,8 +244,22 @@
 
 .booking-widget.widget_tvds_booking_filter_widget {
 
+  .tvds_homes_search_form_section {
+    padding-bottom: 25px;
+    border-bottom: 1px solid #eeeeee;
+    margin-bottom: 37px;
+  }
+
   .tvds_homes_search_form_group {
     margin-bottom: 10px;
+  }
+
+  .tvds_homes_search_form_group.form_group_title h3 {
+    line-height: 25px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 27px;
   }
 
   .btn-select, input {
@@ -253,12 +267,103 @@
     position: relative;
     width: 100%;
     padding: 10px;
-    border-radius: 0px;
-    border: none;
+    border-radius: 0;
     text-align: left;
     line-height: 24px;
-    border-color: #f8f8f8;
+    border: 1px solid #eeeeee;
     background: #f8f8f8;
+  }
+
+  input[type="submit"]{
+    background: #333333;
+    color: #ffffff;
+    position: relative;
+    display: inline-block;
+    -moz-border-radius: 25px;
+    text-align: center;
+    padding: 12px 24px;
+    font-size: 12px;
+    text-transform: uppercase;
+    line-height: 14px;
+    font-weight: 700;
+    margin-top: 10px;
+  }
+
+
+
+  input[type="checkbox"]:not(:checked),
+  input[type="checkbox"]:checked {
+    position: absolute;
+    left: -9999px;
+  }
+  input[type="checkbox"]:not(:checked) + label,
+  input[type="checkbox"]:checked + label {
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+  }
+
+  input[type="checkbox"]:not(:checked) + label:before,
+  input[type="checkbox"]:checked + label:before {
+    content: '';
+    position: absolute;
+    left:0; top: 2px;
+    width: 17px; height: 17px;
+    border: 1px solid #aaa;
+    background: #f8f8f8;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.3)
+  }
+
+  input[type="checkbox"]:not(:checked) + label:after,
+  input[type="checkbox"]:checked + label:after {
+    content: '\e815';
+    position: absolute;
+    left: 1px;
+    font-size: 22px;
+    line-height: 0.8;
+    color: #333333;
+    transition: all .2s;
+    font-family: "fontello";
+    font-style: normal;
+    font-weight: normal;
+    display: inline-block;
+    text-decoration: inherit;
+    text-align: center;
+  }
+
+  input[type="checkbox"]:not(:checked) + label:after {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  input[type="checkbox"]:checked + label:after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  input[type="checkbox"]:disabled:not(:checked) + label:before,
+  input[type="checkbox"]:disabled:checked + label:before {
+    box-shadow: none;
+    border-color: #bbb;
+    background-color: #ddd;
+  }
+
+  input[type="checkbox"]:disabled:checked + label:after {
+    color: #999;
+  }
+
+  input[type="checkbox"]:disabled + label {
+    color: #aaa;
+  }
+
+  input[type="checkbox"]:checked:focus + label:before,
+  input[type="checkbox"]:not(:checked):focus + label:before {
+    border: 1px dotted blue;
+  }
+
+  .btn-default.focus, .btn-default:focus {
+    border: none;
   }
 
   .btn-select ul {
@@ -266,14 +371,14 @@
     position: absolute;
     background-color: #ffffff;
     border: 1px solid #eeeeee;
-    border-top: 0px;
+    border-top: 0;
     color: #000;
     list-style: none;
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     left: -1px;
     right: -1px;
-    top: 51px;
+    top: 44px;
     z-index: 999;
   }
 

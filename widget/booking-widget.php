@@ -23,7 +23,11 @@ class tvds_booking_filter_widget extends WP_Widget
     //
     // Creating widget front-end, this is where the action happens
 	//---------------------------------------------------------------
-    public function widget($args, $instance){
+	/**
+	 * @param array $args
+	 * @param array $instance
+     */
+	public function widget($args, $instance){
         $title      = apply_filters('widget_title', $instance['title']);
         $show_labels = (isset($instance['show_labels'])) ? $instance['show_labels'] : '';
 
@@ -42,281 +46,126 @@ class tvds_booking_filter_widget extends WP_Widget
 			$taxonomy = $tax_url->taxonomy;
 			$tax_slug = $tax_url->slug;
 		}
+		else {
+			$taxonomy = null;
+			$tax_slug = null;
+		}
 
         ?>
-        <form method="get" action="/themeawesome/homes/">
+        <form id="tvds_homes_search_form_widget_form" method="get" action="/themeawesome/homes/">
+
+			<div class="tvds_homes_search_form_section">
+
+				<div class="tvds_homes_search_form_group">
+					<!-- Keyword -->
+					<?php
+					if(isset($_GET['s'])){
+						$keyword = $_GET['s'];
+					}
+
+					if($show_labels){
+						echo '<label>Zoekwoord</label>';
+					}
+					?>
+					<input type="text" name="s" value="<?php if(isset($keyword)){ echo $keyword;} ?>" />
+				</div>
+			</div>
 
 
-			<div class="tvds_homes_search_form_group">
-				<!-- Keyword -->
+			<!-- Taxonomy Section-->
+			<div class="tvds_homes_search_form_section">
+
+				<div class="tvds_homes_search_form_group form_group_title">
+					<h3>Zoeken</h3>
+				</div>
+
 				<?php
-				if(isset($_GET['s'])){
-					$keyword = $_GET['s'];
-				}
-
-				if($show_labels){
-					echo '<label>Zoekwoord</label>';
-				}
+					echo tvds_homes_search_widget_form_taxonomy_fields('type', 'homes_type', 'Type', $taxonomy, $tax_slug, $show_labels);
+					echo tvds_homes_search_widget_form_taxonomy_fields('region', 'homes_region', 'Regio', $taxonomy, $tax_slug, $show_labels);
+					echo tvds_homes_search_widget_form_taxonomy_fields('place', 'homes_place', 'Plaats', $taxonomy, $tax_slug, $show_labels);
 				?>
-				<input type="text" name="s" value="<?php if(isset($keyword)){ echo $keyword;} ?>" />
+			</div>
+
+			<!-- Date Section -->
+			<div class="tvds_homes_search_form_section">
+				<div class="tvds_homes_search_form_group form_group_title">
+					<h3>Datum</h3>
+				</div>
+
+				<!-- Arrival Date -->
+				<div class="tvds_homes_search_form_group">
+					<?php
+					if($show_labels){
+						echo '<label>Aankomst Datum</label>';
+					}
+					?>
+					<input type="text" class="datepicker" name="arrival_date" value="<?php if(isset($_GET['arrival_date'])) echo $_GET['arrival_date']; ?>"/>
+				</div>
+
+				<div class="tvds_homes_search_form_group">
+					<?php echo tvds_homes_search_widget_form_number_select_fields('weeks', 'Aantal Weken', 12 , $show_labels); ?>
+				</div>
 			</div>
 
 
+			<!-- Room Section -->
+			<div class="tvds_homes_search_form_section">
+				<div class="tvds_homes_search_form_group form_group_title">
+					<h3>Room</h3>
+				</div>
 
-			<!-- Type Filter -->
-			<?php
-			var_dump(getallheaders());
+				<!-- Persons Filter -->
+				<div class="tvds_homes_search_form_group">
+					<?php echo tvds_homes_search_widget_form_number_select_fields('max_persons', 'Aantal personen', 20 , $show_labels); ?>
+				</div>
 
-			// If Filter Is Active
-			if(isset($_GET['type'])) {
-				$type = $_GET['type'];
-			}
-			elseif($taxonomy == 'homes_type'){
-				$type = $tax_slug;
-				echo $type;
-			}
-
-			// Get The Set Term
-			$terms = get_terms('homes_type', array('hide_empty' => false));
-
-			if(isset($type)){
-				foreach($terms as $term){
-					if($type == $term->slug){
-						$term_slug = $term->slug;
-						$term_name = $term->name;
-					}
-				}
-			}
-
-			// If Show Labels Is Set
-			if($show_labels){
-				echo '<label>Type</label>';
-			}
-			?>
-			<div class="tvds_homes_search_form_group">
-				<a class="btn btn-default btn-select">
-					<input type="hidden" class="btn-select-input" id="" name="type" value="<?php if(isset($term_slug)){echo $term_slug;} ?>" />
-					<span class="btn-select-value"><?php if(isset($term_slug)){echo $term_slug;}else {echo __('Type', 'tvds');} ?></span>
-					<span class="btn-select-arrow glyphicon glyphicon glyphicon-menu-down pull-right"></span>
-
-					<!-- The Values -->
-					<ul>
-						<li><?php __('Alle Types', 'tvds'); ?></li>
-						<?php
-						// Get All Type Taxonomies
-						foreach($terms as $term){
-							echo '<li data-value="'.$term->slug.'">'.$term->name.'</li>';
-						}
-						?>
-					</ul>
-				</a>
+				<!-- Bedrooms Filter -->
+				<div class="tvds_homes_search_form_group">
+					<?php echo tvds_homes_search_widget_form_number_select_fields('bedrooms', 'Aantal Slaapkamers', 10 , $show_labels); ?>
+				</div>
 			</div>
 
-			</br></br>
-			</br></br>
-			</br></br>
-			</br></br>
 
-<!--			<label>Type</label>-->
-<!--	        <select name="type" >-->
-<!-- 		        <option value="">Alle Types</option>-->
-<!---->
-<!-- 		        --><?php
-//	 		        // If Filter Is Active
-//			        if(isset($_GET['type'])) {
-//						$type = $_GET['type'];
-//					}
-//					elseif($taxonomy == 'homes_type'){
-//						$type = $tax_slug;
-//						echo $type;
-//					}
-//
-//	 		        // Get All Type Taxonomies
-//	 				$terms = get_terms('homes_type', array('hide_empty' => false));
-//
-//			        foreach($terms as $term){
-//				        if(isset($type) && $type == $term->slug){
-//					        echo '<option selected value="'.$term->slug.'">'.$term->name.'</option>';
-//				        }
-//				        else {
-//					        echo '<option value="'.$term->slug.'">'.$term->name.'</option>';
-//				        }
-//			        }
-// 		        ?>
-<!--	        </select></br></br>-->
-	        
-			<!-- Region Filter -->
-			<label>Regio</label>
-	        <select name="region">
- 		        <option value="">Alle Regio's</option>
- 		        
- 		        <?php
-	 		        // If Filter Is Active
-	 		        if(isset($_GET['region'])){
-				        $region = $_GET['region'];
-			        }
+			<!-- Facilities Section -->
+			<div class="tvds_homes_search_form_section">
+				<div class="tvds_homes_search_form_group form_group_title">
+					<h3>Faciliteiten</h3>
+				</div>
 
-	 		      	// Get All Place Taxonomies
-	 		      	$terms = get_terms('homes_region', array('hide_empty' => false));
+				<!-- Wifi -->
+				<div class="tvds_homes_search_form_group">
+					<?php echo tvds_homes_search_widget_form_services_fields('wifi', 'Wifi'); ?>
+				</div>
 
-	 		      	foreach($terms as $term){
-		 		      	if(isset($region) && $region == $term->slug){
-			 		      	echo '<option selected value="'.$term->slug.'">'.$term->name.'</option>';
-		 		      	}
-		 		      	else {
-			 		      	echo '<option value="'.$term->slug.'">'.$term->name.'</option>';
-		 		      	}
-			        }
-	 		    ?>
-	        </select></br></br>
+				<!-- Pool -->
+				<div class="tvds_homes_search_form_group">
+					<?php echo tvds_homes_search_widget_form_services_fields('pool', 'Zwembad'); ?>
+				</div>
 
-	        
-			<!-- Place Filter -->
-			<label>Plaats</label>
-	        <select name="place">
- 		        <option value="">Alle Plaatsen</option>
- 		        
- 		        <?php
-	 		        // If Filter Is Active
-	 		        if(isset($_GET['place'])){
-				        $place = $_GET['place'];
-			        }
-			        
-	 		      	// Get All Place Taxonomies
-	 		      	$terms = get_terms('homes_place', array('hide_empty' => false));
-	 		      	
-	 		      	// For each Taxonomy check if it is t
-	 		      	foreach($terms as $term){
-		 		      	if(isset($place) && $place == $term->slug){
-			 		      	echo '<option selected value="'.$term->slug.'">'.$term->name.'</option>';
-		 		      	}
-		 		      	else {
-			 		      	echo '<option value="'.$term->slug.'">'.$term->name.'</option>';
-		 		      	}
-			        }
-	 		    ?>
-	        </select></br></br>
-	        
-	        <!-- Arrival Date -->
-	        <label>Aankomst Datum</label></br>
-	        <input type="text" class="datepicker" name="arrival_date" value="<?php if(isset($_GET['arrival_date'])) echo $_GET['arrival_date']; ?>"/></br></br>
-	        
-	        <!-- Weeks Filter -->
-	        <label>Aantal Weken</label></br>
-	        <?php
-		        // If Filter Is Active
-		        if(isset($_GET['weeks'])){
-			        $weeks = $_GET['weeks'];
-		        }
-		    ?>
-            <select name="weeks">
-		        <option value="">Maak keuze</option>
-		        <?php 
-		            for($x = 0; $x <= 20; $x++){
-			            if($x == $weeks){
-				        	echo '<option selected value="'.$x.'">'.$x.'</option>';    
-			            }
-			            else {
-				            echo '<option value="'.$x.'">'.$x.'</option>';
-			            }
-					}
-		        ?>
-			</select></br></br>
-            	        
-	        <!-- Persons Filter -->
-			<label>Aantal personen</label>
-			<?php
-				// If Filter Is Active
-				if(isset($_GET['max_persons'])){
-			        $max_persons = $_GET['max_persons'];
-		        }
-		    ?>
-	        <select name="max_persons">
-		        <option value="">Maak keuze</option>
-		        
-	            <?php
-		            for($x = 1; $x <= 20; $x++){
-			            if($x == $max_persons){
-				            echo '<option selected value="'.$x.'">'.$x.'</option>';
-			            }
-			            else {
-				            echo '<option value="'.$x.'">'.$x.'</option>';
-			            }
-		            }
-		        ?>
-            </select></br></br>
-            
-            <!-- Bedrooms Filter -->
-			<label>Aantal Slaapkamers</label>
-			<?php
-				// If Filter Is Active
-				if(isset($_GET['bedrooms'])){
-			        $bedrooms = $_GET['bedrooms'];
-		        }
-		    ?>
-	        <select name="bedrooms">
-		        <option value="">Maak keuze</option>
-		        
-	            <?php
-		            for($x = 1; $x <= 10; $x++){
-			            if($x == $bedrooms){
-				            echo '<option selected value="'.$x.'">'.$x.'</option>';
-			            }
-			            else {
-				            echo '<option value="'.$x.'">'.$x.'</option>';
-			            }
-		            }
-		        ?>
-            </select></br></br>
-	        
-			<!-- Wifi -->
-			<?php
-				// If Filter Is Active
-				if(isset($_GET['wifi'])){
-					$wifi = $_GET['wifi'];
-				}
-		    ?>
-	        <label>Wifi</label></br>
-	        <input type="checkbox" <?php if(isset($wifi) == 1){echo 'checked';} ?> value="1" name="wifi"/></br></br>
+				<!-- Animals -->
+				<div class="tvds_homes_search_form_group">
+					<?php echo tvds_homes_search_widget_form_services_fields('animals', 'Huisdieren'); ?>
+				</div>
 
-			<!-- Pool -->	        
-	        <?php
-				// If Filter Is Active
-				if(isset($_GET['pool'])){
-					$pool = $_GET['pool'];
-				}
-		    ?>
-	        <label>Pool</label></br>
-	        <input type="checkbox" <?php if(isset($pool) == 1){echo 'checked';} ?> value="1" name="pool"/></br></br>
-	        
-   			<!-- Animals -->
-	        <?php
-				// If Filter Is Active
-				if(isset($_GET['animals'])){
-					$animals = $_GET['animals'];
-				}
-		    ?>
-	        <label>Dieren</label></br>
-	        <input type="checkbox" <?php if(isset($animals) == 1){echo 'checked';} ?> value="1" name="animals"/></br></br>
-	        
-			<!-- Alpine -->
-	        <?php
-				// If Filter Is Active
-				if(isset($_GET['alpine'])){
-					$alpine = $_GET['alpine'];
-				}
-		    ?>
-	        <label>Wintersport</label></br>
-	        <input type="checkbox" <?php if(isset($alpine) == 1){echo 'checked';} ?> value="1" name="alpine"/></br></br>
-	        
-			<!-- Clear all Filters -->
-	        <?php $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2); ?>
-	        <a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . $uri_parts[0]; ?>">Clear all filters</a><br/><br/>
+				<!-- Alpine -->
+				<div class="tvds_homes_search_form_group">
+					<?php echo tvds_homes_search_widget_form_services_fields('alpine', 'Wintersport'); ?>
+				</div>
+
+			</div>
+
 	        
 			<!-- Submit -->
 	        <input type="submit" value="Filter"/>
-	        
         </form>
+
+		<!-- Form Validation  -->
+		<script>
+			$("#tvds_homes_search_form_widget_form").submit(function() {
+				$('input[value=""]').attr('name', '');
+			});
+//			$("#tvds_homes_search_form_widget_form").validate();
+		</script>
         
         <?php
 
