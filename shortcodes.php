@@ -16,6 +16,7 @@ function tvds_homes_exclude_booked_homes($search_start_date, $search_end_date){
 	// The Query Arguments
 	$booking_args = array(
 		'post_type' => 'booking',
+		'post_per_page' => '-1',
 	);
 	
 	// The Query
@@ -25,13 +26,14 @@ function tvds_homes_exclude_booked_homes($search_start_date, $search_end_date){
 		while($booking_query->have_posts()) : $booking_query->the_post();
 			
 			// Get The Booked Arrival Date & Weeks
-				$arrival_date 	= get_post_meta(get_the_ID(), 'arrival_date', true);
+			$arrival_date 	= get_post_meta(get_the_ID(), 'arrival_date', true);
 			$weeks 			= get_post_meta(get_the_ID(), 'weeks', true);
 
 			// Make DateTime from the strings
 			$start_date = new DateTime($arrival_date);
 			$end_date 	= new DateTime($arrival_date);
-			
+			$end_date->modify('-1 second');
+
 			// Add The Number Of Weeks To The End Date
 			$end_date->modify('+'.$weeks.' week');
 			
@@ -99,12 +101,14 @@ function tvds_booking_show_book_form(){
 
 			?>
 			<script>
-				window.location.href = '<?php echo esc_attr(get_option('option_name')); ?>';
+				window.location.href = '<?php echo esc_attr(get_option('confirmation_page')); ?>';
 			</script>
 			<?php
 		}
 	}
-	
+
+	echo get_the_ID();
+
 	?>
 	<!-- The booking form -->
     <form action="" id="single-book-form" method="POST">

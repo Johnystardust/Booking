@@ -10,21 +10,24 @@ function tvds_booking_show_calendars(){
 	// The Query Arguments
 	//
 	// Get the bookings with the page ID
-	$args = array(
-		'post_type' 	=> 'booking',
+	$booking_args = array(
+		'post_type' 		=> 'booking',
+		'posts_per_page' 	=> -1,
 		'orderby'       => 'meta_value',
 		'post_status'	=> 'publish',
 		"meta_query" => array(
 			array(
 				"key" 		=> "home_id",
 				"value" 	=> get_the_ID(),
+				'compare' 	=> '=',
 			),
 		),
 	);
 
-	$query = new WP_Query($args);
-	if($query->have_posts()){
-		while($query->have_posts()) : $query->the_post();
+	$booking_query = new WP_Query($booking_args);
+
+	if($booking_query->have_posts()){
+		while($booking_query->have_posts()) : $booking_query->the_post();
 			$arrival_date 	= get_post_meta(get_the_ID(), 'arrival_date', true);
 			$weeks 			= get_post_meta(get_the_ID(), 'weeks', true);
 

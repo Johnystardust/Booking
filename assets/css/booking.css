@@ -46,10 +46,6 @@
   position: relative;
   cursor: pointer; }
 
-.tvds_homes_archive_item .tvds_homes_archive_item_thumbnail img {
-  width: 100%;
-  height: auto; }
-
 /*
 .tvds_homes_archive_item .tvds_homes_archive_item_thumbnail .tvds_homes_archive_item_thumbnail_overlay {
 	position: absolute;
@@ -238,16 +234,22 @@
   font-weight: 700;
   margin-top: 10px; }
 .booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:not(:checked),
-.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:checked {
+.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:checked,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:not(:checked),
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:checked {
   position: absolute;
   left: -9999px; }
 .booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:not(:checked) + label,
-.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:checked + label {
+.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:checked + label,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:not(:checked) + label,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:checked + label {
   position: relative;
   padding-left: 25px;
   cursor: pointer; }
 .booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:not(:checked) + label:before,
-.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:checked + label:before {
+.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:checked + label:before,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:not(:checked) + label:before,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:checked + label:before {
   content: '';
   position: absolute;
   left: 0;
@@ -259,7 +261,9 @@
   border-radius: 3px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3); }
 .booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:not(:checked) + label:after,
-.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:checked + label:after {
+.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:checked + label:after,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:not(:checked) + label:after,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:checked + label:after {
   content: '\e815';
   position: absolute;
   left: 1px;
@@ -273,23 +277,31 @@
   display: inline-block;
   text-decoration: inherit;
   text-align: center; }
-.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:not(:checked) + label:after {
+.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:not(:checked) + label:after,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:not(:checked) + label:after {
   opacity: 0;
   transform: scale(0); }
-.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:checked + label:after {
+.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:checked + label:after,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:checked + label:after {
   opacity: 1;
   transform: scale(1); }
 .booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:disabled:not(:checked) + label:before,
-.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:disabled:checked + label:before {
+.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:disabled:checked + label:before,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:disabled:not(:checked) + label:before,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:disabled:checked + label:before {
   box-shadow: none;
   border-color: #bbb;
   background-color: #ddd; }
-.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:disabled:checked + label:after {
+.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:disabled:checked + label:after,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:disabled:checked + label:after {
   color: #999; }
-.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:disabled + label {
+.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:disabled + label,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:disabled + label {
   color: #aaa; }
 .booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:checked:focus + label:before,
-.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:not(:checked):focus + label:before {
+.booking-widget.widget_tvds_booking_filter_widget input[type="checkbox"]:not(:checked):focus + label:before,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:checked:focus + label:before,
+.booking-widget.widget_tvds_booking_filter_widget input[type="radio"]:not(:checked):focus + label:before {
   border: 1px dotted blue; }
 .booking-widget.widget_tvds_booking_filter_widget .btn-default.focus, .booking-widget.widget_tvds_booking_filter_widget .btn-default:focus {
   border: none; }
@@ -305,7 +317,7 @@
   margin: 0;
   left: -1px;
   right: -1px;
-  top: 44px;
+  top: 45px;
   z-index: 999; }
 .booking-widget.widget_tvds_booking_filter_widget .btn-select ul li {
   padding: 5px 10px;

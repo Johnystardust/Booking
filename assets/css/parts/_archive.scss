@@ -56,8 +56,8 @@
 }
 
 .tvds_homes_archive_item .tvds_homes_archive_item_thumbnail img {
-  width: 100%;
-  height: auto;
+  //width: 100%;
+  //height: auto;
 }
 
 /*
@@ -171,7 +171,6 @@
 }
 
 /* Archive Items Grid View */
-
 .tvds_homes_archive_items_wrapper.grid .tvds_homes_archive_item .tvds_homes_archive_item_inner {
   margin: 0;
 }
@@ -292,19 +291,25 @@
 
 
   input[type="checkbox"]:not(:checked),
-  input[type="checkbox"]:checked {
+  input[type="checkbox"]:checked,
+  input[type="radio"]:not(:checked),
+  input[type="radio"]:checked {
     position: absolute;
     left: -9999px;
   }
   input[type="checkbox"]:not(:checked) + label,
-  input[type="checkbox"]:checked + label {
+  input[type="checkbox"]:checked + label,
+  input[type="radio"]:not(:checked) + label,
+  input[type="radio"]:checked + label {
     position: relative;
     padding-left: 25px;
     cursor: pointer;
   }
 
   input[type="checkbox"]:not(:checked) + label:before,
-  input[type="checkbox"]:checked + label:before {
+  input[type="checkbox"]:checked + label:before,
+  input[type="radio"]:not(:checked) + label:before,
+  input[type="radio"]:checked + label:before {
     content: '';
     position: absolute;
     left:0; top: 2px;
@@ -316,7 +321,9 @@
   }
 
   input[type="checkbox"]:not(:checked) + label:after,
-  input[type="checkbox"]:checked + label:after {
+  input[type="checkbox"]:checked + label:after,
+  input[type="radio"]:not(:checked) + label:after,
+  input[type="radio"]:checked + label:after {
     content: '\e815';
     position: absolute;
     left: 1px;
@@ -332,33 +339,41 @@
     text-align: center;
   }
 
-  input[type="checkbox"]:not(:checked) + label:after {
+  input[type="checkbox"]:not(:checked) + label:after,
+  input[type="radio"]:not(:checked) + label:after{
     opacity: 0;
     transform: scale(0);
   }
 
-  input[type="checkbox"]:checked + label:after {
+  input[type="checkbox"]:checked + label:after,
+  input[type="radio"]:checked + label:after {
     opacity: 1;
     transform: scale(1);
   }
 
   input[type="checkbox"]:disabled:not(:checked) + label:before,
-  input[type="checkbox"]:disabled:checked + label:before {
+  input[type="checkbox"]:disabled:checked + label:before,
+  input[type="radio"]:disabled:not(:checked) + label:before,
+  input[type="radio"]:disabled:checked + label:before{
     box-shadow: none;
     border-color: #bbb;
     background-color: #ddd;
   }
 
-  input[type="checkbox"]:disabled:checked + label:after {
+  input[type="checkbox"]:disabled:checked + label:after,
+  input[type="radio"]:disabled:checked + label:after {
     color: #999;
   }
 
-  input[type="checkbox"]:disabled + label {
+  input[type="checkbox"]:disabled + label,
+  input[type="radio"]:disabled + label {
     color: #aaa;
   }
 
   input[type="checkbox"]:checked:focus + label:before,
-  input[type="checkbox"]:not(:checked):focus + label:before {
+  input[type="checkbox"]:not(:checked):focus + label:before,
+  input[type="radio"]:checked:focus + label:before,
+  input[type="radio"]:not(:checked):focus + label:before{
     border: 1px dotted blue;
   }
 
@@ -378,7 +393,7 @@
     margin: 0;
     left: -1px;
     right: -1px;
-    top: 44px;
+    top: 45px;
     z-index: 999;
   }
 

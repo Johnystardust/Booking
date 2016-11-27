@@ -79,8 +79,14 @@ get_header(); ?>
 						$end_date   = new DateTime($booking_arrival_date);
 						
 						$end_date->modify('+'.$booking_weeks.' week');
-						
+						$end_date->modify('-1 second');
+
 						$exclude_homes_array = tvds_homes_exclude_booked_homes($start_date, $end_date);
+
+						var_dump($exclude_homes_array);
+						echo '<br>';
+						echo 'start_date: '.print_r($start_date).'<br>';
+						echo 'end_date: '.print_r($end_date).'<br>';
 					}
 					else {
 						$exclude_homes_array = '';
@@ -227,6 +233,19 @@ get_header(); ?>
 	
 							    array_push($search_meta, $alpine_array);
 							}
+						}
+					}
+
+					if(isset($_GET['stars'])){
+						$stars = $_GET['stars'];
+						if(!empty($stars)){
+							$stars_array = array(
+								'key'     => 'rating',
+								'value'   => $stars,
+								'compare' => '>='
+							);
+
+							array_push($search_meta, $stars_array);
 						}
 					}
 	
@@ -469,7 +488,54 @@ get_header(); ?>
 					));
 					?>
 				</div><!-- tvds_homes_archive_paginate -->
-				
+
+
+				<?php
+				// The Query Arguments
+				$testargs = array(
+					'post_type' 		=> 'booking',
+					'posts_per_page' 	=> '-1',
+				);
+
+				$testquery = new WP_Query( $testargs );
+
+				if($testquery->have_posts() ) {
+					while ($testquery->have_posts()) : $testquery->the_post();
+						the_title();
+
+						// Get The Booked Arrival Date & Weeks
+						$arrival_date 	= get_post_meta(get_the_ID(), 'arrival_date', true);
+						$weeks 			= get_post_meta(get_the_ID(), 'weeks', true);
+
+						// Make DateTime from the strings
+						$start_date = new DateTime($arrival_date);
+						$end_date 	= new DateTime($arrival_date);
+
+						// Add The Number Of Weeks To The End Date
+						$end_date->modify('+'.$weeks.' week');
+
+
+						echo '<br>';
+						echo 'arrival_date: '.get_post_meta($post->ID, 'arrival_date', true);
+						echo '<br>';
+						echo '<br>';
+						print_r($end_date);
+						echo '<br>';
+						echo '<br>';
+						echo 'weeks: '.get_post_meta($post->ID, 'weeks', true);
+						echo '<br>';
+						echo '<br>';
+						echo 'home_id: '.get_post_meta($post->ID, 'home_id', true);
+						echo '<br><br>';
+						echo '<br><br>';
+
+
+					endwhile;
+				}
+
+
+				?>
+
 			</div><!-- col-md-9 end -->
 
 		</div><!-- row end -->

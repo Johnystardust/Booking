@@ -28,8 +28,8 @@ class tvds_booking_filter_widget extends WP_Widget
 	 * @param array $instance
      */
 	public function widget($args, $instance){
-        $title      = apply_filters('widget_title', $instance['title']);
-        $show_labels = (isset($instance['show_labels'])) ? $instance['show_labels'] : '';
+        $title      	= apply_filters('widget_title', $instance['title']);
+        $show_labels 	= (isset($instance['show_labels'])) ? $instance['show_labels'] : '';
 
 
         echo $args['before_widget'];
@@ -99,7 +99,7 @@ class tvds_booking_filter_widget extends WP_Widget
 						echo '<label>Aankomst Datum</label>';
 					}
 					?>
-					<input type="text" class="datepicker" name="arrival_date" value="<?php if(isset($_GET['arrival_date'])) echo $_GET['arrival_date']; ?>"/>
+					<input type="text" class="datepicker" name="arrival_date" <?php if(isset($_GET['arrival_date'])) echo 'value="'.$_GET['arrival_date'].'"'; ?>/>
 				</div>
 
 				<div class="tvds_homes_search_form_group">
@@ -151,7 +151,43 @@ class tvds_booking_filter_widget extends WP_Widget
 				<div class="tvds_homes_search_form_group">
 					<?php echo tvds_homes_search_widget_form_services_fields('alpine', 'Wintersport'); ?>
 				</div>
+			</div>
 
+			<!-- Rating Section -->
+			<div class="tvds_homes_search_form_section">
+				<div class="tvds_homes_search_form_group form_group_title">
+					<h3>Sterren</h3>
+				</div>
+
+				<div class="tvds_homes_search_form_group">
+					<?php
+
+					if(isset($_GET['stars'])){
+						$rating = $_GET['stars'];
+					}
+					else {
+						$rating = '';
+					}
+
+					for($x = 5; $x > 0; $x--){
+						if($rating == $x){
+							echo '<input id="tvds_stars_'.$x.'" checked type="radio" name="stars" value="'.$x.'">';
+						}
+						else {
+							echo '<input id="tvds_stars_'.$x.'" type="radio" name="stars" value="'.$x.'">';
+						}
+
+
+						echo '<label for="tvds_stars_'.$x.'">';
+							for($i = 5; $i > 0; $i--){
+								if($i <= $x){
+									echo '<i class="icon icon-star"></i>';
+								}
+							}
+						echo '</label><br>';
+					}
+					?>
+				</div>
 			</div>
 
 	        
@@ -162,6 +198,7 @@ class tvds_booking_filter_widget extends WP_Widget
 		<!-- Form Validation  -->
 		<script>
 			$("#tvds_homes_search_form_widget_form").submit(function() {
+				// Remove The Name So The Input Doesnt Get Send When It Has No Value
 				$('input[value=""]').attr('name', '');
 			});
 //			$("#tvds_homes_search_form_widget_form").validate();
