@@ -24,9 +24,7 @@ get_header(); ?>
 			</div>
 
 			<!-- The Homes -->
-			<div class="col-md-9">
-				
-				
+			<div class="col-md-9">				
 				
 				<!-- Archive Page Options -->
 				<div class="tvds_homes_archive_options">
@@ -56,43 +54,35 @@ get_header(); ?>
 				
 				
 				
-				
-				
-				
 				<div class="tvds_homes_archive_items_wrapper">
-
-				
 					<?php
-					
-					// Get Available Homes In The Date
-					if(isset($_GET['arrival_date'])){
-						$booking_arrival_date = $_GET['arrival_date'];
-					}
-					
-					if(isset($_GET['weeks'])){
-						$booking_weeks = $_GET['weeks'];	
-					}
-					
-					if(isset($booking_arrival_date) && isset($booking_weeks)){
-						// Get The Search Arrival date
-						$start_date = new DateTime($booking_arrival_date);
-						$end_date   = new DateTime($booking_arrival_date);
-						
-						$end_date->modify('+'.$booking_weeks.' week');
-						$end_date->modify('-1 second');
 
-						$exclude_homes_array = tvds_homes_exclude_booked_homes($start_date, $end_date);
+					// Create The Search Meta & Tax Query
+					//--------------------------------------------------------------
+					$search_meta 	= array();
+					$tax_query 		= array('relation' => 'AND');
 
-						var_dump($exclude_homes_array);
-						echo '<br>';
-						echo 'start_date: '.print_r($start_date).'<br>';
-						echo 'end_date: '.print_r($end_date).'<br>';
+					// Arrays For The Different Fields
+					$services 	= array('wifi', 'pool', 'animals', 'alpine');
+					$taxonomies = array('province', 'region', 'place', 'type');
+					$numbers 	= array('max_persons', 'bedrooms', 'stars');
+
+					// For Each GET Request Check The $key in the arrays And Run The Appropriate Function
+					foreach($_GET as $key => $value){
+						if(in_array($key, $services)){
+							$search_array = tvds_homes_search_services($key, $value);
+							array_push($search_meta, $search_array);
+						}
+						elseif(in_array($key, $taxonomies)){
+							$tax_search = tvds_homes_search_taxonomies($key, $value);
+							array_push($tax_query, $tax_search);
+						}
+						elseif(in_array($key, $numbers)){
+							$search_array = tvds_homes_search_numbers($key, $value);
+							array_push($search_meta, $search_array);
+						}
 					}
-					else {
-						$exclude_homes_array = '';
-					}
-					
-					
+
 					// Search Keyword
 					if(isset($_GET['s'])){
 						$keyword = $_GET['s'];
@@ -100,214 +90,41 @@ get_header(); ?>
 					else {
 						$keyword = '';
 					}
-					
-					// Create The Search Meta
-					//--------------------------------------------------------------
-					$search_meta = array();
-					
-					// Max Persons Search Meta
-					if(isset($_GET['max_persons'])){
-						$max_persons = $_GET['max_persons'];
-	
-						if(!empty($max_persons)){
-							$max_persons_array = array(
-						        'key'     => 'max_persons',
-						        'value'   => $max_persons,
-						        'compare' => '>='
-						    );
-	
-							array_push($search_meta, $max_persons_array);
+
+					// Get Available Homes In The Date
+					if(isset($_GET['arrival_date']) && isset($_GET['weeks'])){
+						$booking_arrival_date = $_GET['arrival_date'];
+						$booking_weeks = $_GET['weeks'];
+
+						if(!empty($booking_arrival_date) && !empty($booking_weeks)){
+							$exclude_homes_array = tvds_homes_search_dates($booking_arrival_date, $booking_weeks);
+						}
+						else {
+							$exclude_homes_array = '';
 						}
 					}
-					
-					// Bedrooms Search Meta
-					if(isset($_GET['bedrooms'])){
-						$bedrooms = $_GET['bedrooms'];
-	
-						if(!empty($bedrooms)){
-							$bedrooms_array = array(
-						        'key'     => 'bedrooms',
-						        'value'   => $bedrooms,
-						        'compare' => '>='
-						    );
-	
-							array_push($search_meta, $bedrooms_array);
-						}
-					}
-	
-					// Wifi Search Meta
-					if(isset($_GET['wifi'])){
-						$wifi = $_GET['wifi'];
-	
-						if(!empty($wifi)){
-							if($wifi == 1){
-								$wifi_array = array(
-							        'key'     => 'wifi',
-							        'value'   => 1,
-							        'compare' => '='
-							    );
-	
-								array_push($search_meta, $wifi_array);
-							}
-							else if($wifi == 0){
-								$wifi_array = array(
-							        'key'     => 'wifi',
-							        'value'   => 0,
-							        'compare' => '='
-							    );
-	
-							    array_push($search_meta, $wifi_array);
-							}
-						}
-					}
-	
-					// Pool Search Meta
-					if(isset($_GET['pool'])){
-						$pool = $_GET['pool'];
-						if(!empty($pool)){
-							if($pool == 1){
-								$pool_array = array(
-							        'key'     => 'pool',
-							        'value'   => 1,
-							        'compare' => '='
-							    );
-	
-								array_push($search_meta, $pool_array);
-							}
-							else if($pool == 0){
-								$pool_array = array(
-							        'key'     => 'pool',
-							        'value'   => 0,
-							        'compare' => '='
-							    );
-	
-							    array_push($search_meta, $pool_array);
-							}
-						}
-					}
-					
-					// Animals Search Meta
-					if(isset($_GET['animals'])){
-						$animals = $_GET['animals'];
-						if(!empty($animals)){
-							if($animals == 1){
-								$animals_array = array(
-							        'key'     => 'animals',
-							        'value'   => 1,
-							        'compare' => '='
-							    );
-	
-								array_push($search_meta, $animals_array);
-							}
-							else if($animals == 0){
-								$animals_array = array(
-							        'key'     => 'animals',
-							        'value'   => 0,
-							        'compare' => '='
-							    );
-	
-							    array_push($search_meta, $animals_array);
-							}
-						}
-					}
-					
-					// Alpine Search Meta
-					if(isset($_GET['alpine'])){
-						$alpine = $_GET['alpine'];
-						if(!empty($alpine)){
-							if($alpine == 1){
-								$alpine_array = array(
-							        'key'     => 'alpine',
-							        'value'   => 1,
-							        'compare' => '='
-							    );
-	
-								array_push($search_meta, $alpine_array);
-							}
-							else if($alpine == 0){
-								$alpine_array = array(
-							        'key'     => 'alpine',
-							        'value'   => 0,
-							        'compare' => '='
-							    );
-	
-							    array_push($search_meta, $alpine_array);
-							}
-						}
+					else {
+						$exclude_homes_array = '';
 					}
 
-					if(isset($_GET['stars'])){
-						$stars = $_GET['stars'];
-						if(!empty($stars)){
-							$stars_array = array(
-								'key'     => 'rating',
-								'value'   => $stars,
-								'compare' => '>='
-							);
-
-							array_push($search_meta, $stars_array);
-						}
-					}
-	
-					// Create The Tax Query
-					//--------------------------------------------------------------
-					$tax_query = array('relation' => 'AND');
-	
-					// Region Taxonomy Search
-					if(isset($_GET['region'])){
-						$region = $_GET['region'];
-	
-						if(!empty($region)){
-							$tax_query[] = array(
-								'taxonomy' => 'homes_region',
-								'field'    => 'slug',
-								'terms'    => array($region),
-							);
-						}
-					}
-	
-					// Place Taxonomy Search
-					if(isset($_GET['place'])){
-						$place = $_GET['place'];
-	
-						if(!empty($place)){
-							$tax_query[] = array(
-								'taxonomy' => 'homes_place',
-								'field'    => 'slug',
-								'terms'    => array($place),
-							);
-						}
-					}
-	
-					// Type Taxonomy Search
-					if(isset($_GET['type'])){
-						$type = $_GET['type'];
-	
-						if(!empty($type)){
-						    $tax_query[] = array(
-								'taxonomy' => 'homes_type',
-								'field'    => 'slug',
-								'terms'    => array($type),
-							);
-						}
-					}
-	
 					// If is taxonomy query by taxonomy
 					if(is_tax()){
 						$term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
 	
-						$taxonomy = $term->taxonomy;
-						$tax_slug = $term->slug;
-	
 						$tax_query = array(
 							array(
-								'taxonomy' => $taxonomy,
+								'taxonomy' => $term->taxonomy,
 								'field'    => 'slug',
-								'terms'    => $tax_slug,
+								'terms'    => $term->slug,
 							),
 						);
+
+						echo '<h1>Vakantiehuizen '.$term->name.'</h1><br>';
 					}
-	
+					elseif(is_archive()){
+						echo '<h1>Vakantiehuizen</h1><br>';
+					}
+
 					// Pagination Settings
 					$posts_per_page = get_option('archive_max_posts');
 					$posts_per_page = (!empty($posts_per_page) ? $posts_per_page : 12);
@@ -327,142 +144,33 @@ get_header(); ?>
 					);
 					
 					$query = new WP_Query( $args );
-					
+
+					// Query The Posts
 					if ( $query->have_posts() ){
 						while($query->have_posts()) : $query->the_post();
-							?>
-							<div class="tvds_homes_archive_item col-md-12">
-								<div class="tvds_homes_archive_item_inner row">
-									<?php
-									if(has_post_thumbnail()){
-										?>
-										<div class="tvds_homes_archive_item_thumbnail">
-											<a href="<?php echo get_the_post_thumbnail_url(); ?>">
-												<?php the_post_thumbnail('homes_archive_thumb'); ?>
-											</a>
-											
-											<!--<div class="tvds_homes_archive_item_thumbnail_overlay">
-												<div class="tvds_homes_archive_item_thumbnail_overlay_inner">
-													<i class="icon icon-zoom-in"></i>
-													<span><?php echo __('Vergroten', 'tvds'); ?></span>
-												</div>
-											</div>-->
-											
-										</div>
-										<?php
-									}
-									?>
-	
-									<div class="tvds_homes_archive_item_info">
-										<div class="tvds_home_archive_item_info_content">
-
-											<a href="<?php echo get_the_permalink(); ?>"><h3><?php echo get_the_title(); ?></h3></a>
-											
-											
-											<?php
-												if(get_post_meta($post->ID, 'rating', true)){
-													?>
-													<ul class="tvds_homes_archive_item_info_rating">														
-														<?php
-														$rating = intval(get_post_meta($post->ID, 'rating', true));
-														
-														// For Each Rating Echo A Filed Star
-														for($x = 1; $x <= $rating; $x++){
-															echo '<li><i class="icon icon-star"></i></li>';
-														}
-														
-														// For Each Rating Below 5 That isn't set Echo A Empty Star
-														for($i = 1; $i <= (5 - $rating); $i++){
-															echo '<li><i class="icon icon-star-empty"></i></li>';
-														}
-														?>
-													</ul>
-													<br/>
-													<?php
-												}
-											?>
-	
-											
-											<p class="tvds_homes_archive_item_excerpt"><?php echo wp_trim_words(get_the_excerpt(), 14); ?></p>
-										</div>
-	
-										<div class="tvds_homes_archive_item_info_services">
-											<ul class="tvds_homes_archive_services_information">
-												<?php
-												// Wifi
-												if(get_post_meta($post->ID, 'wifi', true) == 1) {
-													echo '<li><i class="icon icon-check"></i> <strong>Wifi</strong></li>';
-												}
-												else {
-													echo '<li><i class="icon icon-check-empty"></i> <strong>Wifi</strong></li>';
-												}
-	
-												// Pool
-												if(get_post_meta($post->ID, 'pool', true) == 1) {
-													echo '<li><i class="icon icon-check"></i> <strong>Zwembad</strong></li>';
-												}
-												else {
-													echo '<li><i class="icon icon-check-empty"></i> <strong>Zwembad</strong></li>';
-												}
-	
-												// Animals
-												if(get_post_meta($post->ID, 'animals', true) == 1) {
-													echo '<li><i class="icon icon-check"></i> <strong>Dieren</strong></li>';
-												}
-												else {
-													echo '<li><i class="icon icon-check-empty"></i> <strong>Dieren</strong></li>';
-												}
-	
-												// Alpine
-												if(get_post_meta($post->ID, 'alpine', true) == 1) {
-													echo '<li><i class="icon icon-check"></i> <strong>Wintersport</strong></li>';
-												}
-												else {
-													echo '<li><i class="icon icon-check-empty"></i> <strong>Wintersport</strong></li>';
-												}
-												?>
-	
-												<div class="clearfix"></div>
-											</ul>
-											
-											<ul class="tvds_homes_archive_room_information">
-												<?php
-												// Max Persons
-												if (get_post_meta($post->ID, 'max_persons', true)){
-													echo '<li><i class="icon icon-user"></i> <strong>'.get_post_meta($post->ID, 'max_persons', true).'</strong></li>';
-												}
-	
-												// Bedrooms
-												if (get_post_meta($post->ID, 'bedrooms', true)){
-													echo '<li class="tvds_homes_archive_beds"><i class="icon icon-bed"></i> <strong>'.get_post_meta($post->ID, 'bedrooms', true).'</strong></li>';
-												}
-												?>
-											</ul>
-										</div>
-									</div>
-	
-									<div class="tvds_homes_archive_item_details">
-	
-										<!-- Price -->
-										<strong><?php echo __('Vanaf', 'tvds'); ?></strong>
-										<h3 class="tvds_homes_archive_price">€ <?php echo get_post_meta($post->ID, 'min_week_price', true); ?></h3>
-										<small>/per week</small><br>
-	
-										<!-- Permalink -->
-										<a class="tvds_homes_book_btn" href="<?php echo get_the_permalink(); ?>"><?php echo __('Bekijk', 'tvds'); ?></a>
-									</div>
-	
-								</div>
-							</div>
-	
-						    <?php
+							include(plugin_dir_path( __FILE__ ).'/content-home.php');
 					    endwhile;
+
+						// If The Archive Is A Taxonomy Get The Term Name And Description And Display It
+						if(is_tax()){
+							$term_id = get_queried_object()->term_id;
+							$term = get_term($term_id);
+
+							if(!empty($term->name) && !empty($term->description)){
+								?>
+								<div class="tvds_homes_archive_taxonomy_description col-md-12">
+									<h4><?php echo $term->name; ?></h4>
+									<p><?php echo $term->description; ?></p>
+								</div>
+								<?php
+							}
+						}
 	
 						wp_reset_postdata();
 					}				
 					else {
-						echo '<p>'._e( 'Sorry, no posts matched your criteria.' ).'</p>';
-					}	
+						include(plugin_dir_path( __FILE__ ).'/content-home-none.php');
+					}
 					?>
 					<div class="clearfix"></div>
 				</div><!-- tvds_homes_archive_items_wrapper end -->
@@ -490,51 +198,55 @@ get_header(); ?>
 				</div><!-- tvds_homes_archive_paginate -->
 
 
-				<?php
-				// The Query Arguments
-				$testargs = array(
-					'post_type' 		=> 'booking',
-					'posts_per_page' 	=> '-1',
-				);
-
-				$testquery = new WP_Query( $testargs );
-
-				if($testquery->have_posts() ) {
-					while ($testquery->have_posts()) : $testquery->the_post();
-						the_title();
-
-						// Get The Booked Arrival Date & Weeks
-						$arrival_date 	= get_post_meta(get_the_ID(), 'arrival_date', true);
-						$weeks 			= get_post_meta(get_the_ID(), 'weeks', true);
-
-						// Make DateTime from the strings
-						$start_date = new DateTime($arrival_date);
-						$end_date 	= new DateTime($arrival_date);
-
-						// Add The Number Of Weeks To The End Date
-						$end_date->modify('+'.$weeks.' week');
-
-
-						echo '<br>';
-						echo 'arrival_date: '.get_post_meta($post->ID, 'arrival_date', true);
-						echo '<br>';
-						echo '<br>';
-						print_r($end_date);
-						echo '<br>';
-						echo '<br>';
-						echo 'weeks: '.get_post_meta($post->ID, 'weeks', true);
-						echo '<br>';
-						echo '<br>';
-						echo 'home_id: '.get_post_meta($post->ID, 'home_id', true);
-						echo '<br><br>';
-						echo '<br><br>';
-
-
-					endwhile;
-				}
-
-
-				?>
+<!--				--><?php
+//				// The Query Arguments
+//				$testargs = array(
+//					'post_type' 		=> 'booking',
+//					'posts_per_page' 	=> '-1',
+//				);
+//
+//				$testquery = new WP_Query( $testargs );
+//
+//				if($testquery->have_posts() ) {
+//					while ($testquery->have_posts()) : $testquery->the_post();
+//						the_title();
+//
+//						// Get The Booked Arrival Date & Weeks
+//						$arrival_date 	= get_post_meta(get_the_ID(), 'arrival_date', true);
+//						$weeks 			= get_post_meta(get_the_ID(), 'weeks', true);
+//
+//						// Make DateTime from the strings
+//						$start_date = new DateTime($arrival_date);
+//						$end_date 	= new DateTime($arrival_date);
+//
+//						// Add The Number Of Weeks To The End Date
+//						$end_date->modify('+'.$weeks.' week');
+//						$end_date->modify('-1 second');
+////						$start_date->modify('+1 second');
+//
+//
+//						echo '<br>';
+//						echo 'arrival_date: ';
+//						print_r($start_date);
+//						echo '<br>';
+//						echo '<br>';
+//						echo 'arrival_date: ';
+//						print_r($end_date);
+//						echo '<br>';
+//						echo '<br>';
+//						echo 'weeks: '.get_post_meta($post->ID, 'weeks', true);
+//						echo '<br>';
+//						echo '<br>';
+//						echo 'home_id: '.get_post_meta($post->ID, 'home_id', true);
+//						echo '<br><br>';
+//						echo '<br><br>';
+//
+//
+//					endwhile;
+//				}
+//
+//
+//				?>
 
 			</div><!-- col-md-9 end -->
 

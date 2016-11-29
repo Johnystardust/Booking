@@ -52,6 +52,8 @@ class tvds_booking_filter_widget extends WP_Widget
 		}
 
         ?>
+        
+        
         <form id="tvds_homes_search_form_widget_form" method="get" action="/themeawesome/homes/">
 
 			<div class="tvds_homes_search_form_section">
@@ -80,7 +82,7 @@ class tvds_booking_filter_widget extends WP_Widget
 				</div>
 
 				<?php
-					echo tvds_homes_search_widget_form_taxonomy_fields('type', 'homes_type', 'Type', $taxonomy, $tax_slug, $show_labels);
+					echo tvds_homes_search_widget_form_taxonomy_fields('province', 'homes_province', 'Provincie', $taxonomy, $tax_slug, $show_labels);
 					echo tvds_homes_search_widget_form_taxonomy_fields('region', 'homes_region', 'Regio', $taxonomy, $tax_slug, $show_labels);
 					echo tvds_homes_search_widget_form_taxonomy_fields('place', 'homes_place', 'Plaats', $taxonomy, $tax_slug, $show_labels);
 				?>
@@ -112,6 +114,10 @@ class tvds_booking_filter_widget extends WP_Widget
 			<div class="tvds_homes_search_form_section">
 				<div class="tvds_homes_search_form_group form_group_title">
 					<h3>Room</h3>
+				</div>
+
+				<div class="tvds_homes_search_form_group">
+					<?php echo tvds_homes_search_widget_form_taxonomy_fields('type', 'homes_type', 'Type', $taxonomy, $tax_slug, $show_labels); ?>
 				</div>
 
 				<!-- Persons Filter -->

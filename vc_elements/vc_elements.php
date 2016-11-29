@@ -11,6 +11,7 @@ function tvds_booking_vc_elements(){
 
 	// Include All The Elements
 	include_once('elements/vc_display_homes.php');
+	include_once('elements/vc_display_services.php');
 	
 	//	Homes Search.
 	//------------------------------------------
@@ -44,7 +45,6 @@ function tvds_booking_vc_elements(){
     
 }
 add_action( 'vc_before_init', 'tvds_booking_vc_elements' );
-
 
 
 //	Homes Search Shortcode.

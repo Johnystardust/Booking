@@ -5,7 +5,219 @@
  * Date: 11/25/2016
  * Time: 9:07 PM
  */
+ 
+function tvds_homes_single_get_terms($terms){
+	if(is_array($terms)){												
+		foreach($terms as $term){		
+			return '<a href="'.get_term_link($term->term_id).'">'.$term->name.'</a>';
+		}	
+	}
+}
 
+/**
+ * Function To Repeat The Services Search GET Request
+ *
+ * @param $key
+ * @param $value
+ * @return array
+ */
+function tvds_homes_search_services($key, $value){
+    if(!empty($_GET[$key])){
+        if($value == 1){
+            $search_array = array(
+                'key'     => $key,
+                'value'   => 1,
+                'compare' => '='
+            );
+            return $search_array;
+        }
+        elseif($value == 0){
+            $search_array = array(
+                'key'     => $key,
+                'value'   => 0,
+                'compare' => '='
+            );
+            return $search_array;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Function To Repeat The Taxonomy Search GET Request
+ *
+ * @param $key
+ * @param $value
+ * @return array|bool
+ */
+function tvds_homes_search_taxonomies($key, $value){
+    if(!empty($_GET[$key])){
+        $tax_search[] = array(
+            'taxonomy' => 'homes_'.$key,
+            'field'    => 'slug',
+            'terms'    => array($value),
+        );
+
+        return $tax_search;
+    }
+
+    return false;
+}
+
+/**
+ * Function To Repeat The Numbers Search GET Request
+ *
+ * @param $key
+ * @param $value
+ * @return array|bool
+ */
+function tvds_homes_search_numbers($key, $value){
+    if(!empty($_GET[$key])){
+        $search_array = array(
+            'key'     => $key,
+            'value'   => $value,
+            'compare' => '>='
+        );
+
+        return $search_array;
+    }
+
+    return false;
+}
+
+/**
+ * Homes Search Form By Date
+ *
+ * @param $arrival_date
+ * @param $weeks
+ * @return array
+ */
+function tvds_homes_search_dates($arrival_date, $weeks){
+    // Get The Search Arrival date
+    $start_date = new DateTime($arrival_date);
+    $end_date   = new DateTime($arrival_date);
+
+    $end_date->modify('+'.$weeks.' week');
+    $end_date->modify('-1 second');
+
+    return tvds_homes_exclude_booked_homes($start_date, $end_date);
+}
+
+
+/**
+ * Check if a Date is inside a range
+ *
+ * @param $i
+ * @param $x
+ * @param $y
+ * @return bool
+ */
+function tvds_homes_check_in_date_range($i, $x, $y){
+    if((($y >= $i) && ($y <= $x))){
+        return true;
+    }
+}
+
+
+/**
+ * Exclude Booked Homes Function
+ *
+ * @param $search_start_date
+ * @param $search_end_date
+ * @return array
+ */
+function tvds_homes_exclude_booked_homes($search_start_date, $search_end_date){
+    $exclude_array = array();
+
+    // The Query Arguments
+    $booking_args = array(
+        'post_type' => 'booking',
+        'post_per_page' => '-1',
+    );
+
+    // The Query
+    $booking_query = new WP_Query($booking_args);
+
+    if($booking_query->have_posts()){
+        while($booking_query->have_posts()) : $booking_query->the_post();
+
+            // Get The Booked Arrival Date & Weeks
+            $arrival_date 	= get_post_meta(get_the_ID(), 'arrival_date', true);
+            $weeks 			= get_post_meta(get_the_ID(), 'weeks', true);
+
+            // Make DateTime from the strings
+            $start_date = new DateTime($arrival_date);
+            $end_date 	= new DateTime($arrival_date);
+
+            // Add The Number Of Weeks To The End Date
+            $end_date->modify('+'.$weeks.' week');
+            $end_date->modify('-1 second');
+//            $start_date->modify('-1 second');
+
+            // Find Out If The Search Is Available
+            if(tvds_homes_check_in_date_range($start_date, $end_date, $search_start_date) || tvds_homes_check_in_date_range($start_date, $end_date, $search_end_date)){
+                // Make Int Of The String An Add It To The Array
+                $home_id = intval(get_post_meta(get_the_ID(), 'home_id', true));
+                $exclude_array[] = $home_id;
+            }
+
+        endwhile;
+        wp_reset_postdata();
+    }
+
+    // Return The Homes To Be Excluded In The Search
+    return $exclude_array;
+}
+
+
+/**
+ * Exclude Days In The Booking Form
+ *
+ * @return array
+ */
+function tvds_homes_booking_form_exclude_booked_days(){
+	
+	$form_args = array(
+		'post_type' 		=> 'booking',
+		'posts_per_page' 	=> -1,
+		'orderby'       => 'meta_value',
+		'post_status'	=> 'publish',
+		"meta_query" => array(
+			array(
+				"key" 		=> "home_id",
+				"value" 	=> get_the_ID(),
+				'compare' 	=> '=',
+			),
+		),
+	);
+	
+	$form_query = new WP_Query($form_args);
+	
+	if($form_query->have_posts()){
+		while($form_query->have_posts()) : $form_query->the_post();
+		
+			$arrival_date 	= get_post_meta(get_the_ID(), 'arrival_date', true);
+			$weeks 			= get_post_meta(get_the_ID(), 'weeks', true);
+
+			$start_date = new DateTime($arrival_date);
+			$end_date 	= new DateTime($arrival_date);
+
+			$end_date->modify('+'.$weeks.' week');
+
+			$interval = DateInterval::createFromDateString('+1 day');
+			$period	= new DatePeriod($start_date, $interval, $end_date);
+
+			foreach($period as $datetime){
+				$booked_days[] = $datetime->format('m-j-Y');
+			}	
+		
+		endwhile;
+		wp_reset_postdata();
+	}
+	
+	return $booked_days;
+}
 
 /**
  * Function to make adding new taxonomy fields easy
@@ -45,7 +257,7 @@ function tvds_homes_search_widget_form_taxonomy_fields($get_value, $get_type, $l
     }
 
     // Get The Set Term
-    $terms = get_terms($get_type, array('hide_empty' => false));
+    $terms = get_terms($get_type, array('hide_empty' => true));
 
     // Get The Selected Term
     if(isset($value)){
@@ -95,7 +307,6 @@ function tvds_homes_search_widget_form_taxonomy_fields($get_value, $get_type, $l
 
     return $output;
 }
-
 
 /**
  * Function to make adding new number fields easy
@@ -168,7 +379,6 @@ function tvds_homes_search_widget_form_number_select_fields($get_value, $label_t
 
     return $output;
 }
-
 
 /**
  * Function to make adding new number fields easy

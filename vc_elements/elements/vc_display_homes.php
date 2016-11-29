@@ -4,10 +4,6 @@
 //------------------------------------------
 
 // Put all The Categories/Taxonomies In A Array
-$cat_terms = get_terms(array(
-    'taxonomy'		=> 'category',
-    'hide_empty' 	=> true,
-));
 $type_terms = get_terms(array(
     'taxonomy'		=> 'homes_type',
     'hide_empty'	=> true,
@@ -20,16 +16,17 @@ $place_terms = get_terms(array(
 	'taxonomy'		=> 'homes_place',
 	'hide_empty'	=> true,
 ));
+$province_terms = get_terms(array(
+	'taxonomy'		=> 'homes_province',
+	'hide_empty'	=> true,
+));
 
 
-$categories = array('Alles' => '',);
 $types 		= array('Alles' => '',);
 $regions	= array('Alles' => '',);
 $places		= array('Alles' => '',);
+$provinces  = array('Alles' => '',);
 
-foreach($cat_terms as $term){
-    $categories[$term->name]=$term->slug;
-}
 foreach($type_terms as $term){
 	$types[$term->name]=$term->slug;
 }
@@ -39,11 +36,14 @@ foreach($region_terms as $term){
 foreach($place_terms as $term){
 	$places[$term->name]=$term->slug;
 }
+foreach($province_terms as $term){
+	$provinces[$term->name]=$term->slug;
+}
 
 vc_map(array(
-    "name"                    	=> __('Huizen', 'tvds'),
+    "name"                    	=> __('Huizen weergeven', 'tvds'),
     "base"                    	=> 'tvds_homes_display',
-    "description"				=> __('Huizen weergeven', 'tvds'),
+    "description"				=> __('Huizen weergeven op taxonomy of alles', 'tvds'),
     "icon"                    	=> "",
     "show_settings_on_create" 	=> true,
     "category"                	=> __('TVDS Huizen', 'tvds'),
@@ -62,23 +62,10 @@ vc_map(array(
             "param_name" 		=> "based_on",
             "value" 			=> array(
                 __("Toon alles", "tvds") 	=> "show_all",
-                __("Categorie", "tvds")    	=> "category",
+                __("Provincie", "tvds")    	=> "provinces",
                 __("Types", "tvds") 		=> "types",
                 __("Regio", "tvds") 		=> "region",
                 __("Plaats", "tvds") 		=> "places",
-            ),
-        ),
-        // Categories
-		array(
-            "type" 				=> "dropdown",
-            "class" 			=> "",
-            "heading" 			=> __("Categorie", "tvds"),
-            "param_name" 		=> "category",
-            "value" 			=> $categories,
-            "dependency"		=> array(
-                "element"	=> "based_on",
-                "value"		=> "category",
-                "not_empty" => false,
             ),
         ),
         // Types
@@ -119,7 +106,20 @@ vc_map(array(
                 "value"		=> "places",
                 "not_empty" => false,
             ),
-        ),        
+        ),
+        // Province
+        array(
+            "type" 				=> "dropdown",
+            "class" 			=> "",
+            "heading" 			=> __("Provincie", "tvds"),
+            "param_name" 		=> "province",
+            "value" 			=> $provinces,
+            "dependency"		=> array(
+                "element"	=> "based_on",
+                "value"		=> "provinces",
+                "not_empty" => false,
+            ),
+        ),
         // Order
         array(
             "type" 				=> "dropdown",

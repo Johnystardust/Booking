@@ -47,7 +47,7 @@ add_action( 'after_setup_theme', 'tvds_homes_add_image_sizes' );
 //----------------------------------------------------------------------------------------------------------------------
 
 // Enqueue normal scripts
-function tvds_homes_enqueue_script(){
+function tvds_homes_enqueue(){
     // Scripts
     wp_enqueue_script('booking_js', plugin_dir_url(__FILE__).'assets/js/booking.js');
 
@@ -58,8 +58,11 @@ function tvds_homes_enqueue_script(){
 
     // Styles
     wp_enqueue_style('booking_css', plugin_dir_url(__FILE__).'assets/css/booking.css');
+    
+	// Temporary CSS !!!!!!!!!!!!!!!!!!!!!!!!!!_----------------------------_!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
+    wp_enqueue_style('temp', plugin_dir_url(__FILE__).'assets/css/temp.css');
 }
-add_action('wp_enqueue_scripts', 'tvds_homes_enqueue_script');
+add_action('wp_enqueue_scripts', 'tvds_homes_enqueue');
 
 // Enqueue admin scripts
 function tvds_homes_enqueue_admin(){

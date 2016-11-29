@@ -9,26 +9,78 @@ get_header(); ?>
 	
 <div id="primary">
 	<div class="container">
+		
+		<div class="row">
+			<div class="col-md-12">
+				<!-- Single Homes Title -->
+				<div class="tvds_single_homes_title">
+					<div class="row">
+						
+						<!-- Single Homes title/categories/rating -->									
+						<div class="col-sm-8 col-xs-12">
+							<!-- Categories -->										
+							<div class="tvds_single_homes_categories">
+								<!-- Get The Taxonomies And Display Them, If Allowed -->
+								<?php
+									$terms_province = get_the_terms($post->ID, 'homes_province');
+									echo tvds_homes_single_get_terms($terms_province);
+									
+									$terms_region = get_the_terms($post->ID, 'homes_region');
+									echo tvds_homes_single_get_terms($terms_region).', ';
+									
+									$terms_place = get_the_terms($post->ID, 'homes_place');
+									echo tvds_homes_single_get_terms($terms_place).', ';
+									
+									$terms_type = get_the_terms($post->ID, 'homes_type');
+									echo tvds_homes_single_get_terms($terms_type).', ';
+								?>
+							</div>
+							
+							<!-- The Title -->
+							<h1><?php echo get_the_title(); ?></h1>
+							
+							<!-- Rating -->
+							<div class="tvds_single_homes_rating">
+								<?php											
+									if(!empty(get_post_meta($post->ID, 'stars', true))){
+										$stars = get_post_meta($post->ID, 'stars', true);
+								
+										for($x = 0; $x < $stars; $x++){
+											echo '<i class="icon icon-star"></i>';
+										}	
+									}
+								?>
+							</div>
+							
+						</div>
+						
+						<!-- Single Homes pricing -->
+						<div class="col-sm-4 col-xs-12">
+							<div class="tvds_single_homes_pricing">
+								<span><?php echo __('Vanaf: ') ?><h3>€ <?php echo get_post_meta(get_the_ID(), 'min_week_price', true); ?></h3><small> /per week</small></span>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
 		<div class="row">
 			
 			<div class="col-md-9">
 
 				<?php if (have_posts()) : ?>
-				    <?php while (have_posts()) : the_post(); ?>
-
-						<?php echo get_the_ID(); ?>
-						<div class="single-home">
+				    <?php while (have_posts()) : the_post(); ?>						
+						
+						<div class="tvds_single_home">
 							
-
-				            <h1><?php echo get_the_title(); ?></h1>
-				            
 				            <?php the_content(); ?>
 				            
 					        <div class="book">
 					            
-					            
 					            <?php do_action('tvds_after_single_home_content'); ?>
-					            
 					            
 					        </div>
 						</div>
@@ -50,6 +102,15 @@ get_header(); ?>
 			<div class="col-md-3">
 				<?php do_action('tvds_single_home_sidebar_content'); ?>
 			</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
 		</div>
 	</div><!-- container end -->
 </div><!-- primary end -->

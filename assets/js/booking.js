@@ -7,14 +7,22 @@ jQuery(document).ready(function($){
 	//----------------------------------------------------------------------------------------------------------------------
 // 	$("#single-book-form").validate();
     
-	
-    // Disable days in date picker
+
+
+
+	// Jquery DatePicker Booking Form Disable All Booked Days And All Days Except Saturday
 	//----------------------------------------------------------------------------------------------------------------------
 
 	/** Days to be disabled as an array */
-	var disableddates = ["11-5-2016", "11-12-2016", "10-26-2016", "10-26-2016"];
+	var disableddates = ["12-3-2016","12-4-2016","12-5-2016","12-6-2016","12-7-2016","12-8-2016","12-9-2016","12-17-2016","12-18-2016","12-19-2016","12-20-2016","12-21-2016","12-22-2016","12-23-2016","12-24-2016","12-25-2016","12-26-2016","12-27-2016","12-28-2016","12-29-2016","12-30-2016"];
 
-	function DisableSpecificDates(date) {
+
+	function DisableBookedDates(date) {
+		
+		var booked_days = $('#single-book-form').attr('data-booked-days');
+		booked_days = JSON.parse('['+booked_days+']');
+		
+		console.log(booked_days);
 
 		var m = date.getMonth();
 		var d = date.getDate();
@@ -33,6 +41,38 @@ jQuery(document).ready(function($){
 			}
 		}
 
+		// Only Return When Saturday
+		var day = date.getDay();
+
+		// If day == 6 then it is Saturday
+		if (day !== 6) {
+			return [false] ;
+		} else {
+			return [true] ;
+		}
+		
+	}
+
+	$(function() {
+		$(".datepicker_booking_form").datepicker({
+			beforeShowDay: DisableBookedDates
+		});
+	});
+
+
+	// Jquery DatePicker Search From Disable All Days Except Saturday
+	//----------------------------------------------------------------------------------------------------------------------
+	function DisableSpecificDates(date) {
+
+		var m = date.getMonth();
+		var d = date.getDate();
+		var y = date.getFullYear();
+
+		// First convert the date in to the mm-dd-yyyy format
+		// Take note that we will increment the month count by 1
+		var currentdate = (m + 1) + '-' + d + '-' + y ;
+
+		// Only Return When Saturday
 		var day = date.getDay();
 
 		// If day == 6 then it is Saturday

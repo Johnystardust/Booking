@@ -23,7 +23,7 @@ function tvds_booking_create_homes_post_type(){
             'public'        => true,
             'menu_position' => 15,
             'supports'      => array('title', 'editor', 'comments', 'excerpt', 'thumbnail', 'custom-fields'),
-            'taxonomies'    => array('category', 'homes_place', 'homes_type'),
+            'taxonomies'    => array('homes_place', 'homes_type', 'homes_region', 'homes_province', 'homes_category'),
             'menu_icon'     => 'dashicons-palmtree',
             'has_archive'   => true,
             'hierarchical'  => true
@@ -64,11 +64,12 @@ function tvds_display_homes_detail_meta_box($home){
     $sale_price         = esc_html(get_post_meta($home->ID, 'sale_price', true));
     
     $max_persons        = esc_html(get_post_meta($home->ID, 'max_persons', true));
-    $type               = esc_html(get_post_meta($home->ID, 'type', true));
+//     $type               = esc_html(get_post_meta($home->ID, 'type', true));
     $bedrooms		    = esc_html(get_post_meta($home->ID, 'bedrooms', true));
     $new_contender      = esc_html(get_post_meta($home->ID, 'new_contender', true));
+    $last_minute	    = esc_html(get_post_meta($home->ID, 'last_minute', true));
 
-    $rating             = esc_html(get_post_meta($home->ID, 'rating', true));
+    $stars              = esc_html(get_post_meta($home->ID, 'stars', true));
     $additional_info    = get_post_meta($home->ID, 'additional_info', true);
     ?>
     <table cellpadding="5px" cellpadding="homes-detail">
@@ -98,6 +99,7 @@ function tvds_display_homes_detail_meta_box($home){
 	        </td>
         </tr>
         <!-- Home Type -->
+<!--
         <tr>
             <td style="width: 100%;"><?php echo __('Huis type', 'tvds'); ?></td>
             <td>
@@ -109,6 +111,7 @@ function tvds_display_homes_detail_meta_box($home){
                 </select>
             </td>
         </tr>
+-->
         <!-- Slaapkamers -->
         <tr>
             <td style="width: 100%;"><?php echo __('Slaapkamers', 'tvds'); ?></td>
@@ -133,6 +136,14 @@ function tvds_display_homes_detail_meta_box($home){
             <td>
                 <input type="radio" name="new_contender" value="0" <?php if($new_contender == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
                 <input type="radio" name="new_contender" value="1" <?php if($new_contender == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
+            </td>
+        </tr>
+        <!-- Last Minute -->        
+        <tr>
+            <td style="width: 100%;"><?php echo __('Aanbieding/Last-minute', 'tvds'); ?></td>
+            <td>
+                <input type="radio" name="last_minute" value="0" <?php if($last_minute == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
+                <input type="radio" name="last_minute" value="1" <?php if($last_minute == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
             </td>
         </tr>
 
@@ -228,13 +239,13 @@ function tvds_display_homes_detail_meta_box($home){
 
         <!-- Rating -->
         <tr>
-            <td style="width: 100%;"><?php echo __('Waardering', 'tvds'); ?></td>
+            <td style="width: 100%;"><?php echo __('Sterren', 'tvds'); ?></td>
             <td>
-                <select name="rating">
-	                <option value=""><?php echo __('Geen waardering', 'tvds'); ?></option>
+                <select name="stars">
+	                <option value=""><?php echo __('Geen Sterren', 'tvds'); ?></option>
                     <?php
                     for($x = 1; $x <= 5; $x++){
-                        if($x == $rating){
+                        if($x == $stars){
                             echo '<option selected value="'.$x.'">'.$x.' '.__('Sterren', 'tvds').'</option>';
                         }
                         else {
@@ -297,9 +308,11 @@ function tvds_save_homes_post( $home_id, $home ) {
         if ( isset( $_POST['max_persons'] ) && $_POST['max_persons'] != '' ) {
             update_post_meta( $home_id, 'max_persons', $_POST['max_persons'] );
         }
+/*
         if ( isset( $_POST['type'] ) && $_POST['type'] != '' ) {
             update_post_meta( $home_id, 'type', $_POST['type'] );
         }
+*/
 
         if ( isset( $_POST['arrival_date'] ) && $_POST['arrival_date'] != '' ) {
             update_post_meta( $home_id, 'arrival_date', $_POST['arrival_date'] );
@@ -313,9 +326,13 @@ function tvds_save_homes_post( $home_id, $home ) {
         if ( isset( $_POST['new_contender'] ) && $_POST['new_contender'] != '' ) {
             update_post_meta( $home_id, 'new_contender', $_POST['new_contender'] );
         }
+        if ( isset( $_POST['last_minute'] ) && $_POST['last_minute'] != '' ) {
+            update_post_meta( $home_id, 'last_minute', $_POST['last_minute'] );
+        }
+                
 
-        if ( isset( $_POST['rating'] ) && $_POST['rating'] != '' ) {
-            update_post_meta( $home_id, 'rating', $_POST['rating'] );
+        if ( isset( $_POST['stars'] ) && $_POST['stars'] != '' ) {
+            update_post_meta( $home_id, 'stars', $_POST['stars'] );
         }
     }
 }
@@ -440,6 +457,36 @@ function tvds_create_homes_taxonomies(){
             'show_tagcloud' => false,
             'hierarchical' => true,
             'rewrite' => array( 'slug' => 'type' ),
+        )
+    );
+    register_taxonomy(
+        'homes_province',
+        'homes',
+        array(
+            'labels' => array(
+                'name' => __('Provincie', 'tvds'),
+                'add_new_item' => __('Nieuwe provincie', 'tvds'),
+                'new_item_name' => __('Nieuwe provincie', 'tvds')
+            ),
+            'show_ui' => true,
+            'show_tagcloud' => false,
+            'hierarchical' => true,
+            'rewrite' => array( 'slug' => 'provincie' ),
+        )
+    );
+    register_taxonomy(
+        'homes_category',
+        'homes',
+        array(
+            'labels' => array(
+                'name' => __('Categorie', 'tvds'),
+                'add_new_item' => __('Nieuwe categorie', 'tvds'),
+                'new_item_name' => __('Nieuwe categorie', 'tvds')
+            ),
+            'show_ui' => true,
+            'show_tagcloud' => false,
+            'hierarchical' => true,
+            'rewrite' => array( 'slug' => 'categorie' ),
         )
     );
 }
