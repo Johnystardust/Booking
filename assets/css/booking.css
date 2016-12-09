@@ -1,6 +1,9 @@
 /* Misc */
 /* Homes Archive */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+.tvds_homes_archive_room_information {
+  padding: 0; }
+
 /* Archive Options */
 .tvds_homes_archive_options .tvds_homes_archive_options_views {
   float: right;
@@ -51,25 +54,10 @@
   position: relative;
   cursor: pointer; }
 
-/*
-.tvds_homes_archive_item .tvds_homes_archive_item_thumbnail .tvds_homes_archive_item_thumbnail_overlay {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	background-color: rgba(0,0,0,0.4);
-	color: #ffffff;
-	text-align: center;
-	opacity: 0;
-	transition: all 0.3s ease-in-out;
-	-webkit-transition: all 0.3s ease-in-out;
-	-o-transition: all 0.3s ease-in-out;
-	-moz-transition: all 0.3s ease-in-out;
-}
-.tvds_homes_archive_item .tvds_homes_archive_item_thumbnail:hover .tvds_homes_archive_item_thumbnail_overlay {
-	opacity: 1;
-}
-*/
+.tvds_homes_archive_item .tvds_homes_archive_item_thumbnail img {
+  width: 100%;
+  height: auto; }
+
 /* Content */
 .tvds_homes_archive_item .tvds_homes_archive_item_info {
   width: 44.44444444%;
@@ -202,12 +190,139 @@
   box-shadow: 4px 3px 5px 0 rgba(0, 0, 0, 0.03);
   overflow: hidden; }
 
+/* Calendar */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+#tvds_booking_calendars_wrapper {
+  position: relative; }
+
+.tvds_booking_calendars_container {
+  padding: 0; }
+
+td.calendar-day.calendar-day-booked:after {
+  content: ' ';
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  width: 100%;
+  display: block;
+  height: 5px;
+  background-color: #d9534f; }
+
+td.calendar-day:after {
+  content: ' ';
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  width: 100%;
+  display: block;
+  height: 5px;
+  background-color: #5cb85c; }
+
+.tvds_calendar_month_title {
+  text-align: center;
+  margin-top: 0;
+  line-height: 28px; }
+
+/* Calendars Nav */
+.tvds_booking_calendars_nav {
+  position: absolute;
+  width: 100%;
+  z-index: 10; }
+
+.tvds_booking_calendars_nav .tvds_booking_calendars_prev {
+  float: left;
+  line-height: 28px; }
+
+.tvds_booking_calendars_nav .tvds_booking_calendars_next {
+  float: right;
+  line-height: 28px; }
+
+.tvds_booking_calendars_container .calendar .calendar-day-head {
+  background: #333;
+  color: #fff; }
+
+.tvds_booking_calendars_container .calendar div.day-number {
+  background: none;
+  color: #000; }
+
+.tvds_booking_calendars_container table.calendar {
+  border-left: 1px solid #999;
+  border-right: 1px solid #999; }
+
+.tvds_booking_calendars_container .calendar .calendar-day-np {
+  display: none; }
+
+.tvds_booking_calendars_container .calendar .calendar-row .calendar-day-np {
+  display: table-cell; }
+
+/* Misc */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+/* Main Btn */
+.tvds_homes_btn {
+  background: #333333;
+  color: #ffffff;
+  position: relative;
+  display: inline-block;
+  -moz-border-radius: 25px;
+  text-align: center;
+  padding: 12px 24px;
+  font-size: 12px;
+  text-transform: uppercase;
+  line-height: 14px;
+  font-weight: 700;
+  margin-top: 10px; }
+
+/* Thumbnail Banners */
+.tvds_homes_thumbnail_banners {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 0;
+  margin: 0; }
+
+.tvds_homes_thumbnail_banner span {
+  display: block;
+  color: #ffffff;
+  background-color: #333333;
+  text-align: center;
+  font-size: 14px;
+  padding: 10px 7px;
+  text-transform: uppercase;
+  margin-bottom: 10px; }
+
 /* Archive Sidebar */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------ */
 .tvds_homes_archive_sidebar {
   background: #ffffff;
   padding: 15px;
   margin-top: 15px; }
+
+/* Single Sidebar */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+.tvds_homes_sidebar .homes-widget {
+  margin-bottom: 30px; }
+
+/* Widgets */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+.tvds_homes_booking_form {
+  padding: 15px;
+  background: #eeeeee; }
+  .tvds_homes_booking_form .error {
+    color: #d9534f;
+    margin-top: 5px; }
+  .tvds_homes_booking_form h3 {
+    margin-top: 0; }
+  .tvds_homes_booking_form .tvds_homes_booking_form_group input, .tvds_homes_booking_form .tvds_homes_booking_form_group textarea {
+    width: 100%;
+    padding: 5px 10px; }
+  .tvds_homes_booking_form .tvds_homes_booking_form_group button {
+    width: 100%;
+    padding: 5px 10px;
+    background: #333333;
+    border: none;
+    color: #ffffff; }
+  .tvds_homes_booking_form .tvds_homes_booking_form_group {
+    margin-bottom: 10px; }
 
 .booking-widget.widget_tvds_booking_filter_widget .tvds_homes_search_form_section {
   padding-bottom: 25px;
@@ -345,6 +460,124 @@
   color: #000; }
 .booking-widget.widget_tvds_booking_filter_widget .btn-select-arrow {
   top: 5px; }
+
+/* Homes Single */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+/* Title/Categories */
+.tvds_single_homes_title {
+  margin-top: 15px; }
+  .tvds_single_homes_title h1 {
+    margin-top: 10px;
+    text-transform: uppercase;
+    line-height: 32px;
+    font-weight: 700;
+    letter-spacing: 2px; }
+
+.tvds_single_homes_categories {
+  font-size: 16px;
+  color: #bebebe; }
+  .tvds_single_homes_categories a {
+    font-size: 16px;
+    color: #bebebe;
+    cursor: pointer; }
+  .tvds_single_homes_categories a:hover {
+    color: #333333;
+    text-decoration: none; }
+
+.tvds_single_homes_rating {
+  margin-bottom: 10px; }
+
+/* Pricing */
+.tvds_single_homes_pricing {
+  text-align: right;
+  font-size: 16px; }
+  .tvds_single_homes_pricing h3 {
+    display: inline-block;
+    font-weight: 700; }
+
+/* Homes Single Related Homes */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+.tvds_homes_related_item {
+  position: relative;
+  margin-bottom: 30px;
+  /* Thumbnail */
+  /* Info */ }
+  .tvds_homes_related_item .tvds_homes_related_item_inner {
+    position: relative;
+    -webkit-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.03);
+    -moz-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.03);
+    box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.03); }
+  .tvds_homes_related_item .tvds_homes_related_thumbnail img {
+    width: 100%;
+    height: auto; }
+  .tvds_homes_related_item .tvds_homes_related_info {
+    padding: 15px;
+    border: 1px solid #eee;
+    border-top: none; }
+  .tvds_homes_related_item .tvds_homes_related_info_rating {
+    list-style-type: none;
+    padding-left: 0;
+    clear: both;
+    overflow: hidden; }
+    .tvds_homes_related_item .tvds_homes_related_info_rating li {
+      float: left;
+      margin-right: 5px; }
+      .tvds_homes_related_item .tvds_homes_related_info_rating li i {
+        margin-left: 0; }
+  .tvds_homes_related_item .tvds_homes_related_price h3 {
+    display: inline-block;
+    margin: 0px; }
+
+/* VC Display Services */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+.tvds_vc_booking_display_services {
+  margin-top: 15px;
+  padding: 15px;
+  background: #eeeeee; }
+  .tvds_vc_booking_display_services h3 {
+    margin-top: 0; }
+  .tvds_vc_booking_display_services ul {
+    padding: 0px; }
+    .tvds_vc_booking_display_services ul li {
+      line-height: 28px; }
+
+.tvds_vc_booking_display_services_information {
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns: 2; }
+
+/* VC Homes Display */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+.tvds_vc_booking_display_homes_item {
+  position: relative;
+  margin-bottom: 30px;
+  /* Thumbnail */
+  /* Info */ }
+  .tvds_vc_booking_display_homes_item .tvds_vc_booking_display_homes_item_inner {
+    position: relative;
+    -webkit-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.03);
+    -moz-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.03);
+    box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.03); }
+  .tvds_vc_booking_display_homes_item .tvds_vc_booking_display_homes_item_thumbnail img {
+    width: 100%;
+    height: auto; }
+  .tvds_vc_booking_display_homes_item .tvds_vc_booking_display_homes_item_info {
+    padding: 15px;
+    border: 1px solid #eee;
+    border-top: none; }
+  .tvds_vc_booking_display_homes_item .tvds_vc_booking_display_homes_item_info_rating {
+    list-style-type: none;
+    padding-left: 0;
+    clear: both;
+    overflow: hidden; }
+    .tvds_vc_booking_display_homes_item .tvds_vc_booking_display_homes_item_info_rating li {
+      float: left;
+      margin-right: 5px; }
+      .tvds_vc_booking_display_homes_item .tvds_vc_booking_display_homes_item_info_rating li i {
+        margin-left: 0; }
+  .tvds_vc_booking_display_homes_item .tvds_vc_booking_display_homes_item_price h3 {
+    display: inline-block;
+    margin: 0px; }
 
 ul {
   list-style-type: none; }
@@ -512,7 +745,6 @@ td.calendar-day, td.calendar-day-np {
 .tvds_homes_search_form .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap .btn-select {
   display: block;
   position: relative;
-  padding: 0;
   width: 100%;
   padding: 15px 10px;
   border-radius: 0px;
@@ -557,7 +789,6 @@ td.calendar-day, td.calendar-day-np {
   background-color: #f98200;
   color: #ffffff;
   border: none;
-  cursor: pointer;
   font-weight: bold;
   font-size: 16px;
   line-height: 24px;

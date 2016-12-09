@@ -1,6 +1,22 @@
-#homes_detail_meta_box th {
+/* CPT Homes Meta Boxes */
+#homes_detail_meta_box th, #homes_services_meta_box th {
 	text-align: left !important;
 }
+
+#homes_services_meta_box td {
+	width: 50%;
+}
+
+#homes_services_meta_box td input[type="radio"]:nth-child(2){
+	margin-left: 5px;
+}
+
+
+
+
+
+
+
 
 table.calendar		{ border-left:1px solid #999; }
 tr.calendar-row	{  }

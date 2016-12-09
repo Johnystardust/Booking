@@ -6,12 +6,79 @@
  * Time: 9:07 PM
  */
  
-function tvds_homes_single_get_terms($terms){
+ 
+/**
+ * Function to repeat the booking form text input fields
+ *
+ * @param $title
+ * @param $type
+ * @param $name
+ * @param $required
+ * @param null $min_length
+ * @return string
+ */
+function tvds_homes_booking_form_text_input($title, $type, $name, $required, $min_length = NULL){
+    
+    (isset($_POST[$name])) ? $value = $_POST[$name] : $value = '';
+    ($required) ? $required = 'required' : $required = '';
+    ($min_length) ? $min_length = $min_length : $min_length = '';
+    
+    $output = '<div class="tvds_homes_booking_form_group col-sm-6 col-xs-12">';
+        $output .= '<label>'.$title.'</label><br>';
+        $output .= '<input minlength="'.$min_length.'" '.$required.' type="'.$type.'" name="'.$name.'" placeholder="'.$title.'" value="'.$value.'"/>';
+    $output .= '</div>';
+    
+    return $output;
+}
+ 
+/**
+ * Function to get the homes terms as link
+ *
+ * @param $terms
+ * @return string
+ */
+function tvds_homes_get_terms($terms){
 	if(is_array($terms)){												
-		foreach($terms as $term){		
+		foreach($terms as $term){
 			return '<a href="'.get_term_link($term->term_id).'">'.$term->name.'</a>';
 		}	
 	}
+    else {
+        return false;
+    }
+
+    return null;
+}
+
+/**
+ * Function to repeat the homes custom post type radio fields
+ *
+ * @param $name
+ * @param $label
+ * @param $value
+ * @return string
+ */
+function tvds_homes_cpt_fields_radio_helper($name, $label, $value){
+
+    $html = '<tr>';
+    $html .= '<td>'.$label.'</td>';
+    $html .= '<td>';
+    if($value == 0){
+        $html .= '<input type="radio" name="'.$name.'" value="0" checked>'.__('Nee', 'tvds');
+        $html .= '<input type="radio" name="'.$name.'" value="1">'.__('Ja', 'tvds');
+    }
+    elseif($value == 1) {
+        $html .= '<input type="radio" name="'.$name.'" value="0">'.__('Nee', 'tvds');
+        $html .= '<input type="radio" name="'.$name.'" value="1" checked>'.__('Ja', 'tvds');
+    }
+    else {
+        $html .= '<input type="radio" name="'.$name.'" value="0">'.__('Nee', 'tvds');
+        $html .= '<input type="radio" name="'.$name.'" value="1">'.__('Ja', 'tvds');
+    }
+    $html .= '</td>';
+    $html .= '</tr>';
+
+    return $html;
 }
 
 /**
@@ -117,6 +184,8 @@ function tvds_homes_check_in_date_range($i, $x, $y){
     if((($y >= $i) && ($y <= $x))){
         return true;
     }
+
+    return false;
 }
 
 
@@ -153,7 +222,6 @@ function tvds_homes_exclude_booked_homes($search_start_date, $search_end_date){
             // Add The Number Of Weeks To The End Date
             $end_date->modify('+'.$weeks.' week');
             $end_date->modify('-1 second');
-//            $start_date->modify('-1 second');
 
             // Find Out If The Search Is Available
             if(tvds_homes_check_in_date_range($start_date, $end_date, $search_start_date) || tvds_homes_check_in_date_range($start_date, $end_date, $search_end_date)){
@@ -209,11 +277,14 @@ function tvds_homes_booking_form_exclude_booked_days(){
 			$period	= new DatePeriod($start_date, $interval, $end_date);
 
 			foreach($period as $datetime){
-				$booked_days[] = $datetime->format('m-j-Y');
+				$booked_days[] = $datetime->format('n-j-Y');
 			}	
 		
 		endwhile;
 		wp_reset_postdata();
+	}
+	else {
+		$booked_days = '';
 	}
 	
 	return $booked_days;
@@ -411,4 +482,100 @@ function tvds_homes_search_widget_form_services_fields($get_value, $label_title)
     $output .= '</div>';
 
     return $output;
+}
+
+
+/**
+ * Function to return an array of the services
+ *
+ * @return array
+ */
+function tvds_homes_get_services(){
+    return array(
+        array(
+            'name' 	=> 'wifi',
+            'label' => __('Wifi', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'phone',
+            'label'	=> __('Telefoon', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'tv',
+            'label'	=> __('TV', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'satellite',
+            'label'	=> __('Satelliet', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'washer',
+            'label'	=> __('Wasmachine', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'dishwasher',
+            'label'	=> __('Vaatwasser', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'microwave',
+            'label'	=> __('Magnetron', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'airco',
+            'label'	=> __('Airco', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'sauna',
+            'label'	=> __('Sauna', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'restaurant',
+            'label'	=> __('Restaurant', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'breakfast',
+            'label'	=> __('Ontbijt', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'manege',
+            'label'	=> __('Manege', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'pool',
+            'label'	=> __('Zwembad', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'bbq',
+            'label'	=> __('BBQ', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'animals',
+            'label'	=> __('Huisdieren', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'alpine',
+            'label'	=> __('Wintersport', 'tvds'),
+        ),
+        array(
+            'name' 	=> 'sea',
+            'label'	=> __('Zee', 'tvds'),
+        ),
+    );
+}
+
+/**
+ * Function to check if value is inside a multidimensional array
+ *
+ * @param $needle
+ * @param $haystack
+ * @param bool|false $strict
+ * @return bool
+ */
+function tvds_in_array_r($needle, $haystack, $strict = false) {
+    foreach ($haystack as $item) {
+        if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && tvds_in_array_r($needle, $item, $strict))) {
+            return true;
+        }
+    }
+    return false;
 }

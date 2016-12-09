@@ -31,6 +31,59 @@ jQuery(document).ready(function($){
 		}
 	});
 	
+	// Homes Options Page
+	//----------------------------------------------------------------------------------------------------------------------
+
+	// Hiding proccess
+	function headerOptions(chosenValue){
+		if(chosenValue == 'image'){
+			$('.header_options').hide();
+			$('.header_image').show();
+		}
+		else if(chosenValue == 'slider'){
+			$('.header_options').hide();
+			$('.header_slider').show();
+		}
+		else if(chosenValue == 'none'){
+			$('.header_options').hide();
+		}
+	}
+	
+	// On Start/Ready
+	headerOptions($('.header_select').val());
+	
+	// On Change
+	$('.header_select').on('change', function(){
+		var chosenValue = this.value;
+		headerOptions(chosenValue);
+		return false;
+	});
+
+	// Hiding Procces
+	function singleHeaderOptions(chosenValue){
+		if(chosenValue == 'image'){
+			$('.single_header_options').hide();
+			$('.single_header_image').show();
+		}
+		else if(chosenValue == 'slider'){
+			$('.single_header_options').hide();
+			$('.single_header_slider').show();
+		}
+		else if(chosenValue == 'none'){
+			$('.single_header_options').hide();
+		}
+	}
+	
+	// On Start/Ready
+	singleHeaderOptions($('.single_header_select').val());
+
+	// On Change	
+	$('.single_header_select').on('change', function(){
+		var chosenValue = this.value;
+		singleHeaderOptions(chosenValue);
+		return false;
+	});
+	
 	
 	// Calendar Carousel
 	//----------------------------------------------------------------------------------------------------------------------

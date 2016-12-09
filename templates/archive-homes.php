@@ -6,19 +6,29 @@
  * Time: 8:51 PM
  */
 
+get_header(); 
+?>
 
-get_header(); ?>
-
-<div style="background-image: url('http://dev.timvanderslik.nl/themeawesome/wp-content/uploads/2016/10/slide2.jpg'); background-position: center top; background-size: cover; width: 100%; height: 400px;">
+<div class="tvds_homes_archive_header">
+	<div class="<?php if(get_option('header_layout') == 'boxed'){echo 'container';} ?>">
+		<?php 
+			if(get_option('header_select') == 'slider'){
+				echo do_shortcode(get_option('slider'));
+			}
+			elseif(get_option('header_select' == 'image')){
+				echo '<img src="'.get_option('image').'" />';
+			}
+		?>
+	</div>
 </div>
-	
+
 <div id="primary" style="background-color: #f8f8f8;">
-	<div class="container">
+	<div class="<?php if(get_option('layout') == 'boxed'){echo 'container';} ?>">
 		<div class="row">
 
 			<!-- The Sidebar -->
 			<div class="col-md-3">
-				<div class="tvds_homes_archive_sidebar">
+				<div class="tvds_homes_archive_sidebar tvds_homes_sidebar">
 					<?php dynamic_sidebar('booking_sidebar'); ?>
 				</div>
 			</div>
@@ -26,33 +36,40 @@ get_header(); ?>
 			<!-- The Homes -->
 			<div class="col-md-9">				
 				
-				<!-- Archive Page Options -->
-				<div class="tvds_homes_archive_options">
-					
-					<!-- Order Options -->
-					<div class="tvds_homes_archive_options_order">
-						<form method="get" action="/themeawesome/homes/">
+				<?php
+					// Archive Page Options
+					if(get_option('enable_archive_grid') == true){
+						?>
+						<div class="tvds_homes_archive_options">
+									
+							<!-- View Options -->
+							<div class="tvds_homes_archive_options_views">
+								
+								<div class="tvds_homes_archive_options_view_list tvds_homes_archive_view_btn active" data-view="list">
+									<i class="icon icon-th-list"></i>
+								</div>
+								
+								<div class="tvds_homes_archive_options_view_grid tvds_homes_archive_view_btn" data-view="grid">
+									<i class="icon icon-th"></i>
+								</div>
+								<div class="tvds_homes_archive_options_view_text"><span>View:</span></div>
+							</div>
 							
-						</form>
-					</div>
-					
-					<!-- View Options -->
-					<div class="tvds_homes_archive_options_views">
-						
-						<div class="tvds_homes_archive_options_view_list tvds_homes_archive_view_btn active" data-view="list">
-							<i class="icon icon-th-list"></i>
+							<div class="clearfix"></div>
 						</div>
-						
-						<div class="tvds_homes_archive_options_view_grid tvds_homes_archive_view_btn" data-view="grid">
-							<i class="icon icon-th"></i>
-						</div>
-						<div class="tvds_homes_archive_options_view_text"><span>View:</span></div>
-					</div>
-					
-					<div class="clearfix"></div>
-				</div>
-				
-				
+						<?php
+					}
+					// Archive Page Title
+					if(is_tax()){
+						$term = get_term_by( 'slug', get_query_var('term'), get_query_var('taxonomy'));
+
+						// Echo The Title
+						echo '<h1>Vakantiehuizen '.$term->name.'</h1><br>';
+					}
+					elseif(is_archive()){
+						echo '<h1>Vakantiehuizen</h1><br>';
+					}
+				?>
 				
 				<div class="tvds_homes_archive_items_wrapper">
 					<?php
@@ -63,13 +80,13 @@ get_header(); ?>
 					$tax_query 		= array('relation' => 'AND');
 
 					// Arrays For The Different Fields
-					$services 	= array('wifi', 'pool', 'animals', 'alpine');
+					$services 	= tvds_homes_get_services();
 					$taxonomies = array('province', 'region', 'place', 'type');
 					$numbers 	= array('max_persons', 'bedrooms', 'stars');
 
 					// For Each GET Request Check The $key in the arrays And Run The Appropriate Function
 					foreach($_GET as $key => $value){
-						if(in_array($key, $services)){
+						if(tvds_in_array_r($key, $services)){
 							$search_array = tvds_homes_search_services($key, $value);
 							array_push($search_meta, $search_array);
 						}
@@ -118,11 +135,6 @@ get_header(); ?>
 								'terms'    => $term->slug,
 							),
 						);
-
-						echo '<h1>Vakantiehuizen '.$term->name.'</h1><br>';
-					}
-					elseif(is_archive()){
-						echo '<h1>Vakantiehuizen</h1><br>';
 					}
 
 					// Pagination Settings
@@ -196,57 +208,6 @@ get_header(); ?>
 					));
 					?>
 				</div><!-- tvds_homes_archive_paginate -->
-
-
-<!--				--><?php
-//				// The Query Arguments
-//				$testargs = array(
-//					'post_type' 		=> 'booking',
-//					'posts_per_page' 	=> '-1',
-//				);
-//
-//				$testquery = new WP_Query( $testargs );
-//
-//				if($testquery->have_posts() ) {
-//					while ($testquery->have_posts()) : $testquery->the_post();
-//						the_title();
-//
-//						// Get The Booked Arrival Date & Weeks
-//						$arrival_date 	= get_post_meta(get_the_ID(), 'arrival_date', true);
-//						$weeks 			= get_post_meta(get_the_ID(), 'weeks', true);
-//
-//						// Make DateTime from the strings
-//						$start_date = new DateTime($arrival_date);
-//						$end_date 	= new DateTime($arrival_date);
-//
-//						// Add The Number Of Weeks To The End Date
-//						$end_date->modify('+'.$weeks.' week');
-//						$end_date->modify('-1 second');
-////						$start_date->modify('+1 second');
-//
-//
-//						echo '<br>';
-//						echo 'arrival_date: ';
-//						print_r($start_date);
-//						echo '<br>';
-//						echo '<br>';
-//						echo 'arrival_date: ';
-//						print_r($end_date);
-//						echo '<br>';
-//						echo '<br>';
-//						echo 'weeks: '.get_post_meta($post->ID, 'weeks', true);
-//						echo '<br>';
-//						echo '<br>';
-//						echo 'home_id: '.get_post_meta($post->ID, 'home_id', true);
-//						echo '<br><br>';
-//						echo '<br><br>';
-//
-//
-//					endwhile;
-//				}
-//
-//
-//				?>
 
 			</div><!-- col-md-9 end -->
 

@@ -1,6 +1,6 @@
 <?php
 
-//	Homes Display.
+//	Homes Display Services.
 //------------------------------------------
 vc_map(array(
     "name"                    	=> __('Huis Faciliteiten', 'tvds'),
@@ -24,7 +24,14 @@ vc_map(array(
             "param_name" 		=> "title",
             "value" 			=> "Details",
         ),
-        
+        // Show Empty Services
+        array(
+            'type'              => 'checkbox',
+            "class" 			=> "",
+            "heading" 			=> __("Toon lege voorzieningen", "tvds"),
+            "param_name" 		=> "show_empty_services",
+            "value" 			=> false,
+        ),
         // Extra Class
         array(
             "type" 				=> "textfield",
@@ -39,22 +46,14 @@ vc_map(array(
 ));
 
 
-//	Homes Display Shortcode.
+//	Homes Display Services Shortcode.
 //------------------------------------------------------------
 function tvds_homes_services_display_shortcode($atts, $content = null){
     // Get all the atts from the element
     $atts = vc_map_get_attributes( 'tvds_homes_services_display', $atts );
     extract($atts);
     
-    
-    
-    
-    
     $output = '';
-    
-    
-    
-    
     
     $services_args = array(
 		'post_type' 		=> 'homes',
@@ -68,7 +67,7 @@ function tvds_homes_services_display_shortcode($atts, $content = null){
 		while($services_query->have_posts()) : $services_query->the_post();
 			
 			
-			$output .= '<div class="tvds_homes_services_display">';
+			$output .= '<div class="tvds_vc_booking_display_services">';
 			
 				// If Have Title Display it
 				if(!empty($title)){
@@ -87,24 +86,27 @@ function tvds_homes_services_display_shortcode($atts, $content = null){
 					$output .= '<div class="col-sm-6 col-xs-12">';				
 						$output .= '<ul>';
 							// Type
-							$output .= '<li>Type: <span>'.tvds_homes_single_get_terms($terms_type).'</span></li>';
+							$output .= '<li>Type: <span>'.tvds_homes_get_terms($terms_type).'</span></li>';
 
 							// Price
 							$output .= '<li>Prijs: <span> € '.get_post_meta(get_the_ID(), 'min_week_price', true).'</span></li>';
 
 							// Location
-							$output .= '<li>Location: <span>'.tvds_homes_single_get_terms($terms_region).', '.tvds_homes_single_get_terms($terms_place).'</span></li>';
+							$output .= '<li>Location: <span>'.tvds_homes_get_terms($terms_region).', '.tvds_homes_get_terms($terms_place).'</span></li>';
 		
 							// Rating
 							$output .= '<li>';
 								$output .= 'Rating: ';
 								
-								if(!empty(get_post_meta(get_the_ID(), 'rating', true))){
-									$rating = get_post_meta(get_the_ID(), 'rating', true);
+								if(!empty(get_post_meta(get_the_ID(), 'stars', true))){
+									$stars = get_post_meta(get_the_ID(), 'stars', true);
 									
-									for($x = 0; $x < $rating; $x++){
+									for($x = 0; $x < $stars; $x++){
 										$output .= '<i class="icon icon-star"></i>';
 									}	
+								}
+								else {
+									$output .= __('Niet beschikbaar', 'tvds');
 								}
 							$output .= '</li>';
 						$output .= '</ul>';
@@ -113,39 +115,21 @@ function tvds_homes_services_display_shortcode($atts, $content = null){
 					
 					// Display services
 					$output .= '<div class="col-sm-6 col-xs-12">';
-						$output .= '<ul class="tvds_homes_archive_services_information">';
-							// Wifi
-							if(get_post_meta(get_the_ID(), 'wifi', true) == 1) {
-								$output .= '<li><i class="icon icon-check"></i> <strong>Wifi</strong></li>';
-							}
-							else {
-								$output .= '<li><i class="icon icon-check-empty"></i> <strong>Wifi</strong></li>';
-							}
-			
-							// Pool
-							if(get_post_meta(get_the_ID(), 'pool', true) == 1) {
-								$output .= '<li><i class="icon icon-check"></i> <strong>Zwembad</strong></li>';
-							}
-							else {
-								$output .= '<li><i class="icon icon-check-empty"></i> <strong>Zwembad</strong></li>';
-							}
-			
-							// Animals
-							if(get_post_meta(get_the_ID(), 'animals', true) == 1) {
-								$output .= '<li><i class="icon icon-check"></i> <strong>Dieren</strong></li>';
-							}
-							else {
-								$output .= '<li><i class="icon icon-check-empty"></i> <strong>Dieren</strong></li>';
-							}
-			
-							// Alpine
-							if(get_post_meta(get_the_ID(), 'alpine', true) == 1) {
-								$output .= '<li><i class="icon icon-check"></i> <strong>Wintersport</strong></li>';
-							}
-							else {
-								$output .= '<li><i class="icon icon-check-empty"></i> <strong>Wintersport</strong></li>';
-							}
+						$output .= '<ul class="tvds_vc_booking_display_services_information">';
+								
+							// Get All The Services In An Array For Easy Usage	
+							$services = tvds_homes_get_services();
 							
+							// For Each Row In The Array Return The Icon
+							foreach($services as $service){
+								if(get_post_meta(get_the_ID(), $service['name'], true) == 1){
+									$output .= '<li><i class="icon icon-check"></i> <strong>'.$service['label'].'</strong></li>';
+								}
+								else if($show_empty_services) {
+									$output .= '<li><i class="icon icon-check-empty"></i> <strong>'.$service['label'].'</strong></li>';
+								}
+							}
+														
 						$output .= '</ul>';
 					$output .= '</div>';
 					

@@ -1,0 +1,79 @@
+/* Calendar */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+#tvds_booking_calendars_wrapper {
+  position: relative;
+}
+
+.tvds_booking_calendars_container {
+  padding: 0;
+}
+
+td.calendar-day.calendar-day-booked:after {
+  content: ' ';
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  width: 100%;
+  display: block;
+  height: 5px;
+  background-color: #d9534f;
+}
+
+td.calendar-day:after {
+  content: ' ';
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  width: 100%;
+  display: block;
+  height: 5px;
+  background-color: #5cb85c;
+}
+
+.tvds_calendar_month_title {
+  text-align: center;
+  margin-top: 0;
+  line-height: 28px;
+}
+
+/* Calendars Nav */
+.tvds_booking_calendars_nav {
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+}
+
+.tvds_booking_calendars_nav .tvds_booking_calendars_prev {
+  float: left;
+  line-height: 28px;
+}
+
+.tvds_booking_calendars_nav .tvds_booking_calendars_next {
+  float: right;
+  line-height: 28px;
+}
+
+
+
+.tvds_booking_calendars_container .calendar .calendar-day-head {
+  background: #333;
+  color: #fff;
+}
+
+.tvds_booking_calendars_container .calendar div.day-number {
+  background: none;
+  color: #000;
+}
+
+.tvds_booking_calendars_container table.calendar {
+  border-left: 1px solid #999;
+  border-right: 1px solid #999;
+}
+
+.tvds_booking_calendars_container .calendar .calendar-day-np {
+  display: none;
+}
+
+.tvds_booking_calendars_container .calendar .calendar-row .calendar-day-np {
+  display: table-cell;
+}

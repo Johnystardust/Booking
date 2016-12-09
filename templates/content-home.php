@@ -15,10 +15,22 @@
             <div class="tvds_homes_archive_item_thumbnail">
                 <!-- Last Minute -->
                 <?php
+                // If Home Is Last Minute Or For Sale	                
                 $last_minute = get_post_meta($post->ID, 'last_minute', true);
-
-                if($last_minute == 1){
-                    echo '<span class="tvds_homes_archive_last_minute">Last Minute</span>';
+                $for_sale	 = get_post_meta($post->ID, 'for_sale', true);
+                
+                
+                if($last_minute || $for_sale){
+                    echo '<ul class="tvds_homes_archive_item_thumbnail_banners tvds_homes_thumbnail_banners">';
+                    
+                        if($last_minute){
+	                        echo '<li class="tvds_homes_thumbnail_banner"><span class="tvds_homes_thumbnail_last_minute">'.__('Last minute', 'tvds').'</span></li>';
+                        }
+                        if($for_sale){
+	                        echo '<li class="tvds_homes_thumbnail_banner"><span class="tvds_homes_thumbnail_for_sale">'.__('Te koop', 'tvds').'</span></li>';
+                        }
+                    
+                    echo '</ul>';
                 }
                 ?>
 
@@ -65,44 +77,6 @@
             </div>
 
             <div class="tvds_homes_archive_item_info_services">
-                <ul class="tvds_homes_archive_services_information">
-                    <?php
-                    // Wifi
-                    if(get_post_meta($post->ID, 'wifi', true) == 1) {
-                        echo '<li><i class="icon icon-check"></i> <strong>Wifi</strong></li>';
-                    }
-                    else {
-                        echo '<li><i class="icon icon-check-empty"></i> <strong>Wifi</strong></li>';
-                    }
-
-                    // Pool
-                    if(get_post_meta($post->ID, 'pool', true) == 1) {
-                        echo '<li><i class="icon icon-check"></i> <strong>Zwembad</strong></li>';
-                    }
-                    else {
-                        echo '<li><i class="icon icon-check-empty"></i> <strong>Zwembad</strong></li>';
-                    }
-
-                    // Animals
-                    if(get_post_meta($post->ID, 'animals', true) == 1) {
-                        echo '<li><i class="icon icon-check"></i> <strong>Dieren</strong></li>';
-                    }
-                    else {
-                        echo '<li><i class="icon icon-check-empty"></i> <strong>Dieren</strong></li>';
-                    }
-
-                    // Alpine
-                    if(get_post_meta($post->ID, 'alpine', true) == 1) {
-                        echo '<li><i class="icon icon-check"></i> <strong>Wintersport</strong></li>';
-                    }
-                    else {
-                        echo '<li><i class="icon icon-check-empty"></i> <strong>Wintersport</strong></li>';
-                    }
-                    ?>
-
-                    <div class="clearfix"></div>
-                </ul>
-
                 <ul class="tvds_homes_archive_room_information">
                     <?php
                     // Max Persons

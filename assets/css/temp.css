@@ -1,0 +1,108 @@
+/* Misc */
+
+.tvds_homes_btn.small {
+  padding: 6px 16px;
+}
+
+
+
+/* Homes Display */
+.tvds_vc_booking_display_homes_item_services {
+	list-style: none;
+	padding: 0;
+	clear: both;
+	overflow: hidden;
+}
+
+.tvds_vc_booking_display_homes_item_services li {
+	float: left;
+}
+
+
+.tvds_vc_booking_display_homes_item_inner {
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.tvds_vc_booking_display_homes_item_inner:hover {
+	-webkit-box-shadow: 0px 39px 56.4px 3.6px rgba(0, 0, 0, 0.24);
+    -moz-box-shadow: 0px 39px 56.4px 3.6px rgba(0, 0, 0, 0.24);
+    box-shadow: 0px 39px 56.4px 3.6px rgba(0, 0, 0, 0.24);
+}
+
+/* Related Homes */
+.tvds_homes_related_item_inner {
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.tvds_homes_related_item_inner:hover {
+    transition: box-shadow 0.2s ease-in-out;
+	-webkit-box-shadow: 0px 39px 56.4px 3.6px rgba(0, 0, 0, 0.24);
+    -moz-box-shadow: 0px 39px 56.4px 3.6px rgba(0, 0, 0, 0.24);
+    box-shadow: 0px 39px 56.4px 3.6px rgba(0, 0, 0, 0.24);
+}
+
+
+
+
+/* Widgets */
+.tvds_homes_sidebar .tvds_homes_booking_form {
+	margin-bottom: 30px;
+}
+
+/* All Widgets */
+.homes-widget {
+	margin-bottom: 30px;
+	padding: 15px;
+	background-color: #eeeeee;
+}
+
+.homes-widget .widget-title {
+	margin-top: 0;
+}
+
+
+
+
+
+
+
+
+/* Homes Favorite Widget */
+.widget_tvds_homes_favorite {
+	
+}
+
+.tvds_homes_favorite_widget_inner {
+	margin-top: 20px;
+}
+
+.tvds_homes_favorite_widget_row {
+	margin-bottom: 15px;
+}
+
+.tvds_homes_favorite_widget_row:last-child {
+	margin-bottom: 0px;
+}
+
+.tvds_homes_favorite_widget_thumbnail {
+	width: 100px;
+	height: 100px;
+	float: left;
+}
+
+.tvds_homes_favorite_widget_thumbnail img {
+	width: 100%;
+	height: auto;
+}
+
+.tvds_homes_favorite_widget_content {
+	margin-left: 120px;
+}
+
+.tvds_homes_favorite_widget_content span {
+	width: 100%;
+	display: block;
+}
+
+
+

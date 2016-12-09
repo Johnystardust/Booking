@@ -56,10 +56,10 @@ function tvds_booking_show_calendars(){
 	echo '<div id="tvds_booking_calendars_wrapper">';
 
 		// Calendars Menu
-		echo '<a class="tvds_booking_calendars_prev"><i class="icon icon-left-dir"></i> '.__('Vorige', 'tvds').'</a>';
-		echo '<a class="tvds_booking_calendars_next">'.__('Volgende', 'tvds').' <i class="icon icon-right-dir"></i></a>';
-		
-		
+		echo '<div class="tvds_booking_calendars_nav">';
+			echo '<a class="tvds_booking_calendars_prev"><i class="icon icon-left-dir"></i> '.__('Vorige', 'tvds').'</a>';
+			echo '<a class="tvds_booking_calendars_next">'.__('Volgende', 'tvds').' <i class="icon icon-right-dir"></i></a>';
+		echo '</div>';
 		
 		echo '<ul class="tvds_booking_calendars_container">';
 			
@@ -72,7 +72,7 @@ function tvds_booking_show_calendars(){
 					$date = strtotime($current_month.'/1/'.$current_year);
 					$newformat = date('Y-M',$date);
 			
-					echo '<h2>'.$newformat.'</h2>';
+					echo '<h3 class="tvds_calendar_month_title">'.$newformat.'</h3>';
 					$booked_month = tvds_booking_get_booked_month($booked_days, $current_year, $current_month);
 					echo tvds_booking_draw_calendar($current_month, $current_year, $booked_month);
 			
@@ -122,7 +122,7 @@ function tvds_booking_draw_calendar($month,$year, $booked_month){
 
 	// Table Headings
 	//---------------------------------------------------------------
-	$headings = array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+	$headings = array(__('Zondag', 'tvds'), __('Maandag', 'tvds'), __('Dinsdag', 'tvds'), __('Woensdag', 'tvds'), __('Donderdag', 'tvds'), __('Vrijdag', 'tvds'), __('Zaterdag', 'tvds'));
 	$calendar.= '<tr class="calendar-row"><td class="calendar-day-head">'.implode('</td><td class="calendar-day-head">',$headings).'</td></tr>';
 
 	// days and weeks vars now ...
@@ -149,7 +149,7 @@ function tvds_booking_draw_calendar($month,$year, $booked_month){
 	for($list_day = 1; $list_day <= $days_in_month; $list_day++):
 		// Add The Day, If The Day Is In Booked Array Color It
 		if(in_array($list_day, $booked_month)){
-			$calendar.= '<td style="background-color: #333333;" class="calendar-day">';
+			$calendar.= '<td class="calendar-day calendar-day-booked">';
 		}
 		else {
 			$calendar.= '<td class="calendar-day">';

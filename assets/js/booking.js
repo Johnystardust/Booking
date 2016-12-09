@@ -3,26 +3,13 @@
  */
 jQuery(document).ready(function($){
     
-    // Validate the booking form
+    // Jquery DatePicker Booking Form Disable All Booked Days And All Days Except Saturday
 	//----------------------------------------------------------------------------------------------------------------------
-// 	$("#single-book-form").validate();
-    
+	function DisableBookedDates(date) {	
 
-
-
-	// Jquery DatePicker Booking Form Disable All Booked Days And All Days Except Saturday
-	//----------------------------------------------------------------------------------------------------------------------
-
-	/** Days to be disabled as an array */
-	var disableddates = ["12-3-2016","12-4-2016","12-5-2016","12-6-2016","12-7-2016","12-8-2016","12-9-2016","12-17-2016","12-18-2016","12-19-2016","12-20-2016","12-21-2016","12-22-2016","12-23-2016","12-24-2016","12-25-2016","12-26-2016","12-27-2016","12-28-2016","12-29-2016","12-30-2016"];
-
-
-	function DisableBookedDates(date) {
-		
 		var booked_days = $('#single-book-form').attr('data-booked-days');
 		booked_days = JSON.parse('['+booked_days+']');
-		
-		console.log(booked_days);
+		booked_days = $.map(booked_days, function(el){return el});
 
 		var m = date.getMonth();
 		var d = date.getDate();
@@ -33,10 +20,11 @@ jQuery(document).ready(function($){
 		var currentdate = (m + 1) + '-' + d + '-' + y ;
 
 		// We will now check if the date belongs to disableddates array
-		for (var i = 0; i < disableddates.length; i++) {
-
+		for (var i = 0; i < booked_days.length; i++) {
+			
 			// Now check if the current date is in disabled dates array.
-			if ($.inArray(currentdate, disableddates) != -1 ) {
+			if ($.inArray(currentdate, booked_days) != -1 ){
+				console.log(currentdate);
 				return [false];
 			}
 		}
@@ -50,15 +38,70 @@ jQuery(document).ready(function($){
 		} else {
 			return [true] ;
 		}
-		
 	}
+	
+	// Jquery DatePicker Booking Form Disable Booked Weeks
+	//----------------------------------------------------------------------------------------------------------------------
+	function DisableBookedWeeks(date){
 
+		// Get The Selected Date
+		var selected_date = $(this).datepicker('getDate');
+		var date = new Date(selected_date);
+		
+		// Get The Booked Days	
+		var booked_days = $('#single-book-form').attr('data-booked-days');
+		booked_days = JSON.parse('['+booked_days+']');
+		booked_days = $.map(booked_days, function(el){return el});
+		
+		// Loop Over The Weeks
+		for(var x = 1; x < 20; x++){
+						
+			// Add Weeks to the Selected Date		
+			var weekLater = new Date(date.getFullYear(), date.getMonth(), date.getDate() + ((1 * 7) * x) - 1);			
+				
+			// Make It A Useable Date
+			var d = weekLater.getDate();
+			var m =  weekLater.getMonth();
+			m += 1;  // JavaScript months are 0-11
+			var y = weekLater.getFullYear();
+			
+			
+			var selected_date = m + "-" + d + "-" + y;
+			
+			// If The weekLater Date is in The Booked_days Remove all the next weeks
+			if($.inArray(selected_date, booked_days) != -1){
+				
+				// If A Date is Booked Run The Function To Disable The options In The Select
+				DisableBookedWeeksSelectOptions(x)
+				return false;
+			}
+			else {
+				$('#tvds_homes_booking_form_weeks option').removeAttr('disabled');
+			}
+		}
+	}
+	
+	// Weeks Select Field Disable Booked Weeks
+	//----------------------------------------------------------------------------------------------------------------------
+	function DisableBookedWeeksSelectOptions(max_weeks){
+		
+		$('#tvds_homes_booking_form_weeks option').attr('disabled', 'disabled');
+		
+		max_weeks = max_weeks - 1;
+		
+		for(var x = 1; x <= max_weeks; x++){
+			$('#tvds_homes_booking_form_weeks option[value="'+x+'"]').removeAttr('disabled');
+		}
+	}
+	
+	// Booking Form Datepicker Function
 	$(function() {
 		$(".datepicker_booking_form").datepicker({
-			beforeShowDay: DisableBookedDates
+			dateFormat: 'd-m-yy',
+			beforeShowDay: DisableBookedDates,
+			onSelect: DisableBookedWeeks,
 		});
 	});
-
 
 	// Jquery DatePicker Search From Disable All Days Except Saturday
 	//----------------------------------------------------------------------------------------------------------------------
@@ -84,17 +127,12 @@ jQuery(document).ready(function($){
 
 	}
 
+	// Filter Form Datepicker Function
 	$(function() {
 		$(".datepicker").datepicker({
 			beforeShowDay: DisableSpecificDates
 		});
 	});
-	
-	
-	
-	
-	
-	
 	
 	// Bootstrap Select Buttons
 	//----------------------------------------------------------------------------------------------------------------------
@@ -144,12 +182,6 @@ jQuery(document).ready(function($){
 	    }
 	});
 
-
-	
-	
-	
-		
-	
 	// Calendar Carousel
 	//----------------------------------------------------------------------------------------------------------------------
 	
@@ -198,7 +230,6 @@ jQuery(document).ready(function($){
 		
 	}
 	
-	
 	// Slide Prev
 	$('.tvds_booking_calendars_prev').click(function(){
 		slide(slideIndex -= 1);
@@ -209,12 +240,17 @@ jQuery(document).ready(function($){
 		slide(slideIndex += 1);
 	});
 	
-	
-	
-	
-	
-	
-	
+	$(window).resize(function(){
+		var wrapper 		= $('#tvds_booking_calendars_wrapper');
+		var wrapperWidth 	= wrapper.width();
+		
+		ul.width(wrapperWidth * calendarsCount);
+		calendar.width(wrapperWidth);
+	});
+
+
+
+
 	// Homes Archive View
 	//----------------------------------------------------------------------------------------------------------------------
 	$('.tvds_homes_archive_view_btn').click(function(){
@@ -235,45 +271,6 @@ jQuery(document).ready(function($){
 		
 		$('.tvds_homes_archive_view_btn').removeClass('active');	
 		$(this).addClass('active');	
-		
-		
-		
-
 	});
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
 
 });

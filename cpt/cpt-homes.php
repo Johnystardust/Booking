@@ -36,43 +36,30 @@ add_action('init', 'tvds_booking_create_homes_post_type');
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_add_homes_meta_boxes(){
     add_meta_box('homes_detail_meta_box', __('Huis details', 'tvds'), 'tvds_display_homes_detail_meta_box', 'homes', 'normal', 'high');
+    add_meta_box('homes_services_meta_box', __('Huis diensten', 'tvds'), 'tvds_display_homes_services_meta_box', 'homes', 'normal', 'high');
     add_meta_box('homes_booking_meta_box', __('Reserveringen', 'tvds'), 'tvds_display_homes_booking_meta_box', 'homes', 'normal', 'high');
+    add_meta_box('homes_header_meta_box',  __('Header', 'tvds'), 'tvds_display_homes_header_meta_box', 'homes', 'side', 'default');
 }
 add_action('admin_init', 'tvds_add_homes_meta_boxes');
 
-
-/*
- * Meta boxes die erbij moeten komen
- *
- * Nieuwe Aanwinst
- *
- *
- *
- */
-
-// Display meta boxes
+// Display Detail meta boxes
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_display_homes_detail_meta_box($home){
-    $wifi               = esc_html(get_post_meta($home->ID, 'wifi', true));
-    $pool               = esc_html(get_post_meta($home->ID, 'pool', true));
-    $animals            = esc_html(get_post_meta($home->ID, 'animals', true));
-    $alpine             = esc_html(get_post_meta($home->ID, 'alpine', true));
-    
     $min_week_price     = esc_html(get_post_meta($home->ID, 'min_week_price', true));
     $max_week_price     = esc_html(get_post_meta($home->ID, 'max_week_price', true));
     $for_sale           = esc_html(get_post_meta($home->ID, 'for_sale', true));
     $sale_price         = esc_html(get_post_meta($home->ID, 'sale_price', true));
     
     $max_persons        = esc_html(get_post_meta($home->ID, 'max_persons', true));
-//     $type               = esc_html(get_post_meta($home->ID, 'type', true));
     $bedrooms		    = esc_html(get_post_meta($home->ID, 'bedrooms', true));
     $new_contender      = esc_html(get_post_meta($home->ID, 'new_contender', true));
     $last_minute	    = esc_html(get_post_meta($home->ID, 'last_minute', true));
+    $favorite			= esc_html(get_post_meta($home->ID, 'favorite', true));
 
     $stars              = esc_html(get_post_meta($home->ID, 'stars', true));
     $additional_info    = get_post_meta($home->ID, 'additional_info', true);
     ?>
-    <table cellpadding="5px" cellpadding="homes-detail">
+    <table cellpadding="5px">
 	    
 	    <!-- Details Section -->
 		<tr>
@@ -98,20 +85,6 @@ function tvds_display_homes_detail_meta_box($home){
 	            </select>
 	        </td>
         </tr>
-        <!-- Home Type -->
-<!--
-        <tr>
-            <td style="width: 100%;"><?php echo __('Huis type', 'tvds'); ?></td>
-            <td>
-                <select name="type">
-                    <option value="0" <?php if($type == 0){echo 'selected';} ?>><?php echo __('Vrijstaand', 'tvds'); ?></option>
-                    <option value="1" <?php if($type == 1){echo 'selected';} ?>><?php echo __('Half vrijstaand', 'tvds'); ?></option>
-                    <option value="2" <?php if($type == 2){echo 'selected';} ?>><?php echo __('Appartament', 'tvds'); ?></option>
-                    <option value="3" <?php if($type == 3){echo 'selected';} ?>><?php echo __('Hotel & Residence', 'tvds'); ?></option>
-                </select>
-            </td>
-        </tr>
--->
         <!-- Slaapkamers -->
         <tr>
             <td style="width: 100%;"><?php echo __('Slaapkamers', 'tvds'); ?></td>
@@ -146,50 +119,14 @@ function tvds_display_homes_detail_meta_box($home){
                 <input type="radio" name="last_minute" value="1" <?php if($last_minute == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
             </td>
         </tr>
-
-		<!-- Divider -->
-        <tr>
-	        <td colspan="2"><hr/></td>
-        </tr>
-
-	    <!-- Voorzieningen Section -->
+		<!-- Favorite -->
 		<tr>
-            <th style="width: 100%;"><?php echo __('Voorzieningen', 'tvds'); ?></th>
-            <th><?php echo __('Aanwezig', 'tvds'); ?></th>
-        </tr>
-
-        <!-- Wifi -->
-        <tr>
-            <td style="width: 100%;"><?php echo __('Wifi', 'tvds'); ?></td>
-            <td>
-                <input type="radio" name="wifi" value="0" <?php if($wifi == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
-                <input type="radio" name="wifi" value="1" <?php if($wifi == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
-            </td>
-        </tr>
-        <!-- Pool -->
-        <tr>
-            <td style="width: 100%;"><?php echo __('Zwembad', 'tvds'); ?></td>
-            <td>
-                <input type="radio" name="pool" value="0" <?php if($pool == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
-                <input type="radio" name="pool" value="1" <?php if($pool == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
-            </td>
-        </tr>
-        <!-- Animals -->        
-        <tr>
-            <td style="width: 100%;"><?php echo __('Huisdieren', 'tvds'); ?></td>
-            <td>
-                <input type="radio" name="animals" value="0" <?php if($animals == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
-                <input type="radio" name="animals" value="1" <?php if($animals == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
-            </td>
-        </tr>
-        <!-- Alpine -->        
-        <tr>
-            <td style="width: 100%;"><?php echo __('Wintersport', 'tvds'); ?></td>
-            <td>
-                <input type="radio" name="alpine" value="0" <?php if($alpine == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
-                <input type="radio" name="alpine" value="1" <?php if($alpine == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
-            </td>
-        </tr>
+			<td style="width: 100%;"><?php echo __('Favoriet', 'tvds'); ?></td>
+			<td>
+				<input type="radio" name="favorite" value="0" <?php if($favorite == 0){ echo 'checked'; } ?>> <?php echo __('Nee', 'tvds'); ?>
+                <input type="radio" name="favorite" value="1" <?php if($favorite == 1){ echo 'checked'; } ?>> <?php echo __('Ja', 'tvds'); ?>
+			</td>
+		</tr>
 
         <!-- Divider -->
         <tr>
@@ -266,7 +203,39 @@ function tvds_display_homes_detail_meta_box($home){
     <?php
 }
 
-// Display meta boxes
+/**
+ * Display the services meta box for the homes custom post type
+ *
+ * @param $home
+ */
+function tvds_display_homes_services_meta_box($home){
+    // Get All The Services
+    $services_array = tvds_homes_get_services();
+
+    ?>
+	<table cellpadding="5px">
+		<tr>
+	        <th style="width: 100%;"><?php echo __('Voorzieningen', 'tvds'); ?></th>
+	        <th><?php echo __('Aanwezig', 'tvds'); ?></th>
+	    </tr>
+		<?php
+		foreach($services_array as $field){
+			$value = esc_html(get_post_meta($home->ID, $field['name'], true));
+			echo tvds_homes_cpt_fields_radio_helper($field['name'], $field['label'], $value);
+		}
+		?>
+
+        <!-- Additional Info -->
+        <tr>
+            <td style="width: 100%;"><?php echo __('Extra voorzienigen informatie', 'tvds'); ?></td>
+            <td><textarea cols="40" rows name="additional_services_info"><?php echo $additional_services_info; ?></textarea></td>
+        </tr>
+	</table>
+	<?php
+	
+}
+
+// Display Calendar Meta Box
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_display_homes_booking_meta_box( $home ) {
 	
@@ -274,25 +243,66 @@ function tvds_display_homes_booking_meta_box( $home ) {
 	do_shortcode('[tvds_booking_calendar]');
 }
 
+
+// Display Header Meta Box
+//----------------------------------------------------------------------------------------------------------------------
+function tvds_display_homes_header_meta_box($home){
+	
+	$header_select 	= get_post_meta($home->ID, 'header_select', true);
+	$header_image	= get_post_meta($home->ID, 'header_image', true);
+	$header_slider 	= get_post_meta($home->ID, 'header_slider', true);
+	
+	
+	?>
+	<table cellpadding="5px">
+		<!-- Header -->
+		<tr>
+            <td style="width: 100%;"><?php echo __('Header', 'tvds'); ?></td>
+            <td>
+	            <select class="header_select" name="header_select">
+	                <option <?php if($header_select == 'none'){echo 'selected';} ?> value="none"><?php echo __('Geen', 'tvds'); ?></option>
+	                <option <?php if($header_select == 'image'){echo 'selected';}  ?> value="image"><?php echo __('Afbeelding', 'tvds'); ?></option>
+	                <option <?php if($header_select == 'slider'){echo 'selected';}  ?> value="slider"><?php echo __('Slider', 'tvds'); ?></option>
+                </select>
+	        </td>
+        </tr>
+        
+        <tr class="header_options header_image">
+	        <td style="width: 100%;"><?php echo __('Afbeelding', 'tvds'); ?></td>
+	        <td><input name="header_image" type="text" value="<?php echo $header_image; ?>" ></td>
+        </tr>
+        
+        <tr class="header_options header_slider">
+	        <td style="width: 100%;"><?php echo __('Slider Shortcode', 'tvds'); ?></td>
+	        <td><input name="header_slider" type="text" value="<?php echo $header_slider; ?>" ></td>
+        </tr>	
+	</table>
+	<p class="howto">With the header you can set what kind of header you would like on the single home page</p>
+	<?php
+}
+
 // Save Post
 //----------------------------------------------------------------------------------------------------------------------
 function tvds_save_homes_post( $home_id, $home ) {
     // Check post type for movie reviews
     if ( $home->post_type == 'homes' ) {
-        // Store data in post meta table if present in post data
-        if ( isset( $_POST['wifi'] ) && $_POST['wifi'] != '' ) {
-            update_post_meta( $home_id, 'wifi', $_POST['wifi'] );
+
+        // Get All The Services
+        $services_array = tvds_homes_get_services();
+
+        // For each service create the update_post_meta save
+        foreach($services_array as $field){
+            if(isset($_POST[$field['name']]) && $_POST[$field['name']] != ''){
+                update_post_meta($home_id, $field['name'], $_POST[$field['name']]);
+            }
         }
-        if ( isset( $_POST['pool'] ) && $_POST['pool'] != '' ) {
-            update_post_meta( $home_id, 'pool', $_POST['pool'] );
-        }
-        if ( isset( $_POST['animals'] ) && $_POST['animals'] != '' ) {
-            update_post_meta( $home_id, 'animals', $_POST['animals'] );
-        }
-        if ( isset( $_POST['alpine'] ) && $_POST['alpine'] != '' ) {
-            update_post_meta( $home_id, 'alpine', $_POST['alpine'] );
-        }
-        
+
+
+
+
+
+
+
         if ( isset( $_POST['min_week_price'] ) && $_POST['min_week_price'] != '' ) {
             update_post_meta( $home_id, 'min_week_price', $_POST['min_week_price'] );
         }
@@ -308,11 +318,6 @@ function tvds_save_homes_post( $home_id, $home ) {
         if ( isset( $_POST['max_persons'] ) && $_POST['max_persons'] != '' ) {
             update_post_meta( $home_id, 'max_persons', $_POST['max_persons'] );
         }
-/*
-        if ( isset( $_POST['type'] ) && $_POST['type'] != '' ) {
-            update_post_meta( $home_id, 'type', $_POST['type'] );
-        }
-*/
 
         if ( isset( $_POST['arrival_date'] ) && $_POST['arrival_date'] != '' ) {
             update_post_meta( $home_id, 'arrival_date', $_POST['arrival_date'] );
@@ -329,11 +334,31 @@ function tvds_save_homes_post( $home_id, $home ) {
         if ( isset( $_POST['last_minute'] ) && $_POST['last_minute'] != '' ) {
             update_post_meta( $home_id, 'last_minute', $_POST['last_minute'] );
         }
+        if ( isset( $_POST['favorite'] ) && $_POST['favorite'] != '' ) {
+            update_post_meta( $home_id, 'favorite', $_POST['favorite'] );
+        }
                 
 
         if ( isset( $_POST['stars'] ) && $_POST['stars'] != '' ) {
             update_post_meta( $home_id, 'stars', $_POST['stars'] );
         }
+        
+        
+        
+        
+        
+		// Header Meta Fields
+		if(isset($_POST['header_select']) && $_POST['header_select'] != ''){
+			update_post_meta($home_id, 'header_select', $_POST['header_select']);
+		}
+		if(isset($_POST['header_image']) && $_POST['header_image'] != ''){
+			update_post_meta($home_id, 'header_image', $_POST['header_image']);
+		}
+		if(isset($_POST['header_slider']) && $_POST['header_slider'] != ''){
+			update_post_meta($home_id, 'header_slider', $_POST['header_slider']);
+		}
+        
+        
     }
 }
 add_action( 'save_post', 'tvds_save_homes_post', 10, 2 );

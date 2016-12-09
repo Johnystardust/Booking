@@ -1,0 +1,73 @@
+/* VC Display Services */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+.tvds_vc_booking_display_services {
+  margin-top: 15px;
+  padding: 15px;
+  background: #eeeeee;
+
+  h3 {
+    margin-top: 0;
+  }
+
+  ul {
+    padding: 0px;
+
+    li {
+      line-height: 28px;
+    }
+  }
+}
+
+.tvds_vc_booking_display_services_information {
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns: 2;
+}
+
+/* VC Homes Display */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+.tvds_vc_booking_display_homes_item {
+  position: relative;
+  margin-bottom: 30px;
+
+  .tvds_vc_booking_display_homes_item_inner {
+    position: relative;
+    -webkit-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.03);
+    -moz-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.03);
+    box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.03);
+  }
+
+  /* Thumbnail */
+  .tvds_vc_booking_display_homes_item_thumbnail img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* Info */
+  .tvds_vc_booking_display_homes_item_info {
+    padding: 15px;
+    border: 1px solid #eee;
+    border-top: none;
+  }
+
+  .tvds_vc_booking_display_homes_item_info_rating {
+    list-style-type: none;
+    padding-left: 0;
+    clear: both;
+    overflow: hidden;
+
+    li {
+      float: left;
+      margin-right: 5px;
+
+      i {
+        margin-left: 0;
+      }
+    }
+  }
+
+  .tvds_vc_booking_display_homes_item_price h3 {
+    display: inline-block;
+    margin: 0px;
+  }
+}
