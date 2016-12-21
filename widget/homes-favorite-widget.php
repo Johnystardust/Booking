@@ -68,6 +68,15 @@ class tvds_homes_favorite_widget extends WP_Widget
 							if(has_post_thumbnail()){
 								the_post_thumbnail('thumbnail');
 							}
+							else {
+								// Echo Placeholder Image
+							}
+							
+							// Get The Banners
+							if(get_post_meta($post->ID, 'for_sale', true)){
+								echo '<span></span>';
+							}
+							
 						echo '</div>'; // tvds_homes_favorite_widget_thumbnail end					
 						
 						

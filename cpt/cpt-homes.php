@@ -26,7 +26,8 @@ function tvds_booking_create_homes_post_type(){
             'taxonomies'    => array('homes_place', 'homes_type', 'homes_region', 'homes_province', 'homes_category'),
             'menu_icon'     => 'dashicons-palmtree',
             'has_archive'   => true,
-            'hierarchical'  => true
+            'hierarchical'  => true,
+            'rewrite'		=> 'homes',
         )
     );
 }
@@ -303,16 +304,16 @@ function tvds_save_homes_post( $home_id, $home ) {
 
 
 
-        if ( isset( $_POST['min_week_price'] ) && $_POST['min_week_price'] != '' ) {
+        if ( isset( $_POST['min_week_price'] ) ) {
             update_post_meta( $home_id, 'min_week_price', $_POST['min_week_price'] );
         }
-        if ( isset( $_POST['max_week_price'] ) && $_POST['max_week_price'] != '' ) {
+        if ( isset( $_POST['max_week_price'] ) ) {
             update_post_meta( $home_id, 'max_week_price', $_POST['max_week_price'] );
         }
         if ( isset( $_POST['for_sale'] ) && $_POST['for_sale'] != '' ) {
             update_post_meta( $home_id, 'for_sale', $_POST['for_sale'] );
         }
-        if ( isset( $_POST['sale_price'] ) && $_POST['sale_price'] != '' ) {
+        if ( isset( $_POST['sale_price'] ) ) {
             update_post_meta( $home_id, 'sale_price', $_POST['sale_price'] );
         }
         if ( isset( $_POST['max_persons'] ) && $_POST['max_persons'] != '' ) {
@@ -451,7 +452,10 @@ function tvds_create_homes_taxonomies(){
 			'show_ui' => true,
 			'show_tagcloud' => false,
 			'hierarchical' => true,
-			'rewrite' => array('slug' => 'regio'),
+			'rewrite' => array(
+				'slug' 			=> 'regio',
+				'with_front' 	=> false
+			)
 		)
 	);
     register_taxonomy(
@@ -466,7 +470,10 @@ function tvds_create_homes_taxonomies(){
             'show_ui' => true,
             'show_tagcloud' => false,
             'hierarchical' => true,
-            'rewrite' => array( 'slug' => 'plaats' ),
+            'rewrite' => array(
+				'slug' 			=> 'plaats',
+				'with_front' 	=> false
+			)
         )
     );
     register_taxonomy(
@@ -481,7 +488,10 @@ function tvds_create_homes_taxonomies(){
             'show_ui' => true,
             'show_tagcloud' => false,
             'hierarchical' => true,
-            'rewrite' => array( 'slug' => 'type' ),
+            'rewrite' => array(
+				'slug' 			=> 'type',
+				'with_front' 	=> false
+			)
         )
     );
     register_taxonomy(
@@ -496,7 +506,10 @@ function tvds_create_homes_taxonomies(){
             'show_ui' => true,
             'show_tagcloud' => false,
             'hierarchical' => true,
-            'rewrite' => array( 'slug' => 'provincie' ),
+            'rewrite' => array(
+				'slug' 			=> 'provincie',
+				'with_front' 	=> false
+			)
         )
     );
     register_taxonomy(

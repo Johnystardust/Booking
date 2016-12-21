@@ -23,7 +23,9 @@ function tvds_homes_booking_form_text_input($title, $type, $name, $required, $mi
     ($required) ? $required = 'required' : $required = '';
     ($min_length) ? $min_length = $min_length : $min_length = '';
     
-    $output = '<div class="tvds_homes_booking_form_group col-sm-6 col-xs-12">';
+    $class = (!get_option('single_sidebar')) ? 'col-sm-6 col-xs-12' : 'col-xs-12';
+    
+    $output = '<div class="tvds_homes_booking_form_group '.$class.'">';
         $output .= '<label>'.$title.'</label><br>';
         $output .= '<input minlength="'.$min_length.'" '.$required.' type="'.$type.'" name="'.$name.'" placeholder="'.$title.'" value="'.$value.'"/>';
     $output .= '</div>';
@@ -158,6 +160,7 @@ function tvds_homes_search_numbers($key, $value){
  *
  * @param $arrival_date
  * @param $weeks
+ *
  * @return array
  */
 function tvds_homes_search_dates($arrival_date, $weeks){
@@ -194,6 +197,7 @@ function tvds_homes_check_in_date_range($i, $x, $y){
  *
  * @param $search_start_date
  * @param $search_end_date
+ *
  * @return array
  */
 function tvds_homes_exclude_booked_homes($search_start_date, $search_end_date){
@@ -202,7 +206,7 @@ function tvds_homes_exclude_booked_homes($search_start_date, $search_end_date){
     // The Query Arguments
     $booking_args = array(
         'post_type' => 'booking',
-        'post_per_page' => '-1',
+        'posts_per_page' => -1,
     );
 
     // The Query
@@ -224,10 +228,10 @@ function tvds_homes_exclude_booked_homes($search_start_date, $search_end_date){
             $end_date->modify('-1 second');
 
             // Find Out If The Search Is Available
-            if(tvds_homes_check_in_date_range($start_date, $end_date, $search_start_date) || tvds_homes_check_in_date_range($start_date, $end_date, $search_end_date)){
+            if(tvds_homes_check_in_date_range($start_date, $end_date, $search_start_date) && tvds_homes_check_in_date_range($start_date, $end_date, $search_end_date)){
                 // Make Int Of The String An Add It To The Array
                 $home_id = intval(get_post_meta(get_the_ID(), 'home_id', true));
-                $exclude_array[] = $home_id;
+                array_push($exclude_array, $home_id);
             }
 
         endwhile;
@@ -578,4 +582,95 @@ function tvds_in_array_r($needle, $haystack, $strict = false) {
         }
     }
     return false;
+}
+
+/**
+ * Function to create the arguments for the archive query, The $_GET gets send as $get_value to the function 
+ *
+ * @param $get_value
+ * @return var
+ */
+function tvds_create_search_meta_and_tax_query($get_value){
+	// Create The Search Meta & Tax Query
+	//--------------------------------------------------------------
+	$search_meta 	= array();
+	$tax_query 		= array('relation' => 'AND');
+
+	// Arrays For The Different Fields
+	$services 	= tvds_homes_get_services();
+	$taxonomies = array('province', 'region', 'place', 'type');
+	$numbers 	= array('max_persons', 'bedrooms', 'stars');
+
+	// For Each GET Request Check The $key in the arrays And Run The Appropriate Function
+	foreach($get_value as $key => $value){
+		if(tvds_in_array_r($key, $services)){
+			$search_array = tvds_homes_search_services($key, $value);
+			array_push($search_meta, $search_array);
+		}
+		elseif(in_array($key, $taxonomies)){
+			$tax_search = tvds_homes_search_taxonomies($key, $value);
+			array_push($tax_query, $tax_search);
+		}
+		elseif(in_array($key, $numbers)){
+			$search_array = tvds_homes_search_numbers($key, $value);
+			array_push($search_meta, $search_array);
+		}
+	}
+
+	// Search Keyword
+	if(isset($get_value['keyword'])){
+		$keyword = $get_value['keyword'];
+	}
+	else {
+		$keyword = '';
+	}
+
+	// Get Available Homes In The Date
+	if(isset($get_value['arrival_date']) && isset($get_value['weeks'])){
+		$booking_arrival_date = $get_value['arrival_date'];
+		$booking_weeks = $get_value['weeks'];
+
+		if(!empty($booking_arrival_date) && !empty($booking_weeks)){
+			$exclude_homes_array = tvds_homes_search_dates($booking_arrival_date, $booking_weeks);
+		}
+		else {
+			$exclude_homes_array = '';
+		}
+	}
+	else {
+		$exclude_homes_array = '';
+	}
+
+	// If is taxonomy query by taxonomy
+	if(is_tax()){
+		$term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
+
+		$tax_query = array(
+			array(
+				'taxonomy' => $term->taxonomy,
+				'field'    => 'slug',
+				'terms'    => $term->slug,
+			),
+		);
+	}
+
+	// Pagination Settings
+	$posts_per_page = get_option('archive_max_posts');
+	$posts_per_page = (!empty($posts_per_page) ? $posts_per_page : 12);
+	$paged = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+
+
+	// The Query Arguments
+	$args = array(
+	    'post_type' 		=> 'homes',
+		'paged'				=> $paged,
+		'posts_per_page' 	=> $posts_per_page,
+	    'tax_query' 		=> $tax_query,
+	    'orderby'       	=> 'meta_value',
+	    'meta_query'  		=> $search_meta,
+	    's'					=> $keyword,
+	    'post__not_in' 		=> $exclude_homes_array
+	);
+	
+	return $args;
 }

@@ -51,45 +51,72 @@ function tvds_booking_show_calendars(){
 	$date = new DateTime();
 	$current_year  = $date->format('Y');
 	$current_month = $date->format('m');
-
-	// Calendars Container
-	echo '<div id="tvds_booking_calendars_wrapper">';
-
-		// Calendars Menu
-		echo '<div class="tvds_booking_calendars_nav">';
-			echo '<a class="tvds_booking_calendars_prev"><i class="icon icon-left-dir"></i> '.__('Vorige', 'tvds').'</a>';
-			echo '<a class="tvds_booking_calendars_next">'.__('Volgende', 'tvds').' <i class="icon icon-right-dir"></i></a>';
-		echo '</div>';
+	
+	// Calendars Output
+	$output = '<h3>'.__("Beschikbaarheid", "tvds").'</h3>';
+	
+	$output .= '<div class="tvds_booking_calendars">';
 		
-		echo '<ul class="tvds_booking_calendars_container">';
+		// Calendars Nav
+		$output .= '<div class="tvds_booking_calendars_nav">';
 			
-			// Get The Number Of Calendars In The Future
-			$max_calendar_future = (!empty(get_option('max_future_calendars')) ? get_option('max_future_calendars') : 12); 
+			$output .= '<a class="tvds_booking_calendars_prev"><span class="homes-chevron left"></span></a>';
+			$output .= '<a class="tvds_booking_calendars_next"><span class="homes-chevron right"></span></a>';
 			
-			// For Each Month Display a Calendar
-			for ($x = 0; $x <= ($max_calendar_future - 1); $x++){
-				echo '<li class="tvds_calendar_item">';
-					$date = strtotime($current_month.'/1/'.$current_year);
-					$newformat = date('Y-M',$date);
+		$output .= '</div>'; // tvds_booking_calendars_carousel_nav end
+		
+		// Calendars
+		$output .= '<div class="tvds_booking_calendars_container">';
+		
+			$output .= '<ul>';
 			
-					echo '<h3 class="tvds_calendar_month_title">'.$newformat.'</h3>';
-					$booked_month = tvds_booking_get_booked_month($booked_days, $current_year, $current_month);
-					echo tvds_booking_draw_calendar($current_month, $current_year, $booked_month);
-			
-					// If The Month Is December Start a New Year
-					if($current_month > 11){
-						$current_month = 1;
-						$current_year++;
-					}
-					else {
-						$current_month++;
-					}
+				// Get the number of calender months allowed in the future, if not set is 12
+				$max_calendar_future = (!empty(get_option('max_future_calendars')) ? get_option('max_future_calendars') : 12);
+				
+				// For every month in the future draw a calendar
+				for($x = 0; $x <= ($max_calendar_future - 1); $x++){
+					
+					$output .= '<li class="tvds_booking_calendars_item" data-index="'.$x.'">';
+					
+					
+						// The Calendar
+						$output .= '<div class="tvds_booking_calendar">';
+						
+							// Date Format For The Calendar Title
+							$date 		= strtotime($current_month.'/1/'.$current_year);
+							$newformat 	= date('Y-M',$date);
+					
+							// The Calendar Title
+							$output .= '<div class="tvds_booking_calendars_title">';
+								$output .= '<h3>'.$newformat.'</h3>';
+							$output .= '</div>'; // tvds_booking_calendars_title end
+							
+							$booked_month = tvds_booking_get_booked_month($booked_days, $current_year, $current_month);
+							$output .= tvds_booking_draw_calendar($current_month, $current_year, $booked_month);
+					
+							// If The Month Is December Start a New Year
+							if($current_month > 11){
+								$current_month = 1;
+								$current_year++;
+							}
+							else {
+								$current_month++;
+							}
 
-				echo '</li>';
-			}
+						$output .= '</div>'; // tvds_booking_calendar end
+					
+					$output .= '</li>'; // tvds_booking_calendars_item end
+					
+				}
 			
-		echo '</ul>';
-	echo '</div>';
+			$output .= '</ul>'; // ul end
+			
+		$output .= '</div>'; // tvds_booking_calendars_container end
+		
+	$output .= '</div>'; // tvds_booking_calendars end 
+	
+	echo $output;
+	
 }
 add_action('tvds_after_single_home_content', 'tvds_booking_show_calendars', 20);
 add_shortcode('tvds_booking_calendar', 'tvds_booking_show_calendars');
@@ -115,16 +142,7 @@ function tvds_booking_get_booked_month($booked_days, $year, $month){
 
 // Draw Calendar
 //----------------------------------------------------------------------------------------------------------------------
-function tvds_booking_draw_calendar($month,$year, $booked_month){
-	// Draw Table
-	//---------------------------------------------------------------
-	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar">';
-
-	// Table Headings
-	//---------------------------------------------------------------
-	$headings = array(__('Zondag', 'tvds'), __('Maandag', 'tvds'), __('Dinsdag', 'tvds'), __('Woensdag', 'tvds'), __('Donderdag', 'tvds'), __('Vrijdag', 'tvds'), __('Zaterdag', 'tvds'));
-	$calendar.= '<tr class="calendar-row"><td class="calendar-day-head">'.implode('</td><td class="calendar-day-head">',$headings).'</td></tr>';
-
+function tvds_booking_draw_calendar($month, $year, $booked_month){
 	// days and weeks vars now ...
 	//---------------------------------------------------------------
 	$running_day 		= date('w',mktime(0,0,0,$month,1,$year));	// Number of days before Saturday
@@ -132,63 +150,63 @@ function tvds_booking_draw_calendar($month,$year, $booked_month){
 	$days_in_this_week 	= 1;
 	$day_counter 		= 0;
 	$dates_array 		= array();
-
-	// Row For Week One
-	//---------------------------------------------------------------
-	$calendar.= '<tr class="calendar-row">';
 	
-	// Print blank days till the first day of the week
-	//---------------------------------------------------------------
-	for($x = 0; $x < $running_day; $x++):
-		$calendar.= '<td class="calendar-day-np"> </td>';
-		$days_in_this_week++;
-	endfor;
-
-	// keep going with days....
-	//---------------------------------------------------------------
-	for($list_day = 1; $list_day <= $days_in_month; $list_day++):
-		// Add The Day, If The Day Is In Booked Array Color It
-		if(in_array($list_day, $booked_month)){
-			$calendar.= '<td class="calendar-day calendar-day-booked">';
-		}
-		else {
-			$calendar.= '<td class="calendar-day">';
-		}
+	// Calendar Output
+	$calendar = '<div class="tvds_booking_calendar_month">';
+	
+		// Calendar Headings
+		$headings = array('SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT');
+		$calendar .= '<div class="calendar-heading calendar-row"><span class="calendar-day-head">'.implode('</span><span class="calendar-day-head">', $headings).'</span></div>';
+	
+		// Row For Week One
+		//---------------------------------------------------------------
+		$calendar.= '<div class="calendar-row">';
 		
-		$calendar.= '<div class="day-number">'.$list_day.'</div>';
-
-		/** QUERY THE DATABASE FOR AN ENTRY FOR THIS DAY !!  IF MATCHES FOUND, PRINT THEM !! **/
-		$calendar.= str_repeat('<p> </p>',2);
-		
-		$calendar.= '</td>';
-		if($running_day == 6):
-			$calendar.= '</tr>';
-			if(($day_counter+1) != $days_in_month):
-				$calendar.= '<tr class="calendar-row">';
-			endif;
-			$running_day = -1;
-			$days_in_this_week = 0;
-		endif;
-		$days_in_this_week++; $running_day++; $day_counter++;
-	endfor;
-
-	// finish the rest of the days in the week
-	//---------------------------------------------------------------
-	if($days_in_this_week < 8):
-		for($x = 1; $x <= (8 - $days_in_this_week); $x++):
-			$calendar.= '<td class="calendar-day-np"> </td>';
+		// Print blank days till the first day of the week
+		//---------------------------------------------------------------
+		for($x = 0; $x < $running_day; $x++):
+			$calendar.= '<span class="calendar-day-np"> </span>';
+			$days_in_this_week++;
 		endfor;
-	endif;
-
-	// final row
-	//---------------------------------------------------------------
-	$calendar.= '</tr>';
-
-	// end the table
-	//---------------------------------------------------------------
-	$calendar.= '</table>';
 	
-	// all done, return result
-	//---------------------------------------------------------------
+		// keep going with days....
+		//---------------------------------------------------------------
+		for($list_day = 1; $list_day <= $days_in_month; $list_day++):
+			// Add The Day, If The Day Is In Booked Array Color It
+			if(in_array($list_day, $booked_month)){
+				$calendar.= '<span class="calendar-day calendar-day-booked">';
+			}
+			else {
+				$calendar.= '<span class="calendar-day">';
+			}
+			
+			$calendar.= '<div class="day-number">'.$list_day.'</div>';
+	
+			/** QUERY THE DATABASE FOR AN ENdivY FOR THIS DAY !!  IF MATCHES FOUND, PRINT THEM !! **/
+			$calendar.= str_repeat('<p> </p>',2);
+			
+			$calendar.= '</span>';
+			if($running_day == 6):
+				$calendar.= '</div>';
+				if(($day_counter+1) != $days_in_month):
+					$calendar.= '<div class="calendar-row">';
+				endif;
+				$running_day = -1;
+				$days_in_this_week = 0;
+			endif;
+			$days_in_this_week++; $running_day++; $day_counter++;
+		endfor;
+	
+		// finish the rest of the days in the week
+		//---------------------------------------------------------------
+		if($days_in_this_week < 8):
+			for($x = 1; $x <= (8 - $days_in_this_week); $x++):
+				$calendar.= '<span class="calendar-day-np"> </span>';
+			endfor;
+		endif;	
+	
+	$calendar .= '</div>'; // tvds_booking_calendar end
+	
+	// Return The Result
 	return $calendar;
 }

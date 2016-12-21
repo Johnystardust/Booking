@@ -52,10 +52,19 @@ class tvds_booking_filter_widget extends WP_Widget
 
         echo $args['before_widget'];
 
-        if(!empty($title)){
-	        echo $args['before_title'] . $title . $args['after_title'];
-        }
-
+		?>
+		
+		<div class="tvds_homes_search_filter_title">
+			<?php
+		        if(!empty($title)){        
+			        echo $args['before_title'] . $title . $args['after_title'];
+		        }
+			?>
+			
+			<a id="tvds_homes_open_search_filter"><i class="icon icon icon-down-dir"></i></a>
+		</div>
+		
+		<?php
 		// If is taxonomy query by taxonomy
 		if(is_tax()){
 			// Get The Taxonomy and its slug
@@ -69,188 +78,193 @@ class tvds_booking_filter_widget extends WP_Widget
 			$tax_slug = null;
 		}
 
+
+		$action_url = (!empty(get_option('rewrite_homes'))) ? home_url().'/'.get_option('rewrite_homes') : home_url().'/homes';
         ?>
         
-        
-        <form id="tvds_homes_search_form_widget_form" method="get" action="/themeawesome/homes/">
+        <div class="tvds_homes_search_filter_form">
+	        
+	    	<form id="tvds_homes_search_form_widget_form" method="get" autocomplete="off" action="<?php echo $action_url; ?>">
 
-			<?php
-				if($show_search){
-					?>
-					<!-- Keyword -->
-					<div class="tvds_homes_search_form_section">
-						<?php
-							if(!empty($search_title)){
-								echo '<div class="tvds_homes_search_form_group form_group_title">';
-									echo '<h3>'.$search_title.'</h3>';
-								echo '</div>';
-							}
+				<?php
+					if($show_search){
 						?>
-						
-						<div class="tvds_homes_search_form_group">
+						<!-- Keyword -->
+						<div class="tvds_homes_search_form_section">
 							<?php
-							if(isset($_GET['s'])){
-								$keyword = $_GET['s'];
-							}
-		
-							if($show_labels){
-								echo '<label>Zoekwoord</label>';
-							}
+								if(!empty($search_title)){
+									echo '<div class="tvds_homes_search_form_group form_group_title">';
+										echo '<h3>'.$search_title.'</h3>';
+									echo '</div>';
+								}
 							?>
-							<input type="text" name="s" value="<?php if(isset($keyword)){ echo $keyword;} ?>" />
-						</div>
-					</div>
-					<?php
-				}
-				
-				if($show_location){
-					?>
-					<!-- Taxonomy Section-->
-					<div class="tvds_homes_search_form_section">
-						<?php
-							if(!empty($location_title)){
-								echo '<div class="tvds_homes_search_form_group form_group_title">';
-									echo '<h3>'.$location_title.'</h3>';
-								echo '</div>';
-							}
 							
-							echo tvds_homes_search_widget_form_taxonomy_fields('province', 'homes_province', 'Provincie', $taxonomy, $tax_slug, $show_labels);
-							echo tvds_homes_search_widget_form_taxonomy_fields('region', 'homes_region', 'Regio', $taxonomy, $tax_slug, $show_labels);
-							echo tvds_homes_search_widget_form_taxonomy_fields('place', 'homes_place', 'Plaats', $taxonomy, $tax_slug, $show_labels);
-						?>
-					</div>
-					<?php
-				}
-				
-				if($show_date){
-					?>
-					<!-- Date Section -->
-					<div class="tvds_homes_search_form_section">
+							<div class="tvds_homes_search_form_group">
+								<?php
+								if(isset($_GET['keyword'])){
+									$keyword = $_GET['keyword'];
+								}
+			
+								if($show_labels){
+									echo '<label>Zoekwoord</label>';
+								}
+								?>
+								<input type="text" name="keyword" value="<?php if(isset($keyword)){ echo $keyword;} ?>" />
+							</div>
+						</div>
 						<?php
-							if(!empty($date_title)){
-								echo '<div class="tvds_homes_search_form_group form_group_title">';
-									echo '<h3>'.$date_title.'</h3>';
-								echo '</div>';
-							}
+					}
+					
+					if($show_location){
 						?>
-		
-						<!-- Arrival Date -->
-						<div class="tvds_homes_search_form_group">
+						<!-- Taxonomy Section-->
+						<div class="tvds_homes_search_form_section">
 							<?php
-							if($show_labels){
-								echo '<label>Aankomst Datum</label>';
-							}
+								if(!empty($location_title)){
+									echo '<div class="tvds_homes_search_form_group form_group_title">';
+										echo '<h3>'.$location_title.'</h3>';
+									echo '</div>';
+								}
+								
+								echo tvds_homes_search_widget_form_taxonomy_fields('province', 'homes_province', 'Provincie', $taxonomy, $tax_slug, $show_labels);
+								echo tvds_homes_search_widget_form_taxonomy_fields('region', 'homes_region', 'Regio', $taxonomy, $tax_slug, $show_labels);
+								echo tvds_homes_search_widget_form_taxonomy_fields('place', 'homes_place', 'Plaats', $taxonomy, $tax_slug, $show_labels);
 							?>
-							<input type="text" class="datepicker" name="arrival_date" <?php if(isset($_GET['arrival_date'])) echo 'value="'.$_GET['arrival_date'].'"'; ?>/>
 						</div>
-		
-						<div class="tvds_homes_search_form_group">
-							<?php echo tvds_homes_search_widget_form_number_select_fields('weeks', 'Aantal Weken', 12 , $show_labels); ?>
-						</div>
-					</div>
-					<?php
-				}
-				
-				if($show_room){
-					?>
-					<!-- Room Section -->
-					<div class="tvds_homes_search_form_section">
 						<?php
-							if(!empty($room_title)){
-								echo '<div class="tvds_homes_search_form_group form_group_title">';
-									echo '<h3>'.$room_title.'</h3>';
-								echo '</div>';
-							}
+					}
+					
+					if($show_date){
 						?>
-		
-						<div class="tvds_homes_search_form_group">
-							<?php echo tvds_homes_search_widget_form_taxonomy_fields('type', 'homes_type', 'Type', $taxonomy, $tax_slug, $show_labels); ?>
-						</div>
-		
-						<!-- Persons Filter -->
-						<div class="tvds_homes_search_form_group">
-							<?php echo tvds_homes_search_widget_form_number_select_fields('max_persons', 'Aantal personen', 20 , $show_labels); ?>
-						</div>
-		
-						<!-- Bedrooms Filter -->
-						<div class="tvds_homes_search_form_group">
-							<?php echo tvds_homes_search_widget_form_number_select_fields('bedrooms', 'Aantal Slaapkamers', 10 , $show_labels); ?>
-						</div>
-					</div>
-
-					<?php
-				}
-
-				// Facilities Section
-				if($show_services){
-					echo '<div class="tvds_homes_search_form_section">';
-						if(!empty($services_title)){
-							echo '<div class="tvds_homes_search_form_group form_group_title">';
-								echo '<h3>'.$services_title.'</h3>';
-							echo '</div>';
-						}
-
-						// Get all the services
-						$services = tvds_homes_get_services();
-
-						foreach($services as $service){
-							echo '<div class="tvds_homes_search_form_group">';
-								echo tvds_homes_search_widget_form_services_fields($service['name'], $service['label']);
-							echo '</div>';
-						}
-					echo '</div>';
-				}
-				
-				if($show_stars){
-					?>
-					<!-- Rating Section -->
-					<div class="tvds_homes_search_form_section">
-						<?php
-							if(!empty($stars_title)){
-								echo '<div class="tvds_homes_search_form_group form_group_title">';
-									echo '<h3>'.$stars_title.'</h3>';
-								echo '</div>';
-							}
-						?>
-		
-						<div class="tvds_homes_search_form_group">
+						<!-- Date Section -->
+						<div class="tvds_homes_search_form_section">
 							<?php
-		
-							if(isset($_GET['stars'])){
-								$rating = $_GET['stars'];
+								if(!empty($date_title)){
+									echo '<div class="tvds_homes_search_form_group form_group_title">';
+										echo '<h3>'.$date_title.'</h3>';
+									echo '</div>';
+								}
+							?>
+			
+							<!-- Arrival Date -->
+							<div class="tvds_homes_search_form_group">
+								<?php
+								if($show_labels){
+									echo '<label>Aankomst Datum</label>';
+								}
+								?>
+								<input type="text" class="datepicker" name="arrival_date" <?php if(isset($_GET['arrival_date'])) echo 'value="'.$_GET['arrival_date'].'"'; ?>/>
+							</div>
+			
+							<div class="tvds_homes_search_form_group">
+								<?php echo tvds_homes_search_widget_form_number_select_fields('weeks', 'Aantal Weken', 12 , $show_labels); ?>
+							</div>
+						</div>
+						<?php
+					}
+					
+					if($show_room){
+						?>
+						<!-- Room Section -->
+						<div class="tvds_homes_search_form_section">
+							<?php
+								if(!empty($room_title)){
+									echo '<div class="tvds_homes_search_form_group form_group_title">';
+										echo '<h3>'.$room_title.'</h3>';
+									echo '</div>';
+								}
+							?>
+			
+							<div class="tvds_homes_search_form_group">
+								<?php echo tvds_homes_search_widget_form_taxonomy_fields('type', 'homes_type', 'Type', $taxonomy, $tax_slug, $show_labels); ?>
+							</div>
+			
+							<!-- Persons Filter -->
+							<div class="tvds_homes_search_form_group">
+								<?php echo tvds_homes_search_widget_form_number_select_fields('max_persons', 'Aantal personen', 20 , $show_labels); ?>
+							</div>
+			
+							<!-- Bedrooms Filter -->
+							<div class="tvds_homes_search_form_group">
+								<?php echo tvds_homes_search_widget_form_number_select_fields('bedrooms', 'Aantal Slaapkamers', 10 , $show_labels); ?>
+							</div>
+						</div>
+	
+						<?php
+					}
+	
+					// Facilities Section
+					if($show_services){
+						echo '<div class="tvds_homes_search_form_section">';
+							if(!empty($services_title)){
+								echo '<div class="tvds_homes_search_form_group form_group_title">';
+									echo '<h3>'.$services_title.'</h3>';
+								echo '</div>';
 							}
-							else {
-								$rating = '';
+	
+							// Get all the services
+							$services = tvds_homes_get_services();
+	
+							foreach($services as $service){
+								echo '<div class="tvds_homes_search_form_group">';
+									echo tvds_homes_search_widget_form_services_fields($service['name'], $service['label']);
+								echo '</div>';
 							}
-		
-							for($x = 5; $x > 0; $x--){
-								if($rating == $x){
-									echo '<input id="tvds_stars_'.$x.'" checked type="radio" name="stars" value="'.$x.'">';
+						echo '</div>';
+					}
+					
+					if($show_stars){
+						?>
+						<!-- Rating Section -->
+						<div class="tvds_homes_search_form_section">
+							<?php
+								if(!empty($stars_title)){
+									echo '<div class="tvds_homes_search_form_group form_group_title">';
+										echo '<h3>'.$stars_title.'</h3>';
+									echo '</div>';
+								}
+							?>
+			
+							<div class="tvds_homes_search_form_group">
+								<?php
+			
+								if(isset($_GET['stars'])){
+									$rating = $_GET['stars'];
 								}
 								else {
-									echo '<input id="tvds_stars_'.$x.'" type="radio" name="stars" value="'.$x.'">';
+									$rating = '';
 								}
-		
-		
-								echo '<label for="tvds_stars_'.$x.'">';
-									for($i = 5; $i > 0; $i--){
-										if($i <= $x){
-											echo '<i class="icon icon-star"></i>';
-										}
+			
+								for($x = 5; $x > 0; $x--){
+									if($rating == $x){
+										echo '<input id="tvds_stars_'.$x.'" checked type="radio" name="stars" value="'.$x.'">';
 									}
-								echo '</label><br>';
-							}
-							?>
+									else {
+										echo '<input id="tvds_stars_'.$x.'" type="radio" name="stars" value="'.$x.'">';
+									}
+			
+			
+									echo '<label for="tvds_stars_'.$x.'">';
+										for($i = 5; $i > 0; $i--){
+											if($i <= $x){
+												echo '<i class="icon icon-star"></i>';
+											}
+										}
+									echo '</label><br>';
+								}
+								?>
+							</div>
 						</div>
-					</div>
-					<?php
-				}		
-			?>
-
-			<!-- Submit -->
-	        <input type="submit" value="Filter"/>
-        </form>
-
+						<?php
+					}		
+				?>
+	
+				<!-- Submit -->
+		        <input type="submit" value="Filter"/>
+	        </form>
+    
+        </div>
+        
 		<!-- Form Validation  -->
 		<script>
 			jQuery("#tvds_homes_search_form_widget_form").submit(function() {
@@ -312,7 +326,7 @@ class tvds_booking_filter_widget extends WP_Widget
         
 		<!-- Enable Sections -->
         <p>
-	        <input id="<?php echo $this->get_field_id('show_search'); ?>" name="<?php echo $this->get_field_name('show_search'); ?>" type="checkbox" <?php if(isset($show_search)){echo 'checked';} ?> />
+	        <input id="<?php echo $this->get_field_id('show_search'); ?>" name="<?php echo $this->get_field_name('show_search'); ?>" type="checkbox" <?php if($show_search == true){echo 'checked';} ?> />
 	        <label for="<?php echo $this->get_field_id('show_search'); ?>"><?php _e('Show Search') ?></label>
         </p>
         <p>
@@ -321,7 +335,7 @@ class tvds_booking_filter_widget extends WP_Widget
         </p>
         
         <p>
-	        <input id="<?php echo $this->get_field_id('show_location'); ?>" name="<?php echo $this->get_field_name('show_location'); ?>" type="checkbox" <?php if(isset($show_location)){echo 'checked';} ?> />
+	        <input id="<?php echo $this->get_field_id('show_location'); ?>" name="<?php echo $this->get_field_name('show_location'); ?>" type="checkbox" <?php if($show_location == true){echo 'checked';} ?> />
 	        <label for="<?php echo $this->get_field_id('show_location'); ?>"><?php _e('Show Location') ?></label>
         </p>
         <p>
@@ -330,7 +344,7 @@ class tvds_booking_filter_widget extends WP_Widget
         </p>
         
         <p>
-	        <input id="<?php echo $this->get_field_id('show_date'); ?>" name="<?php echo $this->get_field_name('show_date'); ?>" type="checkbox" <?php if(isset($show_date)){echo 'checked';} ?> />
+	        <input id="<?php echo $this->get_field_id('show_date'); ?>" name="<?php echo $this->get_field_name('show_date'); ?>" type="checkbox" <?php if($show_date == true){echo 'checked';} ?> />
 	        <label for="<?php echo $this->get_field_id('show_date'); ?>"><?php _e('Show Date') ?></label>
         </p>
         <p>
@@ -339,7 +353,7 @@ class tvds_booking_filter_widget extends WP_Widget
         </p>
         
         <p>
-	        <input id="<?php echo $this->get_field_id('show_room'); ?>" name="<?php echo $this->get_field_name('show_room'); ?>" type="checkbox" <?php if(isset($show_room)){echo 'checked';} ?> />
+	        <input id="<?php echo $this->get_field_id('show_room'); ?>" name="<?php echo $this->get_field_name('show_room'); ?>" type="checkbox" <?php if($show_room == true){echo 'checked';} ?> />
 	        <label for="<?php echo $this->get_field_id('show_room'); ?>"><?php _e('Show Room') ?></label>
         </p>
         <p>
@@ -348,7 +362,7 @@ class tvds_booking_filter_widget extends WP_Widget
         </p>
         
         <p>
-	        <input id="<?php echo $this->get_field_id('show_services'); ?>" name="<?php echo $this->get_field_name('show_services'); ?>" type="checkbox" <?php if(isset($show_services)){echo 'checked';} ?> />
+	        <input id="<?php echo $this->get_field_id('show_services'); ?>" name="<?php echo $this->get_field_name('show_services'); ?>" type="checkbox" <?php if($show_services == true){echo 'checked';} ?> />
 	        <label for="<?php echo $this->get_field_id('show_services'); ?>"><?php _e('Show Services') ?></label>
         </p>
         <p>
@@ -357,7 +371,7 @@ class tvds_booking_filter_widget extends WP_Widget
         </p>
         
         <p>
-	        <input id="<?php echo $this->get_field_id('show_stars'); ?>" name="<?php echo $this->get_field_name('show_stars'); ?>" type="checkbox" <?php if(isset($show_stars)){echo 'checked';} ?> />
+	        <input id="<?php echo $this->get_field_id('show_stars'); ?>" name="<?php echo $this->get_field_name('show_stars'); ?>" type="checkbox" <?php if($show_stars == true){echo 'checked';} ?> />
 	        <label for="<?php echo $this->get_field_id('show_stars'); ?>"><?php _e('Show Stars') ?></label>
         </p>
         <p>

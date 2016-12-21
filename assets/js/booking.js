@@ -182,74 +182,109 @@ jQuery(document).ready(function($){
 	    }
 	});
 
-	// Calendar Carousel
+	// Booking Calendar
 	//----------------------------------------------------------------------------------------------------------------------
-	
-	// Get Some Vars
-	var wrapper 		= $('#tvds_booking_calendars_wrapper');
-	var wrapperWidth 	= wrapper.width();
-	var ul 				= $('.tvds_booking_calendars_container');
-	var calendarsCount 	= ul.children().length;
-	var calendar 		= wrapper.find('.tvds_calendar_item');
-	var slideIndex 		= 0;
-	
-	// Set The CSS
-	ul.width(wrapperWidth * calendarsCount);
-	calendar.width(wrapperWidth);
-	
-	
-	// Slide Function
-	function slide(newSlideIndex){
-		// Animate With CSS3 Transition
-		var left =  wrapperWidth * slideIndex;
-		ul.css('left', -left);
-		
-		// Run The Update Menu Function
-		updateMenu(newSlideIndex);
-	}
-	
-	// Update Menu
-	function updateMenu(slideNumber){
-// 		alert(slideNumber);
-		
-		// Hide Next If There Are No Next Slides
-		if(slideNumber >= (calendarsCount - 1)){
-			$('.tvds_booking_calendars_next').hide();
-		}
-		else {
-			$('.tvds_booking_calendars_next').show();
-		}
-		
-		// Hide Prev If There Are No Prev Slidex
-		if(slideNumber <= 0){
-			$('.tvds_booking_calendars_prev').hide();
-		}
-		else {
-			$('.tvds_booking_calendars_prev').show();
-		}
-		
-	}
-	
-	// Slide Prev
-	$('.tvds_booking_calendars_prev').click(function(){
-		slide(slideIndex -= 1);
+	$('.tvds_booking_calendars').each(function(){
+		tvds_booking_calendars($(this));
 	});
 	
-	// Slide Next
-	$('.tvds_booking_calendars_next').click(function(){
-		slide(slideIndex += 1);
+	function tvds_booking_calendars(obj){
+		
+		var ul 				= obj.find('ul');
+		var num_calendars	= ul.children().length;
+		var calendar_index 	= 0;
+		
+		var nav_prev		= obj.find('.tvds_booking_calendars_prev');
+		var nav_next		= obj.find('.tvds_booking_calendars_next');
+		
+		var calendar_item 	= obj.find('.tvds_booking_calendars_item');
+		var calendar_height = 0;		
+		
+		calendar_height = obj.find(calendar_item).first().outerHeight();
+		
+		$('.tvds_booking_calendars').height(calendar_height);
+		
+		// Set The Active Calendar
+		obj.find(calendar_item).first().addClass('active_calendar');
+		
+		// Hide The Nav Prev at First
+		nav_prev.hide();
+		
+		// Slide Next
+		nav_next.click(function(){
+			calendar_slide(calendar_index + 1);
+		});
+		
+		// Slide Prev
+		nav_prev.click(function(){
+			calendar_slide(calendar_index - 1);
+		});
+		
+		// The Slide/Fade Function
+		function calendar_slide(new_calendar_index){
+			
+			// Remove the current active class		
+			calendar_item.removeClass('active_calendar');
+			
+			// Add New Active Class
+			$('.tvds_booking_calendars_item[data-index="'+new_calendar_index+'"]').addClass('active_calendar');
+			
+			// Get The New Calendar Height
+			var new_height = $('.tvds_booking_calendars_item[data-index="'+new_calendar_index+'"]').outerHeight();
+			$('.tvds_booking_calendars').height(new_height);
+
+			calendar_index = new_calendar_index;
+			
+			update_menu(new_calendar_index);
+		}
+		
+		// Update Menu Function
+		function update_menu(new_calendar_index){
+			
+			if(new_calendar_index >= (num_calendars -1)){
+				nav_next.hide();
+			}
+			else {
+				nav_next.show();
+			}
+			
+			
+			if(new_calendar_index < 1){
+				nav_prev.hide();
+			}
+			else {
+				nav_prev.show();
+			}
+		}
+	}
+	
+	// Homes Filter Widget Open/close
+	//----------------------------------------------------------------------------------------------------------------------
+	$('#tvds_homes_open_search_filter').on('click', function(){
+		// Get The Height Of The
+		var form_height = $('#tvds_homes_search_form_widget_form').outerHeight();
+		
+		// Add The Toggle Class
+		$('.tvds_homes_search_filter_title').toggleClass('tvds_open');
+
+		// Open The Form		
+		if($('.tvds_homes_search_filter_title').hasClass('tvds_open')){
+			$('.tvds_homes_search_filter_form').css('max-height', form_height);
+		}
+		else {
+			$('.tvds_homes_search_filter_form').css('max-height', 0);
+		}
 	});
 	
 	$(window).resize(function(){
-		var wrapper 		= $('#tvds_booking_calendars_wrapper');
-		var wrapperWidth 	= wrapper.width();
-		
-		ul.width(wrapperWidth * calendarsCount);
-		calendar.width(wrapperWidth);
+		if($(window).width() > 992){
+			var form_height = $('#tvds_homes_search_form_widget_form').outerHeight();
+			$('.tvds_homes_search_filter_form').css('max-height', form_height);
+		}
+		else {
+			$('.tvds_homes_search_filter_form').css('max-height', 0);
+		}
 	});
-
-
-
 
 	// Homes Archive View
 	//----------------------------------------------------------------------------------------------------------------------
@@ -274,3 +309,5 @@ jQuery(document).ready(function($){
 	});
 
 });
+
+

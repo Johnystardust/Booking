@@ -1,10 +1,203 @@
-/* Misc */
+/* DatePicker Container */
+body .ui-datepicker {
+	width: 356px;
+	height: auto;
+	margin-top: 3px;
+	padding: 0;
+	background-color: #fff;
+	-webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+	-moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+}
+.ui-datepicker a {
+	text-decoration: none;
+}
 
+/* DatePicker Table */
+.ui-datepicker table {
+	width: 100%;
+}
+.ui-datepicker-header {
+	background: #000;
+	color: #e0e0e0;
+	font-weight: bold;
+	filter: dropshadow(color=#000, offx=1, offy=-1);
+	line-height: 30px;
+	border-width: 1px 0 0 0;
+	border-style: solid;
+	border-color: #111;
+}
+.ui-datepicker-title {
+	text-align: center;
+}
+.ui-datepicker-prev, .ui-datepicker-next {
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	cursor: pointer;
+	background-image: url('../images/arrow.png');
+	background-repeat: no-repeat;
+	line-height: 600%;
+	overflow: hidden;
+}
+.ui-datepicker-prev {
+	float: left;
+	background-position: center -30px;
+}
+.ui-datepicker-next {
+	float: right;
+	background-position: center 0px;
+}
+.ui-datepicker thead {
+	background-color: #f7f7f7;
+	background-image: -moz-linear-gradient(top,  #f7f7f7 0%, #f1f1f1 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f7f7), color-stop(100%,#f1f1f1));
+	background-image: -webkit-linear-gradient(top,  #f7f7f7 0%,#f1f1f1 100%);
+	background-image: -o-linear-gradient(top,  #f7f7f7 0%,#f1f1f1 100%);
+	background-image: -ms-linear-gradient(top,  #f7f7f7 0%,#f1f1f1 100%);
+	background-image: linear-gradient(top,  #f7f7f7 0%,#f1f1f1 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#f1f1f1',GradientType=0 );
+	border-bottom: 1px solid #bbb;
+}
+.ui-datepicker th {
+	text-transform: uppercase;
+	font-size: 6pt;
+	padding: 5px 0;
+	color: #666666;
+	text-shadow: 1px 0px 0px #fff;
+	filter: dropshadow(color=#fff, offx=1, offy=0);
+	text-align: center;
+}
+.ui-datepicker tbody td {
+	padding: 0;
+	border-right: 1px solid #bbb;
+}
+.ui-datepicker tbody td:last-child {
+	border-right: 0px;
+}
+.ui-datepicker tbody tr {
+	border-bottom: 1px solid #bbb;
+}
+.ui-datepicker tbody tr:last-child {
+	border-bottom: 0px;
+}
+.ui-datepicker td span, .ui-datepicker td a {
+	display: inline-block;
+	font-weight: bold;
+	text-align: center;
+	width: 50px;
+    height: 50px;
+    line-height: 50px;
+	color: #666666;
+	text-shadow: 1px 1px 0px #fff;
+	filter: dropshadow(color=#fff, offx=1, offy=1);
+}
+.ui-datepicker-calendar .ui-state-default {
+	font-size: 9px;
+	background: #ededed;
+	background: -moz-linear-gradient(top,  #ededed 0%, #dedede 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ededed), color-stop(100%,#dedede));
+	background: -webkit-linear-gradient(top,  #ededed 0%,#dedede 100%);
+	background: -o-linear-gradient(top,  #ededed 0%,#dedede 100%);
+	background: -ms-linear-gradient(top,  #ededed 0%,#dedede 100%);
+	background: linear-gradient(top,  #ededed 0%,#dedede 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#dedede',GradientType=0 );
+	-webkit-box-shadow: inset 1px 1px 0px 0px rgba(250, 250, 250, .5);
+	-moz-box-shadow: inset 1px 1px 0px 0px rgba(250, 250, 250, .5);
+	box-shadow: inset 1px 1px 0px 0px rgba(250, 250, 250, .5);
+}
+.ui-datepicker-calendar .ui-state-hover {
+	background: #f7f7f7;
+}
+.ui-datepicker-calendar .ui-state-active {
+	background: #333333;
+	-webkit-box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, .1);
+	-moz-box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, .1);
+	box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, .1);
+	color: #e0e0e0;
+	text-shadow: 0px 1px 0px #4d7a85;
+	filter: dropshadow(color=#4d7a85, offx=0, offy=1);
+	border: 1px solid #333333;
+	position: relative;
+	margin: -1px;
+}
+.ui-datepicker-unselectable .ui-state-default {
+	background: #f4f4f4;
+	color: #b4b3b3;
+}
+.ui-datepicker-calendar td:first-child .ui-state-active {
+	width: 51px;
+	margin-left: 0;
+}
+.ui-datepicker-calendar td:last-child .ui-state-active {
+	width: 51px;
+	margin-right: 0;
+}
+.ui-datepicker-calendar tr:last-child .ui-state-active {
+	height: 51px;
+	margin-bottom: 0;
+}
+
+
+
+
+/* Misc */
 .tvds_homes_btn.small {
   padding: 6px 16px;
 }
 
+.homes-chevron {
+	display: block;
+	width: 30px;
+	height: 30px;
+}
+.homes-chevron::before {
+	border-style: solid;
+	border-width: 3px 3px 0 0;
+	content: '';
+	display: inline-block;
+	height: 11px;
+	width: 11px;
+	top: 10px;
+	position: relative;
+	transform: rotate(-45deg);
+	vertical-align: top;
+}
 
+.homes-chevron.right:before {
+	left: 8px;
+	transform: rotate(45deg);
+}
+
+.homes-chevron.bottom:before {
+	top: 0;
+	transform: rotate(135deg);
+}
+
+.homes-chevron.left:before {
+	left: 11px;
+	transform: rotate(-135deg);
+}
+
+
+
+/* Booking Form */
+.tvds_homes_search_form .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap .btn-select ul li {
+	border-bottom: 1px solid #eeeeee;
+}
+.tvds_homes_search_form .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap .btn-select ul li:last-child {
+	border-bottom: none;
+}
+
+/* Filter Form Widget */
+.booking-widget.widget_tvds_booking_filter_widget .btn-select ul li {
+	border-bottom: 1px solid #eeeeee;
+}
+
+.booking-widget.widget_tvds_booking_filter_widget .btn-select ul li:last-child {
+	border-bottom: none;
+}
 
 /* Homes Display */
 .tvds_vc_booking_display_homes_item_services {
@@ -42,15 +235,13 @@
 }
 
 
-
-
 /* Widgets */
 .tvds_homes_sidebar .tvds_homes_booking_form {
 	margin-bottom: 30px;
 }
 
 /* All Widgets */
-.homes-widget {
+.homes-widget, .booking-widget {
 	margin-bottom: 30px;
 	padding: 15px;
 	background-color: #eeeeee;
@@ -60,18 +251,84 @@
 	margin-top: 0;
 }
 
-
-
-
-
-
-
-
-/* Homes Favorite Widget */
-.widget_tvds_homes_favorite {
-	
+/* Filter Widget */
+.widget_tvds_booking_filter_widget {
+	background: #ffffff;
+	padding: 0px;
 }
 
+.tvds_homes_search_filter_title {
+	background: #333333;
+	padding: 15px;
+}
+
+.tvds_homes_search_filter_title .widget-title {
+	margin: 0px;
+	color: #fff;
+	display: inline-block;
+}
+
+.tvds_homes_search_filter_title #tvds_homes_open_search_filter {
+	float: right;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+    cursor: pointer;
+    background-color: #999999;
+    color: #ffffff;
+    font-size: 17px;
+    display: none;
+}
+
+.tvds_homes_search_filter_title #tvds_homes_open_search_filter i {
+	margin-left: 0px;
+	vertical-align: middle;
+}
+
+.tvds_homes_search_filter_title #tvds_homes_open_search_filter i:before {
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
+.tvds_homes_search_filter_form {
+	overflow: hidden;
+	transition: all 0.3s ease-in-out;
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+}
+
+.booking-widget.widget_tvds_booking_filter_widget .btn-select ul {
+	max-height: 350px;
+	overflow: auto;
+}
+
+
+#tvds_homes_search_form_widget_form {
+	padding: 15px;
+}
+
+/* Homes Archive */
+.tvds_homes_archive_item_inner:hover {    
+	transition: box-shadow 0.2s ease-in-out;
+    -webkit-box-shadow: 0px 39px 56.4px 3.6px rgba(0, 0, 0, 0.24);
+    -moz-box-shadow: 0px 39px 56.4px 3.6px rgba(0, 0, 0, 0.24);
+    box-shadow: 0px 39px 56.4px 3.6px rgba(0, 0, 0, 0.24);
+}
+
+/* Homes Archive Home Item */
+.tvds_homes_archive_item_info_categories {
+	margin-bottom: 10px;
+}
+.tvds_homes_archive_item_info_rating li.empty-star {
+	color: #f1f1f1;
+}
+
+.tvds_homes_archive_taxonomy_description {
+	margin-bottom: 30px;
+}
+
+/* Homes Favorite Widget */
 .tvds_homes_favorite_widget_inner {
 	margin-top: 20px;
 }
@@ -103,6 +360,245 @@
 	width: 100%;
 	display: block;
 }
+
+
+
+
+
+
+
+
+/* Visual Composer */
+.tvds_homes_region {
+	position: relative;	
+	margin-bottom: 30px;
+}
+
+.tvds_homes_region-inner {
+	overflow: hidden;
+	cursor: pointer;
+}
+
+.tvds_homes_region_background_clip {
+	transition: all 0.3s ease-in-out;
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+}
+
+.tvds_homes_region_background_clip img {
+	width: 100%;
+	height: auto;
+}
+
+.tvds_homes_region-inner:hover .tvds_homes_region_background_clip {
+	-webkit-transform: scale(1.24);
+    -ms-transform: scale(1.24);
+    transform: scale(1.24);
+}
+
+.tvds_homes_region_background_overlay {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background-color: rgba(0,0,0,0.4);
+	opacity: 0;
+	text-align: center;
+	transition: all 0.3s ease-in-out;
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+}
+
+.tvds_homes_region_background_overlay i {
+	position: relative;
+	top: 50%;
+	margin-top: -20px;
+	font-size: 24px;
+	color: #ffffff;
+}
+
+.tvds_homes_region-inner:hover .tvds_homes_region_background_overlay {
+	opacity: 1;
+}
+
+.tvds_homes_region_title {
+	position: relative;
+	z-index: 1;
+	background: #333333;
+}
+
+.tvds_homes_region_title span {
+	display: block;
+	color: #ffffff;
+	margin: 0px;
+	padding: 20px 15px;
+}
+
+
+
+/* VC Search Homes */
+.tvds_homes_search_form ul {
+	list-style: none;
+}
+
+
+
+/* Booking Calendars */
+.tvds_booking_calendars {
+	position: relative;
+	margin-bottom: 30px;
+	transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-webkit-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+}
+
+.tvds_booking_calendars ul {
+	padding: 0;
+}
+
+.tvds_booking_calendars_item {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	display: none;
+}
+
+.tvds_booking_calendars_item.active_calendar {
+	display: block;
+}
+
+.tvds_booking_calendar {
+	padding: 0 15px 15px;
+    background: #eeeeee;
+}
+
+/* Calendar Title */
+.tvds_booking_calendars_title {
+	margin: 0 -15px;
+	padding: 15px;
+	background: #333333;
+}
+
+.tvds_booking_calendars_title h3 {
+	margin: 0;
+	text-align: center;
+	color: #ffffff;
+}
+
+/* Calendar Month */
+.tvds_booking_calendar_month {
+	background: #ffffff;
+	margin-top: 30px;
+}
+
+/* Calendar Heading */
+.calendar-heading {
+	border-top: 1px solid;
+	height: 47px !important;
+}
+
+.calendar-row {
+	height: 40px;
+}
+
+.calendar-row .calendar-day-head, .calendar-row .calendar-day, .calendar-row .calendar-day-np {
+	width: 14.2857143%;
+	display: inline-block;
+	text-align: center;
+    padding: 10px;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+    min-height: 40px;
+    position: relative;
+}
+
+.calendar-row .calendar-day-head:first-child, .calendar-row .calendar-day:first-child, .calendar-row .calendar-day-np:first-child {
+	border-left: 1px solid;
+}
+
+/* Day */
+.calendar-row .calendar-day .day-number {
+	position: absolute;
+	text-align: center;
+    width: 100%;
+    left: 0px;
+}
+
+.calendar-row .calendar-day:after {
+	content: ' ';
+	position: absolute;
+	left: 0;
+	bottom: 0px;
+	width: 100%;
+	display: block;
+	height: 3px;
+	background-color: #5cb85c; 
+}
+
+/* Day Booked */
+.calendar-row  .calendar-day.calendar-day-booked:after {
+	content: ' ';
+	position: absolute;
+	left: 0;
+	bottom: 0px;
+	width: 100%;
+	display: block;
+	height: 3px;
+	background-color: #d9534f; 
+}
+
+/* No Day */
+.calendar-day-np {
+	background: #eeeeee;
+}
+
+/* Calendars Navigation */
+.tvds_booking_calendars_nav {
+	position: relative;
+	z-index: 1;
+}
+
+.tvds_booking_calendars_nav a {
+	position: absolute;
+    display: inline-block;
+    margin-top: 0px;
+	width: 30px;
+	height: 30px;
+    top: 13px;
+    cursor: pointer;
+    background-color: #999999;
+    color: #ffffff;
+    font-size: 17px;
+}
+
+.tvds_booking_calendars_nav a:hover {	
+	background-color: #666666;
+    color: #ffffff;
+}
+
+.tvds_booking_calendars_next {
+	right: 15px;
+}
+
+.tvds_booking_calendars_next i {
+    left: -5px;
+    top: 4px;
+    position: relative;
+}
+
+.tvds_booking_calendars_prev {
+	left: 15px;
+}
+.tvds_booking_calendars_prev i {
+	right: 5px;
+    top: 4px;
+    position: relative;
+}
+
 
 
 

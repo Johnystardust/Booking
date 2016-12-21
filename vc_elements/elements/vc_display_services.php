@@ -91,6 +91,16 @@ function tvds_homes_services_display_shortcode($atts, $content = null){
 							// Price
 							$output .= '<li>Prijs: <span> € '.get_post_meta(get_the_ID(), 'min_week_price', true).'</span></li>';
 
+							// Max Price
+							if(!empty(get_post_meta(get_the_ID(), 'max_week_price', true))){
+								$output .= '<li>Max prijs: <span> € '.get_post_meta(get_the_ID(), 'max_week_price', true).'</span></li>';
+							}
+
+							// For Sale
+							if(get_post_meta(get_the_ID(), 'for_sale', true)){
+								$output .= '<li>Koop prijs: <span> € '.get_post_meta(get_the_ID(), 'sale_price', true).'</span></li>';
+							}
+
 							// Location
 							$output .= '<li>Location: <span>'.tvds_homes_get_terms($terms_region).', '.tvds_homes_get_terms($terms_place).'</span></li>';
 		

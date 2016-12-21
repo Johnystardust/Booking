@@ -279,107 +279,110 @@ function tvds_homes_display_shortcode($atts, $content = null){
 		
         // Container Output
         $output .= '<div id="" class="tvds_vc_booking_display_homes">';
-
-        while ($the_query->have_posts()): $the_query->the_post();
-
-            $output .= '<div class="tvds_vc_booking_display_homes_item '.$columns.'">';
-				$output .= '<div class="tvds_vc_booking_display_homes_item_inner">';
-			
-					// Post Thumbnail
-					$output .= '<div class="tvds_vc_booking_display_homes_item_thumbnail">';
+        	$output .= '<div class="row">';
+		
+		        while ($the_query->have_posts()): $the_query->the_post();
+		
+		            $output .= '<div class="tvds_vc_booking_display_homes_item '.$columns.'">';
+						$output .= '<div class="tvds_vc_booking_display_homes_item_inner">';
 					
-						// If Post Has Thumbnail Display it. If Not Display Placeholder Image
-						if(has_post_thumbnail()){
-							$output .= '<img src="'.get_the_post_thumbnail_url().'"/>';
-						}
-						else {
-							$output .= '<img src="/placeholder" />';
-						}
+							// Post Thumbnail
+							$output .= '<div class="tvds_vc_booking_display_homes_item_thumbnail">';
+
+                                $output .= '<a href="'.get_the_permalink().'">';
+                                    // If Post Has Thumbnail Display it. If Not Display Placeholder Image
+                                    if(has_post_thumbnail()){
+                                        $output .= '<img src="'.get_the_post_thumbnail_url($post->ID, $size = 'homes_archive_thumb').'"/>';
+                                    }
+                                    else {
+                                        $output .= '<img src="/placeholder" />';
+                                    }
+					            $output .= '</a>';
+
+								// If Home Is Last Minute Or For Sale	                
+					            $last_minute = get_post_meta($post->ID, 'last_minute', true);
+					            $for_sale	 = get_post_meta($post->ID, 'for_sale', true);
+					            
+					            
+					            if($last_minute || $for_sale){
+					                $output .= '<ul class="tvds_vc_booking_display_homes_item_thumbnail_banners tvds_homes_thumbnail_banners">';
+					                
+					                    if($last_minute){
+					                        $output .= '<li class="tvds_homes_thumbnail_banner"><span class="tvds_homes_thumbnail_last_minute">'.__('Last minute', 'tvds').'</span></li>';
+					                    }
+					                    if($for_sale){
+					                        $output .= '<li class="tvds_homes_thumbnail_banner"><span class="tvds_homes_thumbnail_for_sale">'.__('Te koop', 'tvds').'</span></li>';
+					                    }
+					                
+					                $output .= '</ul>';
+					            }
+							$output .= '</div>';
+							
+							
+							
+							// Post Content
+							$output .= '<div class="tvds_vc_booking_display_homes_item_info">';
+							
+								// The Title
+								$output .= '<a href="'.get_the_permalink().'"><h4>'.get_the_title().'</h4></a>';
 						
-						// If Home Is Last Minute Or For Sale	                
-			            $last_minute = get_post_meta($post->ID, 'last_minute', true);
-			            $for_sale	 = get_post_meta($post->ID, 'for_sale', true);
-			            
-			            
-			            if($last_minute || $for_sale){
-			                $output .= '<ul class="tvds_vc_booking_display_homes_item_thumbnail_banners tvds_homes_thumbnail_banners">';
-			                
-			                    if($last_minute){
-			                        $output .= '<li class="tvds_homes_thumbnail_banner"><span class="tvds_homes_thumbnail_last_minute">'.__('Last minute', 'tvds').'</span></li>';
-			                    }
-			                    if($for_sale){
-			                        $output .= '<li class="tvds_homes_thumbnail_banner"><span class="tvds_homes_thumbnail_for_sale">'.__('Te koop', 'tvds').'</span></li>';
-			                    }
-			                
-			                $output .= '</ul>';
-			            }
-					$output .= '</div>';
+								// Stars
+					            if(get_post_meta($post->ID, 'stars', true)){
+						            $output .= '<ul class="tvds_vc_booking_display_homes_item_info_rating">';
+						            
+						                $stars = intval(get_post_meta($post->ID, 'stars', true));
+						
+					                    // For Each Rating Echo A Filed Star
+					                    for($x = 1; $x <= $stars; $x++){
+					                        $output .= '<li><i class="icon icon-star"></i></li>';
+					                    }
 					
+					                    // For Each Rating Below 5 That isn't set Echo A Empty Star
+					                    for($i = 1; $i <= (5 - $stars); $i++){
+					                        $output .= '<li><i class="icon icon-star-empty"></i></li>';
+					                    }
+					                $output .= '</ul>';
+					            }
+					            
+					            // The Excerpt
+					            if($show_excerpt){
+							        $output .= '<p class="tvds_vc_booking_display_homes_item_excerpt">'.wp_trim_words(get_the_excerpt(), 14).'</p>';    
+					            }
+					            
+					            // The Services
+					            if($show_services){
+						            $output .= '<ul class="tvds_vc_booking_display_homes_item_services">';
+							            // Max Persons
+					                    if (get_post_meta($post->ID, 'max_persons', true)){
+					                        $output .= '<li><i class="icon icon-user"></i> <strong>'.get_post_meta($post->ID, 'max_persons', true).'</strong></li>';
+					                    }
 					
-					
-					// Post Content
-					$output .= '<div class="tvds_vc_booking_display_homes_item_info">';
-					
-						// The Title
-						$output .= '<a href="'.get_the_permalink().'"><h4>'.get_the_title().'</h4></a>';
-				
-						// Stars
-			            if(get_post_meta($post->ID, 'stars', true)){
-				            $output .= '<ul class="tvds_vc_booking_display_homes_item_info_rating">';
-				            
-				                $stars = intval(get_post_meta($post->ID, 'stars', true));
-				
-			                    // For Each Rating Echo A Filed Star
-			                    for($x = 1; $x <= $stars; $x++){
-			                        $output .= '<li><i class="icon icon-star"></i></li>';
-			                    }
+					                    // Bedrooms
+					                    if (get_post_meta($post->ID, 'bedrooms', true)){
+					                        $output .= '<li class="tvds_homes_archive_beds"><i class="icon icon-bed"></i> <strong>'.get_post_meta($post->ID, 'bedrooms', true).'</strong></li>';
+					                    }
+					                $output .= '</ul>';
+					            }		            
+					            
+					            // The Price
+					            $output .= '<div class="tvds_vc_booking_display_homes_item_price">';
+						            $output .= '<strong>'.__('Vanaf', 'tvds').' </strong>';
+									$output .= '<h3 class="tvds_homes_archive_price">&euro;'.get_post_meta($post->ID, 'min_week_price', true).'</h3>';
+									$output .= '<small>/per week</small><br>';
+								$output .= '</div>';
 			
-			                    // For Each Rating Below 5 That isn't set Echo A Empty Star
-			                    for($i = 1; $i <= (5 - $stars); $i++){
-			                        $output .= '<li><i class="icon icon-star-empty"></i></li>';
-			                    }
-			                $output .= '</ul>';
-			            }
-			            
-			            // The Excerpt
-			            if($show_excerpt){
-					        $output .= '<p class="tvds_vc_booking_display_homes_item_excerpt">'.wp_trim_words(get_the_excerpt(), 14).'</p>';    
-			            }
-			            
-			            // The Services
-			            if($show_services){
-				            $output .= '<ul class="tvds_vc_booking_display_homes_item_services">';
-					            // Max Persons
-			                    if (get_post_meta($post->ID, 'max_persons', true)){
-			                        $output .= '<li><i class="icon icon-user"></i> <strong>'.get_post_meta($post->ID, 'max_persons', true).'</strong></li>';
-			                    }
+								// The Button
+								$output .= '<a class="tvds_homes_btn" href="'.get_the_permalink().'">'.__('Bekijk', 'tvds').'</a>';
 			
-			                    // Bedrooms
-			                    if (get_post_meta($post->ID, 'bedrooms', true)){
-			                        $output .= '<li class="tvds_homes_archive_beds"><i class="icon icon-bed"></i> <strong>'.get_post_meta($post->ID, 'bedrooms', true).'</strong></li>';
-			                    }
-			                $output .= '</ul>';
-			            }		            
-			            
-			            // The Price
-			            $output .= '<div class="tvds_vc_booking_display_homes_item_price">';
-				            $output .= '<strong>'.__('Vanaf', 'tvds').' </strong>';
-							$output .= '<h3 class="tvds_homes_archive_price">&euro;'.get_post_meta($post->ID, 'min_week_price', true).'</h3>';
-							$output .= '<small>/per week</small><br>';
+							$output .= '</div>';
 						$output .= '</div>';
-	
-						// The Button
-						$output .= '<a class="tvds_homes_btn" href="'.get_the_permalink().'">'.__('Bekijk', 'tvds').'</a>';
-	
 					$output .= '</div>';
-				$output .= '</div>';
-			$output .= '</div>';
-			
-			
-			// Increment The Counter
-            $i++;
-        endwhile;
-
+					
+					
+					// Increment The Counter
+		            $i++;
+		        endwhile;
+		    $output .= '</div>';
         // Container Output
         $output .= '</div>';
     }

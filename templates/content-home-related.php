@@ -11,15 +11,18 @@
 	<div class="tvds_homes_related_item_inner">
 		
 		<!-- Post Thumbnail -->
-		<div class="tvds_homes_related_thumbnail">
+		<div class="tvds_homes_related_thumbnail test">
 			<?php
-				// If Post Has Thumbnail Display it. If Not Display Placeholder Image
-				if(has_post_thumbnail()){
-					echo '<img src="'.get_the_post_thumbnail_url().'"/>';
-				}
-				else {
-					echo '<img src="/placeholder" />';
-				}
+
+				echo '<a href="'.get_the_permalink().'">';
+					// If Post Has Thumbnail Display it. If Not Display Placeholder Image
+					if(has_post_thumbnail()){
+						echo '<img src="'.get_the_post_thumbnail_url().'"/>';
+					}
+					else {
+						echo '<img src="/placeholder" />';
+					}
+				echo '</a>';
 				
 				// If Home Is Last Minute Or For Sale	                
 	            $last_minute = get_post_meta($post->ID, 'last_minute', true);

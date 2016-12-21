@@ -46,7 +46,8 @@ function tvds_booking_show_book_form(){
 			
 			$email = '<html><body>';
 				$email .= '<h3>Beste '.$_POST['name'].'</h3>';
-				$email .= 'U heeft een reservering bij ons gedaan voor het vakantie huis '.$_POST['home_id'].'. Let op dit is geen bevestiging deze zal worden gedaan nadat u de factuur betaald heeft. U zult spoedig van ons een factuur ontvangen.';
+				$email .= 'U heeft een reservering bij ons gedaan voor het vakantie huis '.$_POST['home_id'].'.<br><br>'; 
+				$email .= 'Let op dit is geen bevestiging deze zal worden gedaan nadat u de factuur betaald heeft. U zult spoedig van ons een factuur ontvangen.<br><br>';
 				
 				$email .= '<table>';
 					$email .= '<tr>';
@@ -63,20 +64,18 @@ function tvds_booking_show_book_form(){
 						$email .= '<td>Aantal weken</td>';
 						$email .= '<td>'.$_POST['weeks'].'</td>';
 					$email .= '</tr>';
-				$email .= '</table>';
+				$email .= '</table><br><br>';
 				
-				$email .= 'Heeft u nog vragen of opmerkingen dan staan wij voor u klaar. U kunt ons bereiken op:';
-				$email .= 'Tel: <a href="tel:0612345678">06 123 456 78</a>';
-				$email .= 'Mail: <a href="mailto:timvdslik@gmail.com">timvdslik@gmail.com</a>';
-				$email .= 'Adres: Broerenstraat 39-35';
-				$email .= 'Postcode: 6811 EB';
-				$email .= 'Plaats: Arnhem';
+				$email .= 'Heeft u nog vragen of opmerkingen dan staan wij voor u klaar. U kunt ons bereiken op:<br>';
+				$email .= 'Tel: <a href="tel:0612345678">06 123 456 78</a><br>';
+				$email .= 'Mail: <a href="mailto:timvdslik@gmail.com">timvdslik@gmail.com</a><br>';
+				$email .= 'Adres: Broerenstraat 39-35<br>';
+				$email .= 'Postcode: 6811 EB<br>';
+				$email .= 'Plaats: Arnhem<br><br>';
+				
+				$email .= 'Drome vakantiehuizen';
 				
 			$email .= '</body></html>';
-			
-			
-			
-			
 	
 			if(mail($to, $subject, $email, implode("\r\n", $headers), "-f".$from )){
 				?>
@@ -98,7 +97,7 @@ function tvds_booking_show_book_form(){
 	    
 	    <!-- The Form Title -->
 	    <div class="tvds_homes_booking_form_title">
-		    <h3><?php echo __('Boek nu!', 'tvds'); ?></h3>
+		    <h3><?php echo __('Reserveer nu!', 'tvds'); ?></h3>
 	    </div>
 
 	    <?php
@@ -127,16 +126,18 @@ function tvds_booking_show_book_form(){
 					echo tvds_homes_booking_form_text_input(__('Postcode', 'tvds'), 'text', 'postal', true);
 					echo tvds_homes_booking_form_text_input(__('Phone', 'tvds'), 'text', 'phone', true);
 					echo tvds_homes_booking_form_text_input(__('Email', 'tvds'), 'text', 'email', true);
+					
+					$form_class = (!get_option('single_sidebar')) ? 'col-sm-6 col-xs-12' : 'col-xs-12';
 				?>
 
 				<!-- Arrival Date -->
-				<div class="tvds_homes_booking_form_group col-sm-6 col-xs-12">
+				<div class="tvds_homes_booking_form_group <?php echo $form_class; ?>">
 					<label><?php echo __('Aankomst datum', 'tvds') ?></label>
 					<input required type="text" class="datepicker_booking_form" name="arrival_date" value="<?php if(isset($_POST['arrival_date'])) echo $_POST['arrival_date']; ?>"/>
 				</div>
 
 				<!-- Weeks -->
-				<div class="tvds_homes_booking_form_group col-sm-6 col-xs-12">
+				<div class="tvds_homes_booking_form_group <?php echo $form_class; ?>">
 					<label><?php echo __('Aantal weken', 'tvds') ?></label><br>
 					<select required id="tvds_homes_booking_form_weeks" name="weeks">
 						<option><?php echo __('Aantal weken', 'tvds'); ?></option>
@@ -151,7 +152,7 @@ function tvds_booking_show_book_form(){
 
 				<!-- Notes -->
 				<div class="tvds_homes_booking_form_group col-sm-12 col-xs-12">
-					<label><?php echo __('Opmerkingen', 'tvds') ?></label>
+					<label><?php echo __('Opmerkingen', 'tvds'); ?></label>
 					<textarea  name="notes">
 						<?php
 							if(isset($_POST['notes'])){
@@ -170,7 +171,7 @@ function tvds_booking_show_book_form(){
 				<div class="tvds_homes_booking_form_group col-sm-12 col-xs-12">
 					<?php wp_nonce_field('post_nonce', 'post_nonce_field'); ?>
 					<input type="hidden" name="submitted" id="submitted" value="true" />
-					<button type="submit"><?php _e('Boeken', 'tvds') ?></button>
+					<button type="submit"><?php _e('Reserveren', 'tvds') ?></button>
 				</div>
 			</div>
 		</form>
@@ -184,6 +185,8 @@ function tvds_booking_show_book_form(){
 	<?php
 }
 
+
+// Place The From In The Sidebar Or Place It Below Content
 if(get_option('single_sidebar')){
 	add_action('tvds_single_home_sidebar_content', 'tvds_booking_show_book_form', 10);
 }

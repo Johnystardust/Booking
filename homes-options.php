@@ -22,6 +22,8 @@ add_action('admin_menu', 'tvds_homes_add_options_menu');
 function tvds_homes_options_settings(){
 
 	// Archive Options
+	register_setting('tvds_homes_settings_group', 'show_default_archive_header');
+	register_setting('tvds_homes_settings_group', 'show_archive_title');
 	register_setting('tvds_homes_settings_group', 'archive_background');
     register_setting('tvds_homes_settings_group', 'enable_archive_grid');
     register_setting('tvds_homes_settings_group', 'archive_max_posts');
@@ -30,6 +32,10 @@ function tvds_homes_options_settings(){
     register_setting('tvds_homes_settings_group', 'slider');
 
     // Single Options
+    register_setting('tvds_homes_settings_group', 'show_default_single_header');
+   	register_setting('tvds_homes_settings_group', 'show_single_related_homes');
+    register_setting('tvds_homes_settings_group', 'single_background');
+    register_setting('tvds_homes_settings_group', 'single_homes_title');
     register_setting('tvds_homes_settings_group', 'display_price');
     register_setting('tvds_homes_settings_group', 'single_header_select');
     register_setting('tvds_homes_settings_group', 'single_header');
@@ -44,6 +50,14 @@ function tvds_homes_options_settings(){
     register_setting('tvds_homes_settings_group', 'max_future_calendars');
 
     register_setting('tvds_homes_settings_group', 'price_per');
+    
+    register_setting('tvds_homes_settings_group', 'show_empty_stars');
+    
+    // Rewrite Conditions
+    register_setting('tvds_homes_settings_group', 'rewrite_homes');
+    register_setting('tvds_homes_settings_group', 'rewrite_homes_region');
+    register_setting('tvds_homes_settings_group', 'rewrite_homes_place');
+    register_setting('tvds_homes_settings_group', 'rewrite_homes_type');
 }
 
 // The Settings Page
@@ -63,6 +77,24 @@ function tvds_homes_options_page(){
 	            <tr>
 		            <th colspan="2"><?php echo __('Archief pagina', 'tvds'); ?></th>
 	            </tr>
+	            
+	            <!-- Show Default Archive Header -->
+				<tr valign="top">
+                    <td scope="row"><label><?php echo __('Toon standaard archief header', 'tvds'); ?></label></td>
+                    <td><input type="checkbox" name="show_default_archive_header" <?php if(get_option('show_default_archive_header') == true){ echo 'checked'; } ?>></td>
+                </tr>
+	            
+	            <!-- Show Archive Title-->
+				<tr valign="top">
+                    <td scope="row"><label><?php echo __('Toon archief titel', 'tvds'); ?></label></td>
+                    <td><input type="checkbox" name="show_archive_title" <?php if(get_option('show_archive_title') == true){ echo 'checked'; } ?>></td>
+                </tr>
+                
+                <!-- Allow Grid View-->
+				<tr valign="top">
+                    <td scope="row"><label><?php echo __('Sta grid weergave toe op archief', 'tvds'); ?></label></td>
+                    <td><input type="checkbox" name="enable_archive_grid" <?php if(get_option('enable_archive_grid') == true){ echo 'checked'; } ?>></td>
+                </tr>
 
 				<!-- Posts Per Page -->
 				<tr valign="top">
@@ -74,12 +106,6 @@ function tvds_homes_options_page(){
 				<tr valign="top">
                     <td scope="row"><label><?php echo __('Archive achtergrond', 'tvds'); ?></label></td>
                     <td><input type="text" name="archive_background" value="<?php echo esc_attr(get_option('archive_background')); ?>"></td>
-                </tr>
-
-				<!-- Allow Grid View-->
-				<tr valign="top">
-                    <td scope="row"><label><?php echo __('Sta grid weergave toe op archief', 'tvds'); ?></label></td>
-                    <td><input type="checkbox" name="enable_archive_grid" <?php if(get_option('enable_archive_grid') == true){ echo 'checked'; } ?>></td>
                 </tr>
 
 				<!-- Archive Header -->
@@ -112,11 +138,41 @@ function tvds_homes_options_page(){
 	            <tr>
 		            <th colspan="2"><?php echo __('Single pagina', 'tvds'); ?></th>
 	            </tr>
+	            
+	            <!-- Show Default Single Header -->
+				<tr valign="top">
+                    <td scope="row"><label><?php echo __('Toon standaard single header', 'tvds'); ?></label></td>
+                    <td><input type="checkbox" name="show_default_single_header" <?php if(get_option('show_default_single_header') == true){ echo 'checked'; } ?>></td>
+                </tr>
 
+	            <!-- Background Color -->
+				<tr valign="top">
+                    <td scope="row"><label><?php echo __('Single achtergrond', 'tvds'); ?></label></td>
+                    <td><input type="text" name="single_background" value="<?php echo esc_attr(get_option('single_background')); ?>"></td>
+                </tr>
+                
+                <!-- Show Archive Title-->
+				<tr valign="top">
+                    <td scope="row"><label><?php echo __('Toon gerelateerde huizen', 'tvds'); ?></label></td>
+                    <td><input type="checkbox" name="show_single_related_homes" <?php if(get_option('show_single_related_homes') == true){ echo 'checked'; } ?>></td>
+                </tr>
+
+				<!-- Display Single Title -->
+				<tr valign="top">
+                    <td scope="row"><label><?php echo __('Toon titel op single homes pagina', 'tvds'); ?></label></td>
+                    <td><input type="checkbox" name="single_homes_title" <?php if(get_option('single_homes_title') == true){ echo 'checked'; } ?>></td>
+                </tr>
+				
 	            <!-- Display Price -->
 				<tr valign="top">
                     <td scope="row"><label><?php echo __('Toon prijs in titel', 'tvds'); ?></label></td>
                     <td><input type="checkbox" name="display_price" <?php if(get_option('display_price') == true){ echo 'checked'; } ?>></td>
+                </tr>
+                
+                <!-- Single Sidebar -->
+                <tr valign="top">
+                    <td scope="row"><label><?php echo __('Sidebar weergeven', 'tvds'); ?></label></td>
+                    <td><input type="checkbox" name="single_sidebar" <?php if(get_option('single_sidebar') == true){ echo 'checked'; } ?>></td>
                 </tr>
 
 	            <!-- Single Header -->
@@ -145,13 +201,6 @@ function tvds_homes_options_page(){
                 <tr>
 	                <td><p class="howto">Deze instelling kan worden overschreven door op de individuele pagina een andere achtergrond of slider te selecteren</p></td>
                 </tr>
-
-                <!-- Single Sidebar -->
-                <tr valign="top">
-                    <td scope="row"><label><?php echo __('Sidebar weergeven', 'tvds'); ?></label></td>
-                    <td><input type="checkbox" name="single_sidebar" <?php if(get_option('single_sidebar') == true){ echo 'checked'; } ?>></td>
-                </tr>
-
 
 
                 <!-- Misc Options -->
@@ -211,13 +260,29 @@ function tvds_homes_options_page(){
 						</select>
 					</td>
 				</tr>
-
+				
+				<!-- Show Empty Stars -->
+				<tr valign="top">
+                    <td scope="row"><label><?php echo __('Toon lege sterren', 'tvds'); ?></label></td>
+                    <td><input type="checkbox" name="show_empty_stars" <?php if(get_option('show_empty_stars') == true){ echo 'checked'; } ?>></td>
+                </tr>
+                
             </table>
 
             <?php submit_button(); ?>
         </form>
+        
+        
+<!--
+		List The Hooks for ease refference
+        
+        // tvds_before_homes_header
+		// tvds_after_homes_header
+		
+		// tvds_before_single_home_footer
+		// tvds_after_single_home_footer
+        
+-->
     </div>
     <?php
 }
-
-

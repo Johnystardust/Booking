@@ -22,20 +22,21 @@
                 
                 if($last_minute || $for_sale){
                     echo '<ul class="tvds_homes_archive_item_thumbnail_banners tvds_homes_thumbnail_banners">';
-                    
+
                         if($last_minute){
 	                        echo '<li class="tvds_homes_thumbnail_banner"><span class="tvds_homes_thumbnail_last_minute">'.__('Last minute', 'tvds').'</span></li>';
                         }
                         if($for_sale){
 	                        echo '<li class="tvds_homes_thumbnail_banner"><span class="tvds_homes_thumbnail_for_sale">'.__('Te koop', 'tvds').'</span></li>';
                         }
-                    
+
                     echo '</ul>';
                 }
                 ?>
 
-                <a href="<?php echo get_the_post_thumbnail_url(); ?>">
-                    <?php the_post_thumbnail('homes_archive_thumb'); ?>
+
+                <a href="<?php echo get_the_permalink(); ?>">
+                    <img src="<?php get_the_post_thumbnail_url('homes_archive_thumb'); ?>">
                 </a>
 
             </div>

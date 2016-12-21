@@ -24,7 +24,7 @@ function tvds_booking_create_post_type(){
             'menu_position' 		=> 15,
             'supports'      		=> array('title', 'custom-fields'),
             'taxonomies'    		=> array(''),
-            'has_archive'  	 		=> true,
+            'has_archive'  	 		=> false,
             'show_in_menu' 			=> 'edit.php?post_type=homes',
             'show_in_nav_menus' 	=> false,
 			'exclude_from_search' 	=> true,

@@ -80,6 +80,8 @@ class tvds_homes_last_minute_widget extends WP_Widget
 							echo '<a href="'.get_the_permalink().'" class="tvds_homes_btn small">'.__('Boek', 'tvds').'</a>';
 							
 						echo '</div>'; // tvds_homes_favorite_widget_content end
+						
+						echo '<div class="clearfix"></div>';
 	
 					echo '</div>'; // tvds_homes_favorite_widget_row end
 									
