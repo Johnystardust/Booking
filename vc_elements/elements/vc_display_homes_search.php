@@ -50,6 +50,90 @@ vc_map(array(
             ),
 			"group"				=> __("Design opties", 'tvds'),
         ),
+
+		// Show Keyword
+		array(
+			'type'              => 'checkbox',
+			"class" 			=> "",
+			"heading" 			=> __("Toon zoekwoord", "tvds"),
+			"param_name" 		=> "show_keyword",
+			"value" 			=> false,
+			"group"				=> __("Design opties", 'tvds'),
+			'dependency'		=> array(
+				'element' => 'design',
+				'value' => 'full',
+			),
+		),
+
+		// Show Province
+		array(
+			'type'              => 'checkbox',
+			"class" 			=> "",
+			"heading" 			=> __("Toon provincie", "tvds"),
+			"param_name" 		=> "show_province",
+			"value" 			=> false,
+			"group"				=> __("Design opties", 'tvds'),
+			'dependency'		=> array(
+				'element' => 'design',
+				'value' => 'full',
+			),
+		),
+
+		// Show Type
+		array(
+			'type'              => 'checkbox',
+			"class" 			=> "",
+			"heading" 			=> __("Toon type", "tvds"),
+			"param_name" 		=> "show_type",
+			"value" 			=> false,
+			"group"				=> __("Design opties", 'tvds'),
+			'dependency'		=> array(
+				'element' => 'design',
+				'value' => 'full',
+			),
+		),
+
+		// Show Arrival Date / Weeks
+		array(
+			'type'              => 'checkbox',
+			"class" 			=> "",
+			"heading" 			=> __("Toon aankomstdatum/aantal weken", "tvds"),
+			"param_name" 		=> "show_date",
+			"value" 			=> false,
+			"group"				=> __("Design opties", 'tvds'),
+			'dependency'		=> array(
+				'element' => 'design',
+				'value' => 'full',
+			),
+		),
+
+		// Show Persons
+		array(
+			'type'              => 'checkbox',
+			"class" 			=> "",
+			"heading" 			=> __("Toon personen", "tvds"),
+			"param_name" 		=> "show_persons",
+			"value" 			=> false,
+			"group"				=> __("Design opties", 'tvds'),
+			'dependency'		=> array(
+				'element' => 'design',
+				'value' => 'full',
+			),
+		),
+
+		// Show Bedrooms
+		array(
+			'type'              => 'checkbox',
+			"class" 			=> "",
+			"heading" 			=> __("Toon slaapkamers", "tvds"),
+			"param_name" 		=> "show_bedrooms",
+			"value" 			=> false,
+			"group"				=> __("Design opties", 'tvds'),
+			'dependency'		=> array(
+				'element' => 'design',
+				'value' => 'full',
+			),
+		),
         
         // Background Color
         array(
@@ -108,162 +192,180 @@ function tvds_homes_search_shortcode($atts, $content = null){
 		            
 		            	$output .= '<div class="row">';
 
-			            	// Keyword		            
-			            	$output .= '<div class="tvds_homes_search_form_field_wrap col-md-4 col-sm-12">';
-			            	
-			            		$output .= '<label>'.__('Zoekwoord', 'tvds').'</label>';
-			            		$output .= '<input type="text" name="keyword" style="width: 100%;" placeholder="'.__('Alle', 'tvds').'"/>';
-			            	
-			            	$output .= '</div>'; // tvds_homes_search_form_field_wrap end
-			            
+			            	// Keyword
+			            	if($show_keyword){
+								$output .= '<div class="tvds_homes_search_form_field_wrap col-md-4 col-sm-12">';
+
+									$output .= '<label>'.__('Zoekwoord', 'tvds').'</label>';
+									$output .= '<input type="text" name="keyword" style="width: 100%;" placeholder="'.__('Alle', 'tvds').'"/>';
+
+								$output .= '</div>'; // tvds_homes_search_form_field_wrap end
+							}
+
 							// Province
-			            	$terms_province = get_terms('homes_province', array('hide_empty' => true));
-			            	
-							$output .= '<div class="tvds_homes_search_form_field_wrap col-md-4 col-sm-6">';
-			            	
-			            		$output .= '<label>'.__('Provincie', 'tvds').'</label>';
-			            		
-						        $output .= '<a class="btn btn-default btn-select">';
-						
-						            $output .= '<input type="hidden" class="btn-select-input" id="" name="province" value="" />';
-						    
-						            $output .= '<span class="btn-select-value">Maakt niet uit</span>';
-						    
-						            $output .= '<span class="btn-select-arrow glyphicon glyphicon glyphicon-menu-down pull-right"></span>';
-						
-						            $output .= '<ul>';
-						    
-						                $output .= '<li data-value="">'. __('Alle', 'tvds').'</li>';
-						
-						                foreach($terms_province as $term){
-						                    $output .= '<li data-value="'.$term->slug.'">'.$term->name.'</li>';
-						                }
-						
-						            $output .= '</ul>';
-						
-						        $output .= '</a>';
-			            					            	
-			            	$output .= '</div>'; // tvds_homes_search_form_field_wrap end
-			            				            	
+							if($show_province){
+								$terms_province = get_terms('homes_province', array('hide_empty' => true));
+
+								$output .= '<div class="tvds_homes_search_form_field_wrap col-md-4 col-sm-6">';
+
+									$output .= '<label>'.__('Provincie', 'tvds').'</label>';
+
+									$output .= '<a class="btn btn-default btn-select">';
+
+										$output .= '<input type="hidden" class="btn-select-input" id="" name="province" value="" />';
+
+										$output .= '<span class="btn-select-value">Maakt niet uit</span>';
+
+										$output .= '<span class="btn-select-arrow glyphicon glyphicon glyphicon-menu-down pull-right"></span>';
+
+										$output .= '<ul>';
+
+											$output .= '<li data-value="">'. __('Alle', 'tvds').'</li>';
+
+											foreach($terms_province as $term){
+												$output .= '<li data-value="'.$term->slug.'">'.$term->name.'</li>';
+											}
+
+										$output .= '</ul>';
+
+									$output .= '</a>';
+
+								$output .= '</div>'; // tvds_homes_search_form_field_wrap end
+							}
+
 			            	// Type
-			            	$terms_type = get_terms('homes_type', array('hide_empty' => true));
-			            	
-							$output .= '<div class="tvds_homes_search_form_field_wrap col-md-4 col-sm-6">';
-			            	
-			            		$output .= '<label>'.__('Type', 'tvds').'</label>';
-			            		
-						        $output .= '<a class="btn btn-default btn-select">';
-						
-						            $output .= '<input type="hidden" class="btn-select-input" id="" name="type" value="" />';
-						    
-						            $output .= '<span class="btn-select-value">Maakt niet uit</span>';
-						    
-						            $output .= '<span class="btn-select-arrow glyphicon glyphicon glyphicon-menu-down pull-right"></span>';
-						
-						            $output .= '<ul>';
-						    
-						                $output .= '<li data-value="">'. __('Alle', 'tvds').'</li>';
-						
-						                foreach($terms_type as $term){
-						                    $output .= '<li data-value="'.$term->slug.'">'.$term->name.'</li>';
-						                }
-						
-						            $output .= '</ul>';
-						
-						        $output .= '</a>';
-			            					            	
-			            	$output .= '</div>'; // tvds_homes_search_form_field_wrap end
+							if($show_type){
+								$terms_type = get_terms('homes_type', array('hide_empty' => true));
+
+								$output .= '<div class="tvds_homes_search_form_field_wrap col-md-4 col-sm-6">';
+
+									$output .= '<label>'.__('Type', 'tvds').'</label>';
+
+									$output .= '<a class="btn btn-default btn-select">';
+
+										$output .= '<input type="hidden" class="btn-select-input" id="" name="type" value="" />';
+
+										$output .= '<span class="btn-select-value">Maakt niet uit</span>';
+
+										$output .= '<span class="btn-select-arrow glyphicon glyphicon glyphicon-menu-down pull-right"></span>';
+
+										$output .= '<ul>';
+
+											$output .= '<li data-value="">'. __('Alle', 'tvds').'</li>';
+
+											foreach($terms_type as $term){
+												$output .= '<li data-value="'.$term->slug.'">'.$term->name.'</li>';
+											}
+
+										$output .= '</ul>';
+
+									$output .= '</a>';
+
+								$output .= '</div>'; // tvds_homes_search_form_field_wrap end
+							}
+
 			            	
 			            	// Arrival Date
-			            	$output .= '<div class="tvds_homes_search_form_field_wrap col-md-4 col-sm-6 col-xs-6">';
-			            	
-			            		$output .= '<label>'.__('Aankomst datum', 'tvds').'</label>';
-			            		$output .= '<input class="datepicker" type="text" name="arrival_date" style="width: 100%;" placeholder="'.__('Kies datum', 'tvds').'"/>';
-			            	
-			            	$output .= '</div>'; // tvds_homes_search_form_field_wrap end
-			            	
-			            	// Weeks
-			            	$output .= '<div class="tvds_homes_search_form_field_wrap col-md-4 col-sm-6 col-xs-6">';
-			            	
-			            		$output .= '<label>'.__('Aantal weken', 'tvds').'</label>';
-			            		        	
-			            		$output .= '<a class="btn btn-default btn-select">';
-			            		
-									$output .= '<input type="hidden" class="btn-select-input" id="" name="weeks" value="" />';
-									
-									$output .= '<span class="btn-select-value">'.__('Aantal weken', 'tvds').'</span>';
-									
-									$output .= '<span class="btn-select-arrow glyphicon glyphicon glyphicon-menu-down pull-right"></span>';
-									
-									$output .= '<ul>';
-										for($x = 1; $x <= 12; $x++){
-											if($x == 1){
-												$output .= '<li data-value="'.$x.'">'.$x.' Week</li>';	
-											}
-											else {
-												$output .= '<li data-value="'.$x.'">'.$x.' Weken</li>';
-											}
-										}
-									$output .= '</ul>';
-									
-								$output .= '</a>';
-								            	
-			            	$output .= '</div>'; // tvds_homes_search_form_field_wrap end
-			            	
-			            	// Persons
-							$output .= '<div class="tvds_homes_search_form_field_wrap col-md-2 col-sm-6 col-xs-6">';
-			            	
-			            		$output .= '<label>'.__('Personen', 'tvds').'</label>';
+							if($show_date){
+								$output .= '<div class="tvds_homes_search_form_field_wrap col-md-4 col-sm-6 col-xs-6">';
 
-								$output .= '<a class="btn btn-default btn-select">';
-									
-									$output .= '<input type="hidden" class="btn-select-input" id="" name="max_person" value="" />';
-									
-									$output .= '<span class="btn-select-value">'.__('Maak keuze', 'tvds').'</span>';
-									
-									$output .= '<span class="btn-select-arrow glyphicon glyphicon glyphicon-menu-down pull-right"></span>';
-									
-									$output .= '<ul>';
-										for($x = 1; $x <= 20; $x++){
-											if($x == 1){
-												$output .= '<li data-value="'.$x.'">'.$x.' Persoon</li>';	
+									$output .= '<label>'.__('Aankomst datum', 'tvds').'</label>';
+									$output .= '<input class="datepicker" type="text" name="arrival_date" style="width: 100%;" placeholder="'.__('Kies datum', 'tvds').'"/>';
+
+								$output .= '</div>'; // tvds_homes_search_form_field_wrap end
+
+								// Weeks
+								$output .= '<div class="tvds_homes_search_form_field_wrap col-md-4 col-sm-6 col-xs-6">';
+
+									$output .= '<label>'.__('Aantal weken', 'tvds').'</label>';
+
+										$output .= '<a class="btn btn-default btn-select">';
+
+											$output .= '<input type="hidden" class="btn-select-input" id="" name="weeks" value="" />';
+
+											$output .= '<span class="btn-select-value">'.__('Aantal weken', 'tvds').'</span>';
+
+											$output .= '<span class="btn-select-arrow glyphicon glyphicon glyphicon-menu-down pull-right"></span>';
+
+											$output .= '<ul>';
+												for($x = 1; $x <= 12; $x++){
+													if($x == 1){
+														$output .= '<li data-value="'.$x.'">'.$x.' Week</li>';
+													}
+													else {
+														$output .= '<li data-value="'.$x.'">'.$x.' Weken</li>';
+													}
+												}
+											$output .= '</ul>';
+
+									$output .= '</a>';
+
+								$output .= '</div>'; // tvds_homes_search_form_field_wrap end
+							}
+
+			            	// Persons
+							if($show_persons){
+								$output .= '<div class="tvds_homes_search_form_field_wrap col-md-2 col-sm-6 col-xs-6">';
+
+									$output .= '<label>'.__('Personen', 'tvds').'</label>';
+
+									$output .= '<a class="btn btn-default btn-select">';
+
+										$output .= '<input type="hidden" class="btn-select-input" id="" name="max_person" value="" />';
+
+										$output .= '<span class="btn-select-value">'.__('Maak keuze', 'tvds').'</span>';
+
+										$output .= '<span class="btn-select-arrow glyphicon glyphicon glyphicon-menu-down pull-right"></span>';
+
+										$output .= '<ul>';
+
+											for($x = 1; $x <= 20; $x++){
+												if($x == 1){
+													$output .= '<li data-value="'.$x.'">'.$x.' Persoon</li>';
+												}
+												else {
+													$output .= '<li data-value="'.$x.'">'.$x.' Personen</li>';
+												}
+
 											}
-											else {
-												$output .= '<li data-value="'.$x.'">'.$x.' Personen</li>';
-											}
-											
-										}
-									$output .= '</ul>';
-								$output .= '</a>';
-			            	
-			            	$output .= '</div>'; // tvds_homes_search_form_field_wrap end
+
+										$output .= '</ul>';
+
+									$output .= '</a>';
+
+								$output .= '</div>'; // tvds_homes_search_form_field_wrap end
+							}
+
 			            	
 			            	// Bedrooms
-							$output .= '<div class="tvds_homes_search_form_field_wrap col-md-2 col-sm-6 col-xs-6">';
-			            	
-			            		$output .= '<label>'.__('Slaapkamers', 'tvds').'</label>';
+							if($show_bedrooms){
+								$output .= '<div class="tvds_homes_search_form_field_wrap col-md-2 col-sm-6 col-xs-6">';
 
-								$output .= '<a class="btn btn-default btn-select">';
-									
-									$output .= '<input type="hidden" class="btn-select-input" id="" name="bedrooms" value="" />';
-									
-									$output .= '<span class="btn-select-value">'.__('Maak keuze', 'tvds').'</span>';
-									
-									$output .= '<span class="btn-select-arrow glyphicon glyphicon glyphicon-menu-down pull-right"></span>';
-									
-									$output .= '<ul>';
-										for($x = 1; $x <= 10; $x++){
-											if($x == 1){
-												$output .= '<li data-value="'.$x.'">'.$x.' Slaapkamer</li>';	
+									$output .= '<label>'.__('Slaapkamers', 'tvds').'</label>';
+
+									$output .= '<a class="btn btn-default btn-select">';
+
+										$output .= '<input type="hidden" class="btn-select-input" id="" name="bedrooms" value="" />';
+
+										$output .= '<span class="btn-select-value">'.__('Maak keuze', 'tvds').'</span>';
+
+										$output .= '<span class="btn-select-arrow glyphicon glyphicon glyphicon-menu-down pull-right"></span>';
+
+										$output .= '<ul>';
+											for($x = 1; $x <= 10; $x++){
+												if($x == 1){
+													$output .= '<li data-value="'.$x.'">'.$x.' Slaapkamer</li>';
+												}
+												else {
+													$output .= '<li data-value="'.$x.'">'.$x.' Slaapkamers</li>';
+												}
 											}
-											else {
-												$output .= '<li data-value="'.$x.'">'.$x.' Slaapkamers</li>';
-											}
-										}
-									$output .= '</ul>';
-								$output .= '</a>';
-			            	
-			            	$output .= '</div>'; // tvds_homes_search_form_field_wrap end
+										$output .= '</ul>';
+									$output .= '</a>';
+
+								$output .= '</div>'; // tvds_homes_search_form_field_wrap end
+							}
+
 			            
 						$output .= '</div>'; // row end
 						

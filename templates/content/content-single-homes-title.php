@@ -42,12 +42,25 @@
 					<!-- Rating -->
 					<div class="tvds_single_homes_rating">
 						<?php
-							if(!empty(get_post_meta($post->ID, 'stars', true))){
-								$stars = get_post_meta($post->ID, 'stars', true);
-						
-								for($x = 0; $x < $stars; $x++){
+							if(get_post_meta($post->ID, 'stars', true) && get_option('show_stars')){
+
+								$stars = intval(get_post_meta($post->ID, 'stars', true));
+
+								// For Each Rating Echo A Filed Star
+								for($x = 1; $x <= $stars; $x++){
 									echo '<i class="icon icon-star"></i>';
-								}	
+								}
+
+								// For Each Rating Below 5 That isn't set Echo A Empty Star
+								for($i = 1; $i <= (5 - $stars); $i++){
+									echo '<i class="icon icon-star-empty"></i>';
+								}
+							}
+							else {
+								// For Each Rating Below 5 That isn't set Echo A Empty Star
+								for($i = 1; $i <= 5; $i++){
+									echo '<i class="icon icon-star-empty"></i>';
+								}
 							}
 						?>
 					</div>

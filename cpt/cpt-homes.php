@@ -38,7 +38,7 @@ add_action('init', 'tvds_booking_create_homes_post_type');
 function tvds_add_homes_meta_boxes(){
     add_meta_box('homes_detail_meta_box', __('Huis details', 'tvds'), 'tvds_display_homes_detail_meta_box', 'homes', 'normal', 'high');
     add_meta_box('homes_services_meta_box', __('Huis diensten', 'tvds'), 'tvds_display_homes_services_meta_box', 'homes', 'normal', 'high');
-    add_meta_box('homes_booking_meta_box', __('Reserveringen', 'tvds'), 'tvds_display_homes_booking_meta_box', 'homes', 'normal', 'high');
+//    add_meta_box('homes_booking_meta_box', __('Reserveringen', 'tvds'), 'tvds_display_homes_booking_meta_box', 'homes', 'normal', 'high');
     add_meta_box('homes_header_meta_box',  __('Header', 'tvds'), 'tvds_display_homes_header_meta_box', 'homes', 'side', 'default');
 }
 add_action('admin_init', 'tvds_add_homes_meta_boxes');
@@ -53,6 +53,7 @@ function tvds_display_homes_detail_meta_box($home){
     
     $max_persons        = esc_html(get_post_meta($home->ID, 'max_persons', true));
     $bedrooms		    = esc_html(get_post_meta($home->ID, 'bedrooms', true));
+    $bathrooms          = esc_html(get_post_meta($home->ID, 'bathrooms', true));
     $new_contender      = esc_html(get_post_meta($home->ID, 'new_contender', true));
     $last_minute	    = esc_html(get_post_meta($home->ID, 'last_minute', true));
     $favorite			= esc_html(get_post_meta($home->ID, 'favorite', true));
@@ -103,6 +104,24 @@ function tvds_display_homes_detail_meta_box($home){
 			        ?>
 	            </select>
 	        </td>
+        </tr>
+        <!-- Badkamers -->
+        <tr>
+            <td style="width: 100%;"><?php echo __('Badkamers', 'tvds'); ?></td>
+            <td>
+                <select name="bathrooms">
+                    <?php
+                    for($x = 1; $x <= 10; $x++){
+                        if($x == $bathrooms){
+                            echo '<option selected value="'.$x.'">'.$x.'</option>';
+                        }
+                        else {
+                            echo '<option value="'.$x.'">'.$x.'</option>';
+                        }
+                    }
+                    ?>
+                </select>
+            </td>
         </tr>
         <!-- New Contender -->
         <tr>
@@ -328,6 +347,9 @@ function tvds_save_homes_post( $home_id, $home ) {
         }
         if ( isset( $_POST['bedrooms'] ) && $_POST['bedrooms'] != '' ) {
             update_post_meta( $home_id, 'bedrooms', $_POST['bedrooms'] );
+        }
+        if ( isset( $_POST['bathrooms'] ) && $_POST['bathrooms'] != '' ) {
+            update_post_meta( $home_id, 'bathrooms', $_POST['bathrooms'] );
         }
         if ( isset( $_POST['new_contender'] ) && $_POST['new_contender'] != '' ) {
             update_post_meta( $home_id, 'new_contender', $_POST['new_contender'] );

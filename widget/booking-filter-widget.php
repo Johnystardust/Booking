@@ -79,9 +79,9 @@ class tvds_booking_filter_widget extends WP_Widget
 		}
 
 
-		$action_url = (!empty(get_option('rewrite_homes'))) ? home_url().'/'.get_option('rewrite_homes') : home_url().'/homes';
+		$action_url = home_url().'/homes/';
         ?>
-        
+
         <div class="tvds_homes_search_filter_form">
 	        
 	    	<form id="tvds_homes_search_form_widget_form" method="get" autocomplete="off" action="<?php echo $action_url; ?>">
@@ -187,6 +187,11 @@ class tvds_booking_filter_widget extends WP_Widget
 							<!-- Bedrooms Filter -->
 							<div class="tvds_homes_search_form_group">
 								<?php echo tvds_homes_search_widget_form_number_select_fields('bedrooms', 'Aantal Slaapkamers', 10 , $show_labels); ?>
+							</div>
+
+							<!-- Bathrooms Filter -->
+							<div class="tvds_homes_search_form_group">
+								<?php echo tvds_homes_search_widget_form_number_select_fields('bathrooms', 'Aantal Badkamers', 10 , $show_labels); ?>
 							</div>
 						</div>
 	

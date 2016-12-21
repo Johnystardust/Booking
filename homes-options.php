@@ -51,13 +51,7 @@ function tvds_homes_options_settings(){
 
     register_setting('tvds_homes_settings_group', 'price_per');
     
-    register_setting('tvds_homes_settings_group', 'show_empty_stars');
-    
-    // Rewrite Conditions
-    register_setting('tvds_homes_settings_group', 'rewrite_homes');
-    register_setting('tvds_homes_settings_group', 'rewrite_homes_region');
-    register_setting('tvds_homes_settings_group', 'rewrite_homes_place');
-    register_setting('tvds_homes_settings_group', 'rewrite_homes_type');
+    register_setting('tvds_homes_settings_group', 'show_stars');
 }
 
 // The Settings Page
@@ -261,10 +255,10 @@ function tvds_homes_options_page(){
 					</td>
 				</tr>
 				
-				<!-- Show Empty Stars -->
+				<!-- Show Stars -->
 				<tr valign="top">
-                    <td scope="row"><label><?php echo __('Toon lege sterren', 'tvds'); ?></label></td>
-                    <td><input type="checkbox" name="show_empty_stars" <?php if(get_option('show_empty_stars') == true){ echo 'checked'; } ?>></td>
+                    <td scope="row"><label><?php echo __('Toon Waarderingen', 'tvds'); ?></label></td>
+                    <td><input type="checkbox" name="show_stars" <?php if(get_option('show_stars') == true){ echo 'checked'; } ?>></td>
                 </tr>
                 
             </table>

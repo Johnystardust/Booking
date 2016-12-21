@@ -53,25 +53,32 @@
 			
 			<!-- Stars -->
 			<?php
-	            if(get_post_meta($post->ID, 'stars', true)){
-	                ?>
-		                <ul class="tvds_homes_related_info_rating">
-		                    <?php
-		                    $stars = intval(get_post_meta($post->ID, 'stars', true));
-		
-		                    // For Each Rating Echo A Filed Star
-		                    for($x = 1; $x <= $stars; $x++){
-		                        echo '<li><i class="icon icon-star"></i></li>';
-		                    }
-		
-		                    // For Each Rating Below 5 That isn't set Echo A Empty Star
-		                    for($i = 1; $i <= (5 - $stars); $i++){
-		                        echo '<li><i class="icon icon-star-empty"></i></li>';
-		                    }
-		                    ?>
-		                </ul>
-	                <?php
-	            }
+				if(get_post_meta($post->ID, 'stars', true) && get_option('show_stars')){
+					echo '<ul class="tvds_homes_related_info_rating">';
+
+						$stars = intval(get_post_meta($post->ID, 'stars', true));
+
+						// For Each Rating Echo A Filed Star
+						for($x = 1; $x <= $stars; $x++){
+							echo '<li><i class="icon icon-star"></i></li>';
+						}
+
+						// For Each Rating Below 5 That isn't set Echo A Empty Star
+						for($i = 1; $i <= (5 - $stars); $i++){
+							echo '<li><i class="icon icon-star-empty"></i></li>';
+						}
+					echo '</ul>';
+				}
+				else {
+					echo '<ul class="tvds_homes_related_info_rating">';
+
+						// For Each Rating Below 5 That isn't set Echo A Empty Star
+						for($i = 1; $i <= 5; $i++){
+							echo '<li><i class="icon icon-star-empty"></i></li>';
+						}
+
+					echo '</ul>';
+				}
 	        ?>
 	        
 			<!-- The Excerpt -->

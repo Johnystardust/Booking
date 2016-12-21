@@ -103,23 +103,30 @@ function tvds_homes_services_display_shortcode($atts, $content = null){
 
 							// Location
 							$output .= '<li>Location: <span>'.tvds_homes_get_terms($terms_region).', '.tvds_homes_get_terms($terms_place).'</span></li>';
-		
+
 							// Rating
-							$output .= '<li>';
-								$output .= 'Rating: ';
-								
-								if(!empty(get_post_meta(get_the_ID(), 'stars', true))){
-									$stars = get_post_meta(get_the_ID(), 'stars', true);
-									
-									for($x = 0; $x < $stars; $x++){
+							if(get_post_meta(get_the_ID(), 'stars', true) && get_option('show_stars')){
+								$output .= '<li>';
+									$output .= 'Rating: ';
+
+									$stars = intval(get_post_meta(get_the_ID(), 'stars', true));
+
+									// For Each Rating Echo A Filed Star
+									for($x = 1; $x <= $stars; $x++){
 										$output .= '<i class="icon icon-star"></i>';
-									}	
-								}
-								else {
-									$output .= __('Niet beschikbaar', 'tvds');
-								}
-							$output .= '</li>';
+									}
+
+									// For Each Rating Below 5 That isn't set Echo A Empty Star
+									for($i = 1; $i <= (5 - $stars); $i++){
+										$output .= '<i class="icon icon-star-empty"></i>';
+									}
+
+								$output .= '</li>';
+
+							}
+
 						$output .= '</ul>';
+
 					$output .= '</div>';
 					
 					

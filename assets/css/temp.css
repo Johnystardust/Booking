@@ -300,7 +300,7 @@ body .ui-datepicker {
 
 .booking-widget.widget_tvds_booking_filter_widget .btn-select ul {
 	max-height: 350px;
-	overflow: auto;
+	overflow: auto !important;
 }
 
 
@@ -317,6 +317,13 @@ body .ui-datepicker {
 }
 
 /* Homes Archive Home Item */
+.tvds_homes_thumbnail_banner {
+	padding-left: 0px !important;
+}
+.tvds_homes_thumbnail_banner:before {
+	display: none;
+}
+
 .tvds_homes_archive_item_info_categories {
 	margin-bottom: 10px;
 }
@@ -440,6 +447,10 @@ body .ui-datepicker {
 
 
 /* VC Search Homes */
+.tvds_homes_search_form .btn-select ul {
+	max-height: 350px;
+	overflow: auto !important;
+}
 .tvds_homes_search_form ul {
 	list-style: none;
 }
@@ -498,7 +509,7 @@ body .ui-datepicker {
 /* Calendar Heading */
 .calendar-heading {
 	border-top: 1px solid;
-	height: 47px !important;
+	height: 42px !important;
 }
 
 .calendar-row {

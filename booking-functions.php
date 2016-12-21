@@ -599,7 +599,7 @@ function tvds_create_search_meta_and_tax_query($get_value){
 	// Arrays For The Different Fields
 	$services 	= tvds_homes_get_services();
 	$taxonomies = array('province', 'region', 'place', 'type');
-	$numbers 	= array('max_persons', 'bedrooms', 'stars');
+	$numbers 	= array('max_persons', 'bedrooms', 'bathrooms', 'stars');
 
 	// For Each GET Request Check The $key in the arrays And Run The Appropriate Function
 	foreach($get_value as $key => $value){
