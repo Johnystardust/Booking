@@ -1,0 +1,142 @@
+/* Homes Search Form */
+/* ---------------------------------------------------- */
+
+/* Input Fields */
+.tvds_homes_search_form .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap input {
+	display: block;
+	position: relative;
+	width: 100%;
+	padding: 15px 10px;
+	border-radius: 0px;
+	border: none;
+	line-height: 24px; 
+}
+
+/* Bootstrap Select Fields */
+.tvds_homes_search_form .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap .btn-select {
+	display: block;
+	position: relative;
+	width: 100%;
+	padding: 15px 10px;
+	border-radius: 0px;
+	border: none;
+	text-align: left;
+	line-height: 24px; 
+}
+
+.tvds_homes_search_form .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap .btn-select:hover, .tvds_homes_search_form .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap .btn-select.active {
+	background-color: #F9F8F7;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+.tvds_homes_search_form .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap .btn-select ul {
+	display: none;
+	position: absolute;
+	background-color: #ffffff;
+	border: 1px solid #eeeeee;
+	border-top: 0px;
+	color: #000;
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+	left: -1px;
+	right: -1px;
+	top: 51px;
+	z-index: 999; 
+}
+
+.tvds_homes_search_form .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap .btn-select ul li {
+	padding: 5px 10px;
+	text-align: left;
+}
+
+.tvds_homes_search_form .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap .btn-select ul li:hover, .tvds_homes_search_form .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap .btn-select ul li.selected {
+	background-color: #F9F8F7;
+}
+
+
+
+/* Homes Search Full */
+/* ----------------- */
+
+.tvds_homes_search_form.full.background {
+	padding: 15px 15px 0px;
+	margin-bottom: 30px;
+}
+
+.tvds_homes_search_form.full .tvds_homes_search_form_body {
+	padding: 0px 15px; 
+}
+
+.tvds_homes_search_form.full .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap input,
+.tvds_homes_search_form.full .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap .btn-select {
+	border: 1px solid #eeeeee;
+	margin-bottom: 15px;
+	background: #f9f9f9;
+}
+
+.tvds_homes_search_form.full .tvds_homes_search_form_body input[type="submit"] {
+	width: 100%;
+	height: 50px;
+	margin-top: 30px;
+	background-color: #333333;
+	border: none;
+	color: #fff;
+}
+
+
+/* Homes Search Compact */
+/* -------------------- */
+
+.tvds_homes_search_form.small.background {
+	padding: 15px;
+	margin-bottom: 30px;
+}
+
+.tvds_homes_search_form.small .tvds_homes_search_form_body {
+	padding: 0px 15px 20px; 
+}
+
+.tvds_homes_search_form.small .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap {
+	position: relative;
+	width: 25%;
+	float: left;
+	border-right: 1px solid #eeeeee;
+	border-top: 1px solid #eeeeee;
+	border-bottom: 1px solid #eeeeee; 
+}
+
+.tvds_homes_search_form.small .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap:first-child {
+	border: 1px solid #eeeeee; 
+}
+
+/* Submit Button */
+.tvds_homes_search_form.small .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap.submit-wrap {
+	border-right: 1px solid #f98200;
+	border-top: 1px solid #f98200;
+	border-bottom: 1px solid #f98200;
+}
+
+.tvds_homes_search_form.small .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap input[type="submit"] {
+	background-color: #f98200;
+	color: #ffffff;
+	border: none;
+	font-weight: bold;
+	font-size: 16px;
+	line-height: 24px;
+	cursor: pointer; 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

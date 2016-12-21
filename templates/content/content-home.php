@@ -22,21 +22,20 @@
                 
                 if($last_minute || $for_sale){
                     echo '<ul class="tvds_homes_archive_item_thumbnail_banners tvds_homes_thumbnail_banners">';
-
+                    
                         if($last_minute){
 	                        echo '<li class="tvds_homes_thumbnail_banner"><span class="tvds_homes_thumbnail_last_minute">'.__('Last minute', 'tvds').'</span></li>';
                         }
                         if($for_sale){
 	                        echo '<li class="tvds_homes_thumbnail_banner"><span class="tvds_homes_thumbnail_for_sale">'.__('Te koop', 'tvds').'</span></li>';
                         }
-
+                    
                     echo '</ul>';
                 }
                 ?>
 
-
                 <a href="<?php echo get_the_permalink(); ?>">
-                    <img src="<?php get_the_post_thumbnail_url('homes_archive_thumb'); ?>">
+                    <?php the_post_thumbnail('homes_archive_thumb'); ?>
                 </a>
 
             </div>
@@ -48,7 +47,28 @@
             <div class="tvds_home_archive_item_info_content">
 
                 <a href="<?php echo get_the_permalink(); ?>"><h3><?php echo get_the_title(); ?></h3></a>
-
+                
+                <div class="tvds_homes_archive_item_info_categories">
+	                <?php
+		                $terms_province = get_the_terms($post->ID, 'homes_province');
+						$terms_region 	= get_the_terms($post->ID, 'homes_region');
+						$terms_place 	= get_the_terms($post->ID, 'homes_place');
+													
+						$province 		= tvds_homes_get_terms($terms_province);
+						$region   		= tvds_homes_get_terms($terms_region);
+						$place	 		= tvds_homes_get_terms($terms_place);
+						
+						if(!empty($province)){
+							echo $province.', ';
+						}
+						if(!empty($region)){
+							echo $region.', ';
+						}
+						if(!empty($place)){
+							echo $place.', ';
+						}
+		            ?>
+                </div>
 
                 <?php
                 if(get_post_meta($post->ID, 'stars', true)){
@@ -64,17 +84,34 @@
 
                         // For Each Rating Below 5 That isn't set Echo A Empty Star
                         for($i = 1; $i <= (5 - $stars); $i++){
-                            echo '<li><i class="icon icon-star-empty"></i></li>';
+                            echo '<li class="empty-star"><i class="icon icon-star"></i></li>';
                         }
                         ?>
                     </ul>
                     <br/>
                     <?php
                 }
+                elseif(get_option('show_empty_stars')){
+	                ?>
+	                <ul class="tvds_homes_archive_item_info_rating">
+                        <?php
+                        // For Each Rating Below 5 That isn't set Echo A Empty Star
+                        for($i = 1; $i <= 5; $i++){
+                            echo '<li class="empty-star"><i class="icon icon-star"></i></li>';
+                        }
+                        ?>
+                    </ul>
+                    <br/>
+	                <?php
+                }
+                
+                // The Excerpt
+                if(get_the_excerpt()){
+	                ?>
+                    <p class="tvds_homes_archive_item_excerpt"><?php echo wp_trim_words(get_the_excerpt(), 14); ?></p>
+	                <?php
+                }
                 ?>
-
-
-                <p class="tvds_homes_archive_item_excerpt"><?php echo wp_trim_words(get_the_excerpt(), 14); ?></p>
             </div>
 
             <div class="tvds_homes_archive_item_info_services">

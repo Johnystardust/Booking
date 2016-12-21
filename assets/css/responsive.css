@@ -1,0 +1,83 @@
+@media only screen and (max-width : 1200px) and (min-width : 992px) {
+	.widget_tvds_homes_last_minute .tvds_homes_favorite_widget_thumbnail {
+		width: 50px;
+		margin-right: 15px;
+	}
+	.tvds_homes_favorite_widget_content {
+		margin-left: 0px;
+	}
+	.widget_tvds_homes_last_minute h4 {
+		font-size: 14px;
+	}
+}
+
+@media only screen and (max-width : 992px) {
+	
+	/* Search Filter Widget */
+	body #tvds_homes_open_search_filter {
+		display: inline-block !important;
+	}
+	
+	body .tvds_homes_search_filter_form {
+		max-height: 0px;
+	}
+
+}
+
+@media only screen and (max-width : 768px) {
+	
+	/* VC homes elements */
+	.tvds_homes_search_form.small .tvds_homes_search_form_body .tvds_homes_search_form_field_wrap {
+		width: 100%;
+		margin-bottom: 15px;
+	}
+	
+	
+	/* Force Archive List As Grid Below 768px */
+	body .tvds_homes_archive_options {
+		display: none;
+	}
+	
+	body .tvds_homes_archive_items_wrapper {
+		margin-left: -15px;
+		margin-right: -15px;
+	}
+	
+	body .tvds_homes_archive_items_wrapper .tvds_homes_archive_item .tvds_homes_archive_item_inner {
+		margin: 0;
+	}
+	
+	/* Thumbnail */
+	body .tvds_homes_archive_items_wrapper .tvds_homes_archive_item .tvds_homes_archive_item_thumbnail {
+		width: 100%;
+	}
+	
+	/* Content */
+	body .tvds_homes_archive_items_wrapper .tvds_homes_archive_item .tvds_homes_archive_item_info {
+		width: 100%;
+	}
+	
+	body .tvds_homes_archive_items_wrapper .tvds_homes_archive_item .tvds_homes_archive_item_info h3 {
+		font-size: 20px;
+		white-space: nowrap;
+	}
+	
+	body .tvds_homes_archive_items_wrapper .tvds_homes_archive_item .tvds_homes_archive_item_info .tvds_homes_archive_item_excerpt {
+		display: none;
+	}
+	
+	body .tvds_homes_archive_items_wrapper .tvds_homes_archive_item .tvds_homes_archive_item_info .tvds_homes_archive_services_information {
+		display: none;
+	}
+	
+	/* Details */
+	body .tvds_homes_archive_items_wrapper .tvds_homes_archive_item .tvds_homes_archive_item_details {
+		width: 100%;
+		padding-top: 0;
+		text-align: left;
+	}
+	
+	body .tvds_homes_archive_items_wrapper .tvds_homes_archive_item .tvds_homes_archive_item_details h3 {
+		display: inline;
+	}
+}
